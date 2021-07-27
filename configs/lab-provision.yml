@@ -1,0 +1,35 @@
+---
+
+- name: Create Guid Keypair
+  os_keypair:
+    cloud: "{{ guid }}-project"
+    state: present
+    name: "{{ guid }}-keypair"
+    public_key_file: "{{ user_public_key_file }}"
+
+- name: Generate Heat Template
+  template:
+    src: ../templates/lab_heat_template.j2
+    dest: /tmp/{{ env_type }}
+
+- name: Create Heat stack from generated template
+  command: openstack stack create -f json --wait -t /tmp/{{ env_type }} --os-cloud {{ guid }}-project {{ env_type }}-stack-{{ guid }}
+  ignore_errors: yes
+
+- name: Grab outputs
+  command: >-
+    openstack stack show -f json {{ env_type }}-stack-{{ guid }} --os-cloud {{ guid }}-project
+  register: heat_info
+
+- name: show hot outputs
+  debug:
+    var: heat_info
+    verbosity: 3
+
+- name: set fact for hot_outputs
+  set_fact:
+    hot_outputs: "{{ (heat_info.stdout | from_json) }}"
+
+- name: show hot_outputs
+  debug:
+    var: hot_outputs

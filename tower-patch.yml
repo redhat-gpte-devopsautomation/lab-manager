@@ -1,0 +1,31 @@
+---
+- name: Patch for tower
+  hosts: towers
+  become: true
+  tasks:
+    - name: Append parameter
+      lineinfile:
+        path: /etc/tower/conf.d/remote_host_headers.py
+        regexp: 'EOF'
+        line: "REMOTE_HOST_HEADERS = ['HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR', 'REMOTE_HOST']"
+        create: yes
+        owner: awx
+        group: awx
+        mode: 0644
+
+    - name: Create custom.py
+      copy:
+        content: |
+          USE_X_FORWARDED_PORT = True
+          USE_X_FORWARDED_HOST = True
+          BROADCAST_WEBSOCKET_PROTOCOL = 'http'
+          BROADCAST_WEBSOCKET_PORT = 80
+          BROADCAST_WEBSOCKET_VERIFY_CERT = False
+        dest: /etc/tower/conf.d/custom.py
+        owner: awx
+        group: awx
+        mode: 0644
+
+    - name: Restart tower service
+      shell: ansible-tower-service restart
+

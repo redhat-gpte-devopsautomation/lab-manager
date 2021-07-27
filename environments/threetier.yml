@@ -1,0 +1,95 @@
+env_type: "{{ env_type }}"
+guid: "{{ guid }}"
+email: "{{ email }}"
+project_tag: "{{ env_type }}-{{ guid }}"
+
+# lab_name: mulit-dev
+provider_network: external
+instance_network: dev
+# all_ssh_authorized_keys: "{{ opentlc_admin_pub_keys + [user_pub_key|d()] }}"
+all_ssh_authorized_keys: testkeys
+default_metadata:
+  owner: "{{ email | default('unknownuser') }}"
+  Project: "{{ project_tag }}"
+  guid: "{{ guid }}"
+  env_type: "{{ env_type }}"
+
+osp_default_rootfs_size: 50
+# Default instance type
+__instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor 
+
+# Default Image
+__image: rhel-8.3
+app_instance_count: 2
+# Environment Instances
+instances:
+  - name: app
+    count: "{{ app_instance_count | default(1) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ app_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ app_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "apps"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_type }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - HostSG
+
+  - name: appdb
+    count: "{{ appdb_instance_count | default(1) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ appdb_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ appdb_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "appdbs"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_type }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - HostSG
+  - name: frontend
+    count: "{{ frontend_instance_count | default(1) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ frontend_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ frontend_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "frontends"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_type }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - HostSG

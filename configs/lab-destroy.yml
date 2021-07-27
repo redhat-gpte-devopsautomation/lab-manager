@@ -1,0 +1,7 @@
+---
+- name: Delete Heat stack from generated template
+  command: openstack stack delete  --os-cloud {{ guid }}-project {{ env_type }}-stack-{{ guid }}
+  ignore_errors: yes
+
+- pause:
+    seconds: 10

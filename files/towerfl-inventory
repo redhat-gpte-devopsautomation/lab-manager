@@ -1,0 +1,14 @@
+[tower]
+towerfl.example.com
+[automationhub]
+[database]
+[all:vars]
+admin_password='r3dh4t1!'
+ansible_become=true
+pg_host=''
+pg_port=''
+pg_database='awx'
+pg_username='awx'
+pg_password='r3dh4t1!'
+pg_sslmode='prefer'
+nginx_disable_https=true

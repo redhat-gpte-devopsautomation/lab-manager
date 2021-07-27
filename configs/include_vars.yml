@@ -1,0 +1,15 @@
+---
+- name: include access_details variables
+  include_vars: vars/access_details.yml
+
+- name: include common variables
+  include_vars: vars/common.yml
+
+- include_vars: environments/{{ env_type }}.yml
+  when: env_type != "pod"
+
+- name: include gitlab variables
+  include_vars: vars/gitlab_vars.yml
+  when: pod_type | default(' ') == "gitlab"
+
+

@@ -1,0 +1,62 @@
+################################################
+#               SUMMARY
+################################################
+# Environment: Nodes
+# No of Nodes: 2 (default)
+# Nodes: node
+# Image: rhel-8.3
+# Type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor
+# Network: dev
+# Security Group: DefaultSG,HostSG
+###############################################
+
+env_type: "{{ env_type }}"
+guid: "{{ guid }}"
+email: "{{ email }}"
+project_tag: "{{ env_type }}-{{ guid }}"
+provider_network: external
+instance_network: dev
+all_ssh_authorized_keys: testkeys
+default_metadata:
+  owner: "{{ email | default('unknownuser') }}"
+  Project: "{{ project_tag }}"
+  guid: "{{ guid }}"
+  env_type: "{{ env_type }}"
+
+osp_default_rootfs_size: 50
+# Default instance type
+__instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor 
+
+# Default Image
+__image: rhel-8.3
+# Environment Instances
+instances:
+  - name: node
+    count: "{{ node_instance_count | default(2) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ node_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ node_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "nodes"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_type }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    UserData: |
+        #!/bin/bash 
+                echo "r3dh4t1!" | passwd --stdin cloud-user
+                sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+                rm -rf /home/cloud-user/.ssh/authorized_keys
+                systemctl restart sshd
+    security_groups:
+      - DefaultSG
+      - HostSG

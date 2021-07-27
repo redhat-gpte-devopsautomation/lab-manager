@@ -1,0 +1,8 @@
+{%  for item in groups %}
+{% if item != "bastions,controls" %}
+[{{ item }}]
+{%   for entry in groups[item]  %} 
+{{ entry }}.example.com ansible_host={{ hostvars[entry]['ansible_host'] }}
+{%  endfor %}
+{% endif %}
+{% endfor %}
