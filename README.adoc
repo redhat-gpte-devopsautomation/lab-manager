@@ -1,101 +1,12 @@
-lab-setup
+lab-manager
 =========
 
-* ENV_TYPE can be any name you want to give according to the module.
+To deploy
+lab deploy <env name>
 
+To destroy
 
-
-= Provision Sub Lab Env
-
-== Clone lab setup
-. cd ~/
-. git clone https://github.com/redhat-gpte-devopsautomation/lab-setup.git
-. cd ~/lab-setup
-
-* Directory contents
-[source=textinfo]
-----
-.
-├── configs
-│   ├── lab-configure.yml
-│   ├── lab-destroy.yml
-│   ├── lab-inventory.yml
-│   ├── lab-provision.yml
-│   └── setup-haproxy-pod.yml
-├── environments
-│   ├── multitier.yml
-│   └── tower.yml
-├── files
-│   ├── haproxy-Dockerfile
-│   ├── haproxy-podman-compose.yml
-│   ├── haproxy-pod.service
-│   └── tower-inventory
-├── haproxy.yml
-├── main.yml
-├── README.adoc
-├── templates
-│   ├── example.com.zone.j2
-│   ├── haproxy.cfg.j2
-│   ├── hosts.j2
-│   └── lab_heat_template.j2
-├── tower-patch.yml
-└── vars
-    └── common.yml
-
-5 directories, 20 files
-----
-
-== To provision and configure multitier
-. cd ~/lab-setup
-. ansible-playbook main.yml  -e env_type=multitier 
-. cd ~
-. git clone https://github.com/redhat-gpte-devopsautomation/aa-multitier-solutions.git
-. cd ~/aa-multitier-solutions
-. ansible-playbook site.yml
-. cd ~/lab-setup
-. curl http://frontend.example.com
-. ansible-playbook haproxy.yml
-. Open Browser: http://control.{{ guid }}.dynamic.opentlc.com:8080
-
-
-== To provision and configure tower
-. cd ~/lab-setup
-. ansible-playbook main.yml  -e env_type=tower 
-. wget https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
-. tar -xf ansible-tower-setup-latest.tar.gz 
-. cd ansible-tower-setup-3.8.2-1/
-. ./setup.sh -i ~/lab-setup/files/tower-inventory
-. cd ~/lab-setup
-. ansible-playbook tower-patch.yml
-. curl -k http://tower1.example.com/api/v2/ping/ |jq
-. ansible-playbook haproxy.yml
-
-. open browser https://control.{{ guid }}.dynamic.opentlc.com:8443
-. type: username: admin
-      password: redhat
-. for license:  username: admin
-	      password: r3dh4t1!
-
-. Refresh page if fails for license
-
-
-
-Destroy
-=======
-* ansible-playbook main.yml  -e env_type=tower -e env_destroy=true
-
-
-Networks
-========
-1. Default - Bastion Host and Satellite
-2. Dev - Multi tier Env for 1st Module
-3. Tower - Tower Nodes
-4. Prod - Building Cloud and Tower Module
-
-Important
-=========
-1. DNS Container is pre configured
-2. Satellite with Activation key is preconfigured
+lab destroy <env name>
 
 
 
