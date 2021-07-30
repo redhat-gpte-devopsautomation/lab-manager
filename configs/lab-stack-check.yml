@@ -1,0 +1,70 @@
+#################################
+# Heat Stack Check tasks file
+#################################
+- name: Set stack name
+  set_fact:
+    base_stack_name: "base-stack-{{ guid }}"
+    stack_name: "{{ env_type }}-stack-{{ guid }}"
+
+- name: Collect stack requirements
+  set_fact:
+    stack_required: "{{ stack_required | default([]) + [ item ] }}"
+  loop: "{{ requirements | default(['']) }}"
+
+- name: Gather stack info
+  command: >-
+    openstack stack list -c "Stack Name"  
+    -f csv --os-cloud={{ guid }}-project
+  register: stacks
+
+- name: Create stack_list
+  set_fact:
+     stack_list: "{{ stack_list |default([]) + [ item ] }}"
+  when:
+    - 'item != "Stack Name"'
+    - 'item != base_stack_name'
+  loop: "{{ stacks.stdout_lines | regex_replace('\"','') }}"
+
+- name: Check stack if stack exist
+  set_fact: 
+    stack_exist: yes
+  when: stack_name in stack_list | default([])
+
+- name: Check stacks other than required
+  set_fact:
+     additional_stack_exist: yes
+  when: 
+    - 'item not in stacks_required | default([])'
+    - 'item != stack_name'  
+  loop: "{{ stack_list | default([]) }}"
+
+#################################
+- name: Deployment assertion block
+  when: "env_destroy | default(false) | bool != true"
+  block:
+    - name: Stack already exist
+      assert:
+        that:
+          - 'not stack_exist |default(false) | bool'
+        fail_msg: "{{env_type }}: environment already exist"
+    
+    - name: Check other stacks
+      assert:
+        that:
+          - 'not additional_stack_exist | default(false) | bool'
+        fail_msg: >-
+          {{stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
+          Please run: lab destroy {{ stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
+
+#################################
+- name: Destroy assertion block
+  when: "env_destroy | default(false) | bool"
+  block:
+    - name: Stack doesn't exist
+      assert:
+        that:
+          - 'stack_exist |default(false) | bool'
+        fail_msg: "{{env_type }}: environment doesn't exist"
+    
+
+

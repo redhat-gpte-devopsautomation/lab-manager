@@ -13,7 +13,7 @@
   shell: mv /tmp/ansible-tower-setup-* /tmp/ansible-tower-setup-latest
 
 - name: Run Ansible Tower setup
-  shell: ./setup.sh -i /srv/lab-setup/files/towerfl-inventory
+  shell: ./setup.sh -i {{ lab_mgr_dir }}/files/towerfl-inventory
   args:
     chdir: /tmp/ansible-tower-setup-latest
   async: 3600

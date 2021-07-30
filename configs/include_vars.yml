@@ -1,6 +1,16 @@
 ---
+- name: set lab manager directory path
+  set_fact: 
+    lab_mgr_dir: "/srv/lab-manager/"
+
 - name: include access_details variables
   include_vars: vars/access_details.yml
+
+- name: Set variables from access_details
+  set_fact:
+    guid: "{{ access_details.guid }}"
+    email: "{{ access_details.email }}"
+    subdomain: "{{ access_details.subdomain }}"
 
 - name: include common variables
   include_vars: vars/common.yml
@@ -11,5 +21,3 @@
 - name: include gitlab variables
   include_vars: vars/gitlab_vars.yml
   when: pod_type | default(' ') == "gitlab"
-
-

@@ -1,19 +1,12 @@
 ---
 
 - name: Include variables
-  hosts:
-    - localhost
+  hosts: localhost
   connection: localhost
   gather_facts: false
   tasks:
     - name: Include variables
       include_tasks: configs/include_vars.yml
-
-    - set_fact:
-        guid: "{{ access_details.guid }}"
-        email: "{{ access_details.email }}"
-        subdomain: "{{ access_details.subdomain }}"
-        
 
     - name: Provision lab environment
       when: "env_destroy | default(false) | bool != true"
@@ -33,36 +26,41 @@
         - name: Build inventory and records
           include_tasks: configs/lab-inventory.yml
 
-        - name: Reset haproxy pod
-          include_tasks: configs/setup-haproxy-pod.yml
-
-- name: Configure hosts
+- name: Configure Hosts
   hosts: all:!controls:!bastions:!satellites:!nodes
-  become: true
+  gather_facts: false
   tasks:
-    - name: Include variables
-      include_tasks: configs/include_vars.yml
-
-    - set_fact:
-        guid: "{{ access_details.guid }}"
-        email: "{{ access_details.email }}"
- 
-    - name: Configure lab environment
-      when: "env_destroy | default(false) | bool != true"
+    - when: "env_destroy | default(false) | bool != true"
       block:
+        - name: wait for host to be available
+          wait_for_connection:
+            delay: 30
+            timeout: 300
+            connect_timeout: 10
+          register: rwait
+    
+        - ping:
+          register: rping
+          retries: 3
+          delay: 10
+          until: rping is succeeded
+
+        - name: Include variables
+          include_tasks: configs/include_vars.yml
+
         - name: Configure lab environment
           include_tasks: configs/lab-configure.yml
 
 
-- name: Install Tower for finallab
+- name: Final Lab play
   hosts: localhost
   connection: localhost
   gather_facts: false
   tasks:
-    - name: Install Tower for Final lab
-      when: 
-        - env_type == "finallab"
-        - env_destroy | default(false) != true
+    - name: Prepare ffinallab nodes
+      when:
+        - 'env_type == "finallab"'
+        - 'env_destroy | default(false) | bool != true'
       block:
         - name: Include variables
           include_tasks: configs/include_vars.yml

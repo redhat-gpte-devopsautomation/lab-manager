@@ -10,45 +10,43 @@
         group: root
         mode: "u=rw,g=r,o=r"
 
-    - name: Check if letsencrypt certificate exist
-      stat:
-        path: "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}"
-      register: letsencrypt_certs
+        #    - name: Check if letsencrypt certificate exist
+        #      stat:
+        #        path: "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}"
+        #      register: letsencrypt_certs
+        #
+        #    - name: Generate letsencrypt certificate
+        #      when: not letsencrypt_certs.stat.exists | bool 
+        #      command: >-
+        #         certbot-3 certonly 
+        #         --standalone 
+        #         --email {{ email }}
+        #         --agree-tos  
+        #         -d control.{{ guid }}.{{ subdomain }} -n
+        #    
+        #    - name: Remove existing /tmp/cert.pem
+        #      file:
+        #        path: /tmp/cert.pem
+        #        state: absent
+        #
+        #    - name: merge private key and certificate
+        #      shell: cat "{{ item }}" >> /tmp/cert.pem
+        #      loop:
+        #        - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/privkey.pem"
+        #        - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/cert.pem"
+        #
+        #    - name: copy letsencrypt certificate
+        #      copy:
+        #        src: /tmp/cert.pem
+        #        dest: /opt/podman/volumes/haproxy-volume/etc/ssl/certs/cert.pem
+        #        owner: root
+        #        group: root
+        #        mode: "u=rw,g=r,o=r"
 
-    - name: Generate letsencrypt certificate
-      when: not letsencrypt_certs.stat.exists | bool 
-      command: >-
-         certbot-3 certonly 
-         --standalone 
-         --email {{ email }}
-         --agree-tos  
-         -d control.{{ guid }}.{{ subdomain }} -n
-    
-    - name: Remove existing /tmp/cert.pem
-      file:
-        path: /tmp/cert.pem
-        state: absent
-
-    - name: merge private key and certificate
-      shell: cat "{{ item }}" >> /tmp/cert.pem
-      loop:
-        - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/privkey.pem"
-        - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/cert.pem"
-
-    - name: copy letsencrypt certificate
-      copy:
-        src: /tmp/cert.pem
-        dest: /opt/podman/volumes/haproxy-volume/etc/ssl/certs/cert.pem
-        owner: root
-        group: root
-        mode: "u=rw,g=r,o=r"
-
-    - name: Enable and Start the new podman service
+    - name: Restart haproxy-pod
       service:
         name: haproxy-pod
-        enabled: true
         state: restarted
-      async: 3000
-      poll: 30
+      async: 300
 
 
