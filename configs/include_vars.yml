@@ -1,7 +1,4 @@
 ---
-- name: set lab manager directory path
-  set_fact: 
-    lab_mgr_dir: "/srv/lab-manager/"
 
 - name: include access_details variables
   include_vars: vars/access_details.yml
