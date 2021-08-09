@@ -45,7 +45,7 @@ Example: lab option argument"
 
 
 # Main Playbook
-LAB_MGR_DIR=/srv/lab-manager/
+LAB_MGR_DIR=/srv/lab-manager
 MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
 export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 # CAlls
@@ -55,6 +55,9 @@ if [ "${1}" == "deploy" ];then
   case ${2} in
     satellite)
       ssh satellite.example.com "sudo hammer subscription refresh-manifest --organization=prod"
+      ;;
+    aap2) 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
       ;;
     molecule) 
       ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
@@ -90,6 +93,9 @@ if [ "${1}" == "deploy" ];then
   
 elif [ "${1}" == "destroy" ]; then
   case ${2} in
+    aap2) 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true 
+      ;;
     molecule) 
       ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true 
       ;;
