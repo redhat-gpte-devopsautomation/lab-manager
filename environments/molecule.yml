@@ -42,7 +42,7 @@ instances:
     network: "{{ instance_network | default('default') }}"
     tags:
       - key: "AnsibleGroup"
-        value: "nodes"
+        value: "moleculenodes"
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
