@@ -22,3 +22,5 @@
         env_config_src: "../tasks/lab-config.yml"
       when: not stat_env_config.stat.exists
 
+    - name: Configure lab environment
+      include_tasks: "{{ env_config_src }}"
