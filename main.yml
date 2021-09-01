@@ -1,14 +1,14 @@
 ---
 
-- import_playbook: "./playbooks/instance-provisioner.yml"
+- import_playbook: "./defaults/playbooks/instance-provisioner.yml"
   when: "env_destroy | default(false) | bool != true"
 
-- import_playbook: "./playbooks/instance-config.yml"
+- import_playbook: "./defaults/playbooks/instance-config.yml"
   when: 
     - instance_configure | bool
     - "env_destroy | default(false) | bool != true"
 
-- import_playbook: "./playbooks/instance-destroy.yml"
+- import_playbook: "./defaults/playbooks/instance-destroy.yml"
   when: env_destroy | default(false) | bool
 
 - name: Final Lab play
@@ -22,10 +22,10 @@
         - 'env_destroy | default(false) | bool != true'
       block:
         - name: Include variables
-          include_tasks: configs/include_vars.yml
+          include_tasks: ./defaults/tasks/include_vars.yml
           
         - name: Install Ansible Tower
-          include_tasks: configs/install-towerfl.yml
+          include_tasks: ./defaults/tasks/install-towerfl.yml
 
 - name: Configure Haproxy
   hosts: localhost
@@ -36,5 +36,5 @@
       meta: refresh_inventory
 
     - name: Setup haproxy pod
-      include_tasks: configs/setup-haproxy-pod.yml
+      include_tasks: ./defaults/tasks/setup-haproxy-pod.yml
 
