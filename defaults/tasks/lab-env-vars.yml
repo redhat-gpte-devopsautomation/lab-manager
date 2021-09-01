@@ -10,7 +10,7 @@
     subdomain: "{{ access_details.subdomain }}"
 
 - name: Include default variables
-  include_vars: defaults/vars/main.yml
+  include_vars: defaults/vars/common.yml
 
 - name: Include environment variables
   include_vars: environments/{{ provisioner }}/{{ env_type }}/vars.yml
