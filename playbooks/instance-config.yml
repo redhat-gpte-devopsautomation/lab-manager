@@ -5,20 +5,20 @@
   gather_facts: false
   tasks:
     - name: Include environment variables
-      include_tasks: ./defaults/tasks/lab-env-vars.yml
+      include_tasks: ../defaults/tasks/lab-env-vars.yml
 
     - name: Check if confige exists for the environment
       stat:
-        path: "./environments/{{ provisioner }}/{{ env_type }}/config.yml"
+        path: "../environments/{{ provisioner }}/{{ env_type }}/config.yml"
       register: stat_env_config
 
     - name: Use config from the environment
       set_fact:
-        env_config_src: "./environments/{{ provisioner }}/{{ env_type }}/config.yml"
+        env_config_src: "../environments/{{ provisioner }}/{{ env_type }}/config.yml"
       when: stat_env_config.stat.exists
 
     - name: Use the default infra template
       set_fact:
-        env_config_src: "./defaults/tasks/lab-config.yml"
+        env_config_src: "../defaults/tasks/lab-config.yml"
       when: not stat_env_config.stat.exists
 
