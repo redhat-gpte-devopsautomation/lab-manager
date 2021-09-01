@@ -60,3 +60,5 @@ instances:
     security_groups:
       - DefaultSG
       - HostSG
+
+instance_configure: false
