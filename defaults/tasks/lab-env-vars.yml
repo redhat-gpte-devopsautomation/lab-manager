@@ -1,7 +1,7 @@
 ---
 
 - name: include access_details variables
-  include_vars: vars/access_details.yml
+  include_vars: ../../vars/access_details.yml
 
 - name: Set variables from access_details
   set_fact:
@@ -10,7 +10,7 @@
     subdomain: "{{ access_details.subdomain }}"
 
 - name: Include default variables
-  include_vars: defaults/vars/common.yml
+  include_vars: ../vars/common.yml
 
 - name: Include environment variables
-  include_vars: environments/{{ provisioner }}/{{ env_type }}/vars.yml
+  include_vars: ../../environments/{{ provisioner }}/{{ env_type }}/vars.yml
