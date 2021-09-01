@@ -30,21 +30,7 @@
     - name: Copy ansible hosts
       become: true
       template:
-        src: templates/hosts.j2
+        src: defaults/templates/hosts.j2
         dest: /etc/ansible/hosts
         mode: 0644
 
-
-- name: DNS pod record update
-  become: true
-  when: dns_record_update | default(true) | bool
-  block:
-    - name: Copy dns records
-      template:
-        src: templates/example.com.zone.j2
-        dest: "{{ dns_zone_file | default('/opt/podman/volumes/bind9-volume/var/named/example.com.zone') }}"
-
-    - name: restart_dns_pod
-      service:
-        name: bind9-pod
-        state: restarted

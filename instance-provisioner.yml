@@ -1,0 +1,86 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Include environment variables
+      include_tasks: ./defaults/tasks/lab-env-vars.yml
+    
+    - name: Provision lab environment
+      when: "env_destroy | default(false) | bool != true"
+      block:
+        - name: Provision lab environment
+          include_tasks: ./defaults/tasks/lab-env-provisioner.yml
+
+        - name: Saving inventory in /etc/ansible/hosts
+          include_tasks: ./defaults/tasks/lab-ansible-inventory.yml
+
+        - name: update pod dns records
+          include_tasks: ./defaults/tasks/lab-dns-records.yml
+
+    - name: Destroy lab environment
+      when: env_destroy | default(false) | bool
+      block:
+        - include_tasks: ./defaults/tasks/lab-destroy.yml
+
+        - name: Saving inventory in /etc/ansible/hosts
+          include_tasks: ./defaults/tasks/lab-ansible-inventory.yml
+
+        - name: update pod dns records
+          include_tasks: ./defaults/tasks/lab-dns-records.yml
+
+- name: Configure Hosts
+  hosts: all:!controls:!bastions:!satellites:!nodes
+  gather_facts: false
+  tasks:
+    - when: "env_destroy | default(false) | bool != true"
+      block:
+        - name: wait for host to be available
+          wait_for_connection:
+            delay: 30
+            timeout: 300
+            connect_timeout: 10
+          register: rwait
+    
+        - ping:
+          register: rping
+          retries: 3
+          delay: 10
+          until: rping is succeeded
+
+        - name: Include variables
+          include_tasks: configs/include_vars.yml
+
+        - name: Configure lab environment
+          include_tasks: configs/lab-configure.yml
+
+
+- name: Final Lab play
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Prepare ffinallab nodes
+      when:
+        - 'env_type == "finallab"'
+        - 'env_destroy | default(false) | bool != true'
+      block:
+        - name: Include variables
+          include_tasks: configs/include_vars.yml
+          
+        - name: Install Ansible Tower
+          include_tasks: configs/install-towerfl.yml
+
+- name: Configure Haproxy
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Clean in-memory inventory
+      meta: refresh_inventory
+
+    - name: Setup haproxy pod
+      include_tasks: configs/setup-haproxy-pod.yml
+

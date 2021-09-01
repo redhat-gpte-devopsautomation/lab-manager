@@ -64,7 +64,7 @@
       assert:
         that:
           - 'stack_exist |default(false) | bool'
-        fail_msg: "{{env_type }}: environment doesn't exist"
+        fail_msg: "{{ env_type }}: environment doesn't exist"
     
 
 

@@ -9,12 +9,8 @@
     email: "{{ access_details.email }}"
     subdomain: "{{ access_details.subdomain }}"
 
-- name: include common variables
-  include_vars: vars/common.yml
+- name: Include default variables
+  include_vars: defaults/vars/main.yml
 
-- include_vars: environments/{{ env_type }}.yml
-  when: env_type != "pod"
-
-- name: include gitlab variables
-  include_vars: vars/gitlab_vars.yml
-  when: pod_type | default(' ') == "gitlab"
+- name: Include environment variables
+  include_vars: environments/{{ provisioner }}/{{ env_type }}/vars.yml

@@ -1,0 +1,4 @@
+---
+
+- include_vars: common.yml
+- include_vars: gitlab.yml
