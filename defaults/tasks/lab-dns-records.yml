@@ -6,7 +6,7 @@
   block:
     - name: Copy dns records
       template:
-        src: ./defaults/templates/example.com.zone.j2
+        src: ../templates/example.com.zone.j2
         dest: "{{ dns_zone_file | default('/opt/podman/volumes/bind9-volume/var/named/example.com.zone') }}"
 
     - name: restart_dns_pod

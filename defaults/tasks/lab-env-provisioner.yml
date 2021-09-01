@@ -7,21 +7,21 @@
     public_key_file: "{{ user_public_key_file }}"
 
 - name: Check Heat template
-  include: ./defaults/tasks/lab-stack-check.yml
+  include: ../tasks/lab-stack-check.yml
 
 - name: Check if osp template exists for the environment
   stat:
-    path: "./environments/{{ provisioner }}/{{ env_type }}/osp_template.j2"
+    path: "../../environments/{{ provisioner }}/{{ env_type }}/osp_template.j2"
   register: stat_osp_template
 
 - name: Use osp template from the environment
   set_fact:
-    osp_template_src: "./environments/{{ provisioner }}/{{ env_type }}/osp_template.j2"
+    osp_template_src: "../../environments/{{ provisioner }}/{{ env_type }}/osp_template.j2"
   when: stat_osp_template.stat.exists
 
 - name: Use the default infra template
   set_fact:
-    osp_template_src: "./defaults/templates/osp_template.j2"
+    osp_template_src: "../templates/osp_template.j2"
   when: not stat_osp_template.stat.exists
 
 - name: Generate Heat Template
