@@ -1,12 +1,8 @@
 ---
-
-- name: Configure Hosts
-  hosts: all:!controls:!bastions:!satellites
+- name: Locate config
+  connection: local
   gather_facts: false
   tasks:
-    - name: Include environment variables
-      include_tasks: ../tasks/lab-env-vars.yml
-
     - name: Check if confige exists for the environment
       stat:
         path: "../../environments/{{ provisioner }}/{{ env_type }}/config.yml"
@@ -21,6 +17,13 @@
       set_fact:
         env_config_src: "../tasks/lab-config.yml"
       when: not stat_env_config.stat.exists
+
+- name: Configure Hosts
+  hosts: all:!controls:!bastions:!satellites
+  gather_facts: false
+  tasks:
+    - name: Include environment variables
+      include_tasks: ../tasks/lab-env-vars.yml
 
     - name: Configure lab environment
       include_tasks: "{{ env_config_src }}"
