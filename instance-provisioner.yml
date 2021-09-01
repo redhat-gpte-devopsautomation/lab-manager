@@ -23,7 +23,7 @@
     - name: Destroy lab environment
       when: env_destroy | default(false) | bool
       block:
-        - include_tasks: ./defaults/tasks/lab-destroy.yml
+        - include_tasks: ./defaults/tasks/lab-env-destroy.yml
 
         - name: Saving inventory in /etc/ansible/hosts
           include_tasks: ./defaults/tasks/lab-ansible-inventory.yml
