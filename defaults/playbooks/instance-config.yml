@@ -14,7 +14,7 @@
         env_config_src: "../../environments/{{ provisioner }}/{{ env_type }}/config.yml"
       when: stat_env_config.stat.exists
 
-    - name: Use the default infra template
+    - name: Use the default config
       set_fact:
         env_config_src: "../tasks/lab-config.yml"
       when: not stat_env_config.stat.exists
@@ -27,4 +27,4 @@
       include_tasks: ../tasks/lab-env-vars.yml
 
     - name: Configure lab environment
-      include_tasks: "{{ env_config_src }}"
+      include_tasks: "{{ hostvars['localhost']['env_config_src'] }}"
