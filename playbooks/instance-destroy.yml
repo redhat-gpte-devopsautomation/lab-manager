@@ -1,0 +1,18 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Include environment variables
+      include_tasks: ./defaults/tasks/lab-env-vars.yml
+
+    - include_tasks: ./defaults/tasks/lab-env-destroy.yml
+
+    - name: Saving inventory in /etc/ansible/hosts
+      include_tasks: ./defaults/tasks/lab-ansible-inventory.yml
+
+    - name: update pod dns records
+      include_tasks: ./defaults/tasks/lab-dns-records.yml
+ 
