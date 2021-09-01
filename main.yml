@@ -5,7 +5,7 @@
 
 - import_playbook: "./defaults/playbooks/instance-config.yml"
   when: 
-    - instance_configure | bool
+    - instance_configure | default(true) | bool
     - "env_destroy | default(false) | bool != true"
 
 - import_playbook: "./defaults/playbooks/instance-destroy.yml"
