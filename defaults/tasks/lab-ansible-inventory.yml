@@ -30,7 +30,7 @@
     - name: Copy ansible hosts
       become: true
       template:
-        src: defaults/templates/hosts.j2
+        src: ./defaults/templates/hosts.j2
         dest: /etc/ansible/hosts
         mode: 0644
 
