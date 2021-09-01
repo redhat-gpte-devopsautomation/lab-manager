@@ -1,6 +1,6 @@
 ---
 - name: Check Heat template
-  include: ./configs/lab-stack-check.yml
+  include: ./defaults/tasks/lab-stack-check.yml
 
 - name: Delete Heat stack from generated template
   command: >-
