@@ -1,0 +1,29 @@
+---
+
+- name: Node setup
+  hosts: nodes
+  connection: localhost
+  gather_facts: false
+  tasks:     
+    - name: Configure user's password
+      user:
+        name: cloud-user
+        password: "{{ 'r3dh4t1' | password_hash('sha512') }}"
+        update_password: always
+
+    - name: Enable password ssh authentication
+      lineinfile:
+        line: PasswordAuthentication yes
+        regexp: '^ *PasswordAuthentication'
+        path: /etc/ssh/sshd_config
+    
+    - name: Delete authorized keys
+      file:
+        path: /home/cloud-user/.ssh/authorized_keys
+        state: absent
+        
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted
+        
