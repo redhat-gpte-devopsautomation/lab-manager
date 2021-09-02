@@ -17,14 +17,6 @@
     - env_destroy | default(false) | bool
 
 
-- name: Configure Haproxy
-  hosts: localhost
-  connection: localhost
-  gather_facts: false
-  tasks:
-    - name: Clean in-memory inventory
-      meta: refresh_inventory
-
-    - name: Setup haproxy pod
-      include_tasks: ./defaults/playbooks/pod-reconfig-haproxy.yml
+- name: Re-configure Haproxy pod
+  import_playbook: ./defaults/playbooks/pod-reconfig-haproxy.yml
 
