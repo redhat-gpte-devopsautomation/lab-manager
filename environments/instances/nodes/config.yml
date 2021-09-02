@@ -3,6 +3,7 @@
 - name: Node setup
   hosts: nodes
   gather_facts: false
+  become: true
   tasks:     
     - name: Configure user's password
       user:
