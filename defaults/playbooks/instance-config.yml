@@ -8,11 +8,14 @@
     - name: Include environment variables
       include_tasks: ../tasks/lab-env-vars.yml  
 
-    - name: Include environment variables
+    - name: Include networking
       include_tasks: ../tasks/lab-config-networking.yml
+      when: default_networking | default(true) | bool
 
-    - name: Include environment variables
+    - name: Include subscription
       include_tasks: ../tasks/lab-config-subscription.yml
+      when: default_subscription | default(true) | bool
+
 
 
 - name: Locate config

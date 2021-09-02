@@ -2,7 +2,6 @@
 
 - name: Configure networking
   become: true
-  when: default_networking default(true) | bool
   block:
     - name: DNS IP updated
       lineinfile:
