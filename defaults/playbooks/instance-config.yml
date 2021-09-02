@@ -2,7 +2,6 @@
 
 - name: Locate config
   hosts: all:!controls:!bastions:!satellites
-  connection: local
   gather_facts: false
   tasks:
     - name: Include environment variables
