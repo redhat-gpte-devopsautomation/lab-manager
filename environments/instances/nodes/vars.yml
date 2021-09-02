@@ -51,12 +51,12 @@ instances:
         value: "{{ instance_network }}"
       - key: "network"
         value: "{{ instance_network }}"
-    UserData: |
-        #!/bin/bash 
-                echo "r3dh4t1!" | passwd --stdin cloud-user
-                sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-                rm -rf /home/cloud-user/.ssh/authorized_keys
-                systemctl restart sshd
+    # UserData: |
+    #     #!/bin/bash 
+    #             echo "r3dh4t1!" | passwd --stdin cloud-user
+    #             sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    #             rm -rf /home/cloud-user/.ssh/authorized_keys
+    #             systemctl restart sshd
     security_groups:
       - DefaultSG
       - HostSG
