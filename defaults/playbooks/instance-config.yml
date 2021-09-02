@@ -28,15 +28,6 @@
       register: stat_env_config
 
 
-# - hosts: all,localhost
-#   gather_facts: no
-#   run_once: True
-#   tasks:
-#    - set_fact:
-#         full_run: '{{play_hosts == groups.all}}'
-#      delegate_to: localhost
-#      delegate_facts: yes
-
 - name: Import config playbook from environment
   import_playbook:  "../../environments/{{ provisioner }}/{{ env_type }}/config.yml"
   when: hostvars.localhost.stat_env_config.stat.exists

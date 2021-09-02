@@ -1,50 +1,31 @@
 ---
+---
 
-- become: true
-  block:
-    - name: DNS IP updated
-      lineinfile:
-        state: present
-        path: /etc/sysconfig/network-scripts/ifcfg-eth0
-        line: "{{ __network_conf }}"
-      loop:
-        - PEERDNS=no
-        - DNS1={{ hostvars['control']['ansible_host'] }}
-      loop_control:
-        loop_var: __network_conf
-      register: network_update
-    
-    - name: restart network manager
-      service:
-        name: NetworkManager
-        state: restarted
-      when: network_update.changed | bool
-    
-    - name: install katello-ca-consumer package
-      yum:
-        name: http://{{ satellite_url }}/pub/katello-ca-consumer-latest.noarch.rpm
-        state: present
-        disable_gpg_check: true
-    
-    - name: register system and attach subs
-      redhat_subscription:
-        state: present
-        activationkey: "{{ satellite_activationkey }}"
-        org_id: "{{ satellite_org }}"
-        auto_attach: true
-    
-    - name: Enable repositories
-      rhsm_repository:
-        name: '*'
-        state: enabled
+- name: tower setup
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    # - name: Include variables
+    #   include_tasks: ./defaults/tasks/include_vars.yml
+      
+    - name: Download Tower Setup file
+      unarchive:
+        src: "https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{tower_version}}.tar.gz"
+        dest: /tmp/
+        remote_src: yes 
 
-    - name: Configure motd
+    - name: Remove directory if it exists
       file:
-        conent: "Welcome to Final Lab"
-        path: /etc/motd
+      path: /tmp/ansible-tower-setup-latest
+      state: absent
 
-- name: Include variables
-  include_tasks: ../../../defaults/tasks/include_vars.yml
-  
-- name: Install Ansible Tower
-  include_tasks: ../../../defaults/tasks/install-towerfl.yml
+    - name: Rename the ansible tower setup directory name
+      shell: mv /tmp/ansible-tower-setup-* /tmp/ansible-tower-setup-latest
+
+    - name: Run Ansible Tower setup
+      shell: ./setup.sh -i {{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_type }}/inventory
+      args:
+        chdir: /tmp/ansible-tower-setup-latest
+      async: 3600
+      poll: 36

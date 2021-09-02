@@ -1,6 +1,6 @@
 ---
 
-- hosts: molecules
+- hosts: moleculenodes
   become: true
   gather_facts: false
   tasks:
