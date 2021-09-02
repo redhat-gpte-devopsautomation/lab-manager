@@ -26,5 +26,5 @@
       meta: refresh_inventory
 
     - name: Setup haproxy pod
-      include_tasks: ./defaults/tasks/setup-haproxy-pod.yml
+      include_tasks: ./playbooks/pod-reconfig-haproxy.yml
 

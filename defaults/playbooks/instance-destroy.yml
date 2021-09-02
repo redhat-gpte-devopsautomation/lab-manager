@@ -1,5 +1,4 @@
 ---
-
 - name: Include variables
   hosts: localhost
   connection: localhost
@@ -8,7 +7,28 @@
     - name: Include environment variables
       include_tasks: ../tasks/lab-env-vars.yml
 
-    - include_tasks: ../tasks/lab-env-destroy.yml
+- name: Locate config
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check if destroy playbook exists for the environment
+      stat:
+        path: "../../environments/{{ provisioner }}/{{ env_type }}/destroy.yml"
+      register: stat_destroy
+
+
+- name: Import destroy playbook from environment
+  import_playbook:  "../../environments/{{ provisioner }}/{{ env_type }}/destroy.yml"
+  when: hostvars.localhost.stat_destroy.stat.exists
+
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Destroy heat stack
+      include_tasks: ../tasks/lab-env-destroy.yml
 
     - name: Saving inventory in /etc/ansible/hosts
       include_tasks: ../tasks/lab-ansible-inventory.yml
@@ -16,3 +36,4 @@
     - name: update pod dns records
       include_tasks: ../tasks/lab-dns-records.yml
  
+

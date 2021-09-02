@@ -7,7 +7,28 @@
   tasks:
     - name: Include environment variables
       include_tasks: ../tasks/lab-env-vars.yml
-    
+
+- name: Locate config
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check if destroy playbook exists for the environment
+      stat:
+        path: "../../environments/{{ provisioner }}/{{ env_type }}/pre-provisioner.yml"
+      register: stat_provisioner
+
+
+- name: Import destroy playbook from environment
+  import_playbook:  "../../environments/{{ provisioner }}/{{ env_type }}/pre-provisioner.yml"
+  when: hostvars.localhost.stat_provisioner.stat.exists
+
+
+- name: Provision stack
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+   
     - name: Provision lab environment
       include_tasks: ../tasks/lab-env-provisioner.yml
 

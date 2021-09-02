@@ -4,10 +4,7 @@
   hosts: localhost
   connection: localhost
   gather_facts: false
-  tasks:
-    # - name: Include variables
-    #   include_tasks: ./defaults/tasks/include_vars.yml
-      
+  tasks:     
     - name: Download Tower Setup file
       unarchive:
         src: "https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{tower_version}}.tar.gz"
