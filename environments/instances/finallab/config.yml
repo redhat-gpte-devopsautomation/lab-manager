@@ -37,3 +37,14 @@
       rhsm_repository:
         name: '*'
         state: enabled
+
+    - name: Configure motd
+      file:
+        conent: "Welcome to Final Lab"
+        path: /etc/motd
+
+- name: Include variables
+  include_tasks: ../../../defaults/tasks/include_vars.yml
+  
+- name: Install Ansible Tower
+  include_tasks: ../../../defaults/tasks/install-towerfl.yml
