@@ -8,7 +8,7 @@
     - name: Configure user's password
       user:
         name: cloud-user
-        password: "{{ 'r3dh4t1' | password_hash('sha512') }}"
+        password: "{{ 'r3dh4t1!' | password_hash('sha512') }}"
         update_password: always
 
     - name: Enable password ssh authentication
