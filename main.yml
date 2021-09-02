@@ -2,18 +2,18 @@
 
 - import_playbook: "./defaults/playbooks/instance-provisioner.yml"
   when: 
-    - "'provisioner' == 'instances'"
-    - "env_destroy | default(false) | bool != true"
+    - 'provisione == "instances"'
+    - not env_destroy | default(false) | bool 
 
 - import_playbook: "./defaults/playbooks/instance-config.yml"
   when:
-    - "'provisioner' == 'instances'"
+    - 'provisione == "instances"'
     - instance_configure | default(true) | bool
-    - "env_destroy | default(false) | bool != true"
+    - not env_destroy | default(false) | bool  
 
 - import_playbook: "./defaults/playbooks/instance-destroy.yml"
   when: 
-    - "'provisioner' == 'instances'"
+    - 'provisione == "instances"'
     - env_destroy | default(false) | bool
 
 
