@@ -17,24 +17,6 @@
     - env_destroy | default(false) | bool
 
 
-
-
-- name: Final Lab play
-  hosts: localhost
-  connection: localhost
-  gather_facts: false
-  tasks:
-    - name: Prepare ffinallab nodes
-      when:
-        - 'env_type == "finallab"'
-        - 'env_destroy | default(false) | bool != true'
-      block:
-        - name: Include variables
-          include_tasks: ./defaults/tasks/include_vars.yml
-          
-        - name: Install Ansible Tower
-          include_tasks: ./defaults/tasks/install-towerfl.yml
-
 - name: Configure Haproxy
   hosts: localhost
   connection: localhost
