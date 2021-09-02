@@ -1,11 +1,13 @@
+---
+
 - name: Setup Haproxy 
   hosts: localhost
   become: true
   connection: localhost
   gather_facts: false
   tasks:
-    - name: Include variables
-      include_tasks: configs/include_vars.yml
+    - name: Include environment variables
+      include_tasks: ../tasks/lab-env-vars.yml  
 
     - set_fact:
         guid: "{{ access_details.guid }}"

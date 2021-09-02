@@ -61,4 +61,5 @@ instances:
       - DefaultSG
       - HostSG
 
-instance_configure: false
+default_networking: false
+default_subscription: false
