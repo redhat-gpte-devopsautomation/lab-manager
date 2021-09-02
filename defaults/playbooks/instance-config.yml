@@ -22,7 +22,7 @@
   tasks:
     - name: Check if confige exists for the environment
       stat:
-        path: "../../environments/{{ provisioner }}/{{ env_type }}/config.yml"
+        path: "../../environments/{{ provisioner }}/{{ env_type }}/config.yml | d(none.yml)"
       register: stat_env_config
 
 
