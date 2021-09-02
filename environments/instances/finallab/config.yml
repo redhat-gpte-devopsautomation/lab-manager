@@ -16,8 +16,8 @@
 
     - name: Remove directory if it exists
       file:
-      path: /tmp/ansible-tower-setup-latest
-      state: absent
+        path: /tmp/ansible-tower-setup-latest
+        state: absent
 
     - name: Rename the ansible tower setup directory name
       shell: mv /tmp/ansible-tower-setup-* /tmp/ansible-tower-setup-latest
