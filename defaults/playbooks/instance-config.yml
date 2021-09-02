@@ -17,7 +17,6 @@
       when: default_subscription | default(true) | bool
 
 
-
 - name: Locate config
   hosts: localhost
   gather_facts: false

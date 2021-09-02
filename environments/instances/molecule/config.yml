@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
     - name: Configure motd
-      file:
-        conent: "Welcome to Molecule Lab"
-        path: /etc/motd
+      copy:
+        content: "Welcome to Molecule Lab"
+        dest: /etc/motd
 
