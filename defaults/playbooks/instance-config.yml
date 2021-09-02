@@ -16,16 +16,9 @@
       when: default_subscription | default(true) | bool
 
 
-- name: Locate config
-  hosts: localhost
-  gather_facts: false
-  tasks:
-    - name: Check if confige exists for the environment
-      stat:
-        path: "../../environments/{{ provisioner }}/{{ env_type }}/config.yml"
-      register: stat_env_config
-
-
 - name: Import config playbook from environment
-  import_playbook:  "../../environments/{{ provisioner }}/{{ env_type }}/config.yml | d(none.yml)"
-  when: hostvars.localhost.stat_env_config.stat.exists
+  vars:
+    find_config:
+      - ../../environments/{{ provisioner }}/{{ env_type }}/config.yml
+      - ./none.yml
+  import_playbook: "{{ lookup('first_found', find_config) }}"
