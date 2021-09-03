@@ -80,6 +80,10 @@
         mode: "u=rw,g=r,o=r"
 
     ## Pod systemd service enable/start
+    - name: Reload systemd daemon
+      command: /usr/bin/systemctl daemon-reload
+      
+    ## Pod systemd service enable/start
     - name: Enable and Start pods
       service:
         name: "{{ env_type }}-pod"
