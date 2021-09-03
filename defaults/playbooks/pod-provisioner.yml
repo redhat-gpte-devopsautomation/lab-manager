@@ -11,84 +11,80 @@
     # Pod orchestration directory
     - name: Create podman orchestration directory
       file:
-        path: "/opt/podman/pods/{{ item.name }}-pod/"
+        path: "/opt/podman/pods/{{ env_type }}-pod/"
         state: directory
         owner: root
         group: root
         recurse: true
         mode: "u=rwx,g=rx,o=rx"
-      loop: "{{ pods }}"
 
     # Pod volume directory
     - name: Create podman volume directories
       file:
-        path: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1 }}"
+        path: "/opt/podman/volumes/{{ env_type }}-volume/{{ item }}"
         state: directory
         owner: root
         group: root
         recurse: true
         mode: "u=rwx,g=rx,o=rx"
-      loop: "{{ pods|subelements('volumes') }}"
+      when: volumes is defined
+      loop: "{{ volumes }}"
 
     # Pod dockerfile
     - name: Copy Dockerfile in orchestration dir
       copy:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/{{ item.name }}/Dockerfile
-        dest: "/opt/podman/pods/{{ item.name }}-pod/"
+        src: ../../environments/{{ provisioner }}/{{ env_type }}/Dockerfile
+        dest: "/opt/podman/pods/{{ env_type }}-pod/"
         owner: root
         group: root
         mode: "u=rwx,g=rx,o=rx"
-      when: item.dockerfile | default(false) | bool
-      loop: "{{ pods }}"
+      when: dockerfile | default(false) | bool
 
     # Pod compose file
     - name: Copy podman-compose file in orchestration dir
       copy:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/{{ item.name }}/podman-compose.yml
-        dest: "/opt/podman/pods/{{ item.name }}-pod/"
+        src: ../../environments/{{ provisioner }}/{{ env_type }}/podman-compose.yml
+        dest: "/opt/podman/pods/{{ env_type }}-pod/"
         owner: root
         group: root
         mode: "u=rwx,g=rx,o=rx"
-      loop: "{{ pods }}"
 
     # Pod configuration templates 
     - name: Copy pods config templates
       template:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/{{ item.0.name }}/{{ item.1.src }}
-        dest: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+        src: ../../environments/{{ provisioner }}/{{ env_type }}/{{ item.src }}
+        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
-      when: item.0.config_templates is defined
-      loop: "{{ pods|subelements('config_templates', skip_missing=True) }}"
+      when: config_templates is defined
+      loop: "{{ config_templates }}"
 
     # Pod configuration files
     - name: Copy pods config files
       copy:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/{{ item.0.name }}/{{ item.1.src }}
-        dest: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+        src: "../../environments/{{ provisioner }}/{{ env_type }}/{{ item.src }}"
+        dest: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.dest }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
-      when: item.0.config_files is defined
-      loop: "{{ pods|subelements('config_files', skip_missing=True) }}"
+      when: config_files is defined
+      loop: "{{ config_files }}"
 
     # Pod systemd service file
     - name: Copy podman systemd service config
       template:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/{{ item.name }}/service.j2
-        dest: "/usr/lib/systemd/system/{{ item.name }}-pod.service"
+        src: ../../environments/{{ provisioner }}/{{ env_type }}/service.j2
+        dest: "/usr/lib/systemd/system/{{ env_type }}-pod.service"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
-      loop: "{{ pods }}"
 
     ## Pod systemd service enable/start
     - name: Enable and Start pods
       service:
-        name: "{{ item.name }}-pod"
-        enabled: "{{ item.enabled | default(true) }}"
-        state: "{{ item.state | default('started') }}"
+        name: "{{ env_type }}-pod"
+        enabled: "{{ pod_service.enabled | default(true) }}"
+        state: "{{ pod_service.state | default('started') }}"
       async: 3000
       poll: 30
-      loop: "{{ pods }}"
