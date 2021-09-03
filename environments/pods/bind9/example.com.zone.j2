@@ -7,5 +7,5 @@ $TTL 86400
               86400       ;Minimum TTL
 )
 @  IN  NS {{ ansible_fqdn }}.example.com.
-control     IN  A {{ hostvars[groups['controls'][0]].private_ip_address }}
-satellite   IN  A {{ hostvars[groups['satellites'][0]].private_ip_address }}
+control     IN  A {{ hostvars[groups['controls'][0]].ansible_default_ipv4.address }}
+satellite   IN  A {{ hostvars[groups['satellites'][0]].ansible_default_ipv4.address }}
