@@ -1,0 +1,10 @@
+---
+
+- name: Update environment
+  vars:
+    find_update:
+      - ./environments/{{ provisioner }}/{{ env_type }}/update.yml
+      - ./defaults/playbooks/none.yml
+  import_playbook: "{{ lookup('first_found', find_update) }}"
+
+

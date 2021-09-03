@@ -1,11 +1,12 @@
 $TTL 86400
-@ IN SOA control.example.com. root.{{ ansible_fqdn }}.example.com. (
+@ IN SOA control.example.com. root.control.example.com. (
               3           ;Serial
               3600        ;Refresh
               1800        ;Retry
               604800      ;Expire
               86400       ;Minimum TTL
 )
-@  IN  NS {{ ansible_fqdn }}.example.com.
-control     IN  A {{ hostvars[groups['controls'][0]].ansible_host }}
-satellite   IN  A {{ hostvars[groups['satellites'][0]].ansible_host }}
+@  IN  NS control.example.com.
+{% for entry in groups.all %} 
+{{ entry }}	IN A 	{{ hostvars[entry]['ansible_host'] }}
+{% endfor %}

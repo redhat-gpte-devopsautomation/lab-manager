@@ -10,22 +10,19 @@
       meta: refresh_inventory
 
     - name: Include environment variables
-      include_tasks: ../tasks/lab-env-vars.yml  
-
-    - set_fact:
-        guid: "{{ access_details.guid }}"
-        email: "{{ access_details.email }}"
-        subdomain: "{{ access_details.subdomain }}"
+      include_tasks: "../../../defaults/tasks/lab-env-vars.yml"
 
     - name: copy haproxy.cfg
       template:
-        src: ../templates/haproxy.cfg.j2
-        dest: /opt/podman/volumes/haproxy-volume/etc/haproxy/haproxy.cfg
+        src: haproxy.cfg.j2
+        dest: "/opt/podman/volumes/{{ env_type }}-volume/etc/haproxy/haproxy.cfg"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
+      notify: restart_haproxy_pod
 
-    - name: Restart haproxy-pod
+  handlers:
+    - name: restart_haproxy_pod
       service:
         name: haproxy-pod
         state: restarted
