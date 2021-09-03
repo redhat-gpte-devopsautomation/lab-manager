@@ -15,7 +15,7 @@
     - name: copy haproxy.cfg
       template:
         src: haproxy.cfg.j2
-        dest: "/opt/podman/volumes/{{ env_type }}-volume/etc/haproxy/haproxy.cfg"
+        dest: "/opt/podman/volumes/haproxy-volume/etc/haproxy/haproxy.cfg"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
