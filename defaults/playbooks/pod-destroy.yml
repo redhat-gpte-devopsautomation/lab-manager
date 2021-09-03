@@ -9,32 +9,32 @@
       include_tasks: ../tasks/lab-env-vars.yml
 
     ## Pod systemd service disable and stop
-    - name: Enable and Start pods
+    - name: dislable and stop pods
       service:
         name: "{{ env_type }}-pod"
-        enabled: disable
+        enabled: false
         state: stopped
       async: 3000
       poll: 30
 
     # Pod systemd service file
-    - name: Copy podman systemd service config
+    - name: delete podman systemd service config
       file:
         path: "/usr/lib/systemd/system/{{ env_type }}-pod.service"
         state: absent
 
     ## Pod systemd service enable/start
-    - name: Enable and Start pods
+    - name: Reload systemd daemon
       command: /usr/bin/systemctl daemon-reload
 
     # Pod orchestration directory
-    - name: Create podman orchestration directory
+    - name: delete podman orchestration directory
       file:
         path: "/opt/podman/pods/{{ env_type }}-pod/"
         state: absent
 
     # Pod volume directory
-    - name: Create podman volume directories
+    - name: delete podman volume directories
       file:
         path: "/opt/podman/volumes/{{ env_type }}-volume/"
         state: absent
