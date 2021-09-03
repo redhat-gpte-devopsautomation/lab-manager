@@ -1,5 +1,6 @@
 ---
-- name: update dns pod recoreds
+- name: update gitlab records
+  hosts: localhost
   become: true
   connection: local
   gather_facts: False
