@@ -1,16 +1,13 @@
 ---
 
-pods:
-    # Pod name for prefix result ex bind9-pod
-  - name: gitlab
-    # Pod volumes
-    volumes:
-      - /etc/gitlab
-      - /var/log/gitlab
-      - /var/opt/gitlab
-    # Pod dockerfile if required along with pod-compose file
-    dockerfile: False
-    # Pod state
-    state: started
-    # Pod state upon reboot
-    enabled: True
+# Pod volumes
+volumes:
+  - /etc/gitlab
+  - /var/log/gitlab
+  - /var/opt/gitlab
+# Pod dockerfile if required along with pod-compose file
+dockerfile: False
+# Pod state
+state: started
+# Pod state upon reboot
+enabled: True
