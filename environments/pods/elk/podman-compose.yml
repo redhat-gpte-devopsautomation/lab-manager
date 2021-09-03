@@ -15,7 +15,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - data01:/usr/share/elasticsearch/data
+      - '/opt/podman/volumes/elk-volume/usr/share/elasticsearch/data:/usr/share/elasticsearch/data:Z'
     ports:
       - 9200:9200
     networks:
@@ -36,7 +36,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - data02:/usr/share/elasticsearch/data
+      - '/opt/podman/volumes/elk-volume/usr/share/elasticsearch/data:/usr/share/elasticsearch/data:Z'
     networks:
       - elastic
 
@@ -55,7 +55,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - data03:/usr/share/elasticsearch/data
+      - '/opt/podman/volumes/elk-volume/usr/share/elasticsearch/data:/usr/share/elasticsearch/data:Z'
     networks:
       - elastic
 
@@ -70,13 +70,7 @@ services:
     networks:
       - elastic
 
-volumes:
-  data01:
-    driver: local
-  data02:
-    driver: local
-  data03:
-    driver: local
+
 
 networks:
   elastic:
