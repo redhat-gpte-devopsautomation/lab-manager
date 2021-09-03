@@ -63,7 +63,7 @@
     - name: Copy pods config files
       copy:
         src: "../../environments/{{ provisioner }}/{{ env_type }}/{{ item.src }}"
-        dest: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.dest }}"
+        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
