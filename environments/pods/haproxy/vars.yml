@@ -1,0 +1,11 @@
+pods:
+  - name: haproxy
+    dockerfile: true
+    volumes:
+      - /etc/haproxy
+      - /etc/ssl/certs
+    config_templates:
+      - src: haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+    letsencrypt_cert_dirs:
+      - /etc/ssl/certs/

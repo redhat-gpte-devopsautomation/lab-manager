@@ -1,0 +1,54 @@
+---
+
+- name: Check if letsencrypt certificate exist
+  stat:
+    path: "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}"
+  register: cert_stat
+        
+- name: Generate letsencrypt certificate
+  when: not cert_stat.stat.exists | bool 
+  command: >-
+    certbot-3 certonly 
+    --standalone 
+    --email {{ email }}
+    --agree-tos  
+    -d control.{{ guid }}.{{ subdomain }} -n
+
+
+
+
+#     - name: Letsencrypt Certificate block
+#       when: letsencrypt_cert | default(false) | bool
+
+#         - name: Include letsencrypt generator
+#           include_tasks: ../tasks/lab-letsencrypt-generator.yml
+
+#         - name: Merge if one certificate is required
+#           when: letsencrypt_cert_merge |default(false) | bool
+#           block:
+
+#           - name: Check if letsencrypt certificate exist
+#             stat:
+#               path: "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}"
+#             register: cert_stat
+    
+# - name: Generate letsencrypt certificate
+#   when: not cert_stat.stat.exists | bool 
+#             - name: Remove existing /tmp/cert.pem
+#               file:
+#                 path: /tmp/cert.pem
+#                 state: absent
+
+#             - name: merge private key and certificate
+#               shell: cat "{{ item }}" >> /tmp/cert.pem
+#               loop:
+#                 - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/privkey.pem"
+#                 - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/cert.pem"
+
+#             - name: copy merged certificate
+#               copy:
+#                 src: /tmp/cert.pem
+#                 dest: "/opt/podman/volumes/{{ item.0.name }}-volume/etc/ssl/certs/cert.pem"
+#                 owner: root
+#                 group: root
+#                 mode: "u=rw,g=r,o=r"

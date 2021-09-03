@@ -1,0 +1,45 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Include environment variables
+      include_tasks: ../tasks/lab-env-vars.yml
+
+    ## Pod systemd service disable and stop
+    - name: Enable and Start pods
+      service:
+        name: "{{ item.name }}-pod"
+        enabled: disable
+        state: stopped
+      async: 3000
+      poll: 30
+      loop: "{{ pods }}"
+
+    # Pod systemd service file
+    - name: Copy podman systemd service config
+      file:
+        path: "/usr/lib/systemd/system/{{ item.name }}-pod.service"
+        state: absent
+      loop: "{{ pods }}"
+
+    ## Pod systemd service enable/start
+    - name: Enable and Start pods
+      command: /usr/bin/systemctl daemon-reload
+
+    # Pod orchestration directory
+    - name: Create podman orchestration directory
+      file:
+        path: "/opt/podman/pods/{{ item.name }}-pod/"
+        state: absent
+      loop: "{{ pods }}"
+
+    # Pod volume directory
+    - name: Create podman volume directories
+      file:
+        path: "/opt/podman/volumes/{{ item.name }}-volume/"
+        state: absent
+      loop: "{{ pods }}"
+

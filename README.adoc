@@ -1,13 +1,27 @@
+:name: lab-manager
+:author1: Mitesh The Mouse <mitsharm@redhat.com>
+:author2: Prakhar Srivastava <psrivast@redhat.com>
+:team: GPTE 
+
 lab-manager
-=========
+===========
 
-To deploy
-lab deploy <env name>
+.To deploy
+*lab deploy <env name>*
 
-To destroy
+.To destroy
 
-lab destroy <env name>
-
-
+*lab destroy <env name>*
 
 
+
+
+Author Information
+------------------
+
+* Author/owner:
+** {author1}
+** {author2}
+
+* Team:
+** {team}

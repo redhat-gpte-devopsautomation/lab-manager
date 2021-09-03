@@ -16,7 +16,28 @@
     - 'provisioner == "instances"'
     - env_destroy | default(false) | bool
 
+# Pod provisioner and destroyer
+- name: Import config/provision playbook from environment
+  vars:
+    find_config:
+      - ./environments/{{ provisioner }}/{{ env_type }}/config.yml
+      - .defaults/playbooks/pod-provisioner.yml
+  import_playbook: "{{ lookup('first_found', find_config) }}"
+  when: 
+    - not env_destroy | default(false) | bool
+    - provisioner == 'pod'
 
+- name: Import destroy playbook from environment
+  vars:
+    find_destroy:
+      - ./environments/{{ provisioner }}/{{ env_type }}/destroy.yml
+      - ./defaults/playbooks/pod-destroy.yml
+  import_playbook: "{{ lookup('first_found', find_destroy) }}"
+  when: 
+    - env_destroy | default(false) | bool
+    - provisioner == 'pod'
+    
 - name: Re-configure Haproxy pod
   import_playbook: ./defaults/playbooks/pod-reconfig-haproxy.yml
-
+  when:
+    - provisioner != 'pod'

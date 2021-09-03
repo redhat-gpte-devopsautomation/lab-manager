@@ -8,12 +8,12 @@
     - name: Include environment variables
       include_tasks: ../tasks/lab-env-vars.yml
 
-- name: Import provisioner playbook from environment
+- name: Import pre-provision playbook from environment
   vars:
-    find_destroy:
-      - ../../environments/{{ provisioner }}/{{ env_type }}/provisioner.yml
+    find_provisioner:
+      - ../../environments/{{ provisioner }}/{{ env_type }}/pre-provison.yml
       - ./none.yml
-  import_playbook: "{{ lookup('first_found', find_destroy) }}"
+  import_playbook: "{{ lookup('first_found', find_provisioner) }}"
 
 
 - name: Provision stack

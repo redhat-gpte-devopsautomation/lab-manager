@@ -1,0 +1,21 @@
+---
+
+pods:
+    # Pod name for prefix result ex bind9-pod
+  - name: bind9
+    # Pod volumes
+    volumes:
+      - /var/named/
+      - /etc/
+    # Pod dockerfile if required along with pod-compose file
+    dockerfile: True
+    config_templates:
+      - src: example.com.zone.j2
+        dest: /var/named/example.com.zone
+    config_files:
+      - src: named.conf
+        dest: /etc/named.conf
+    # Pod state
+    state: started
+    # Pod state upon reboot
+    enabled: True
