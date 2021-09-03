@@ -1,0 +1,116 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  tasks:
+    - name: Include environment variables
+      include_tasks: "../defaults/tasks/lab-env-vars.yml"
+
+    # Pod orchestration directory
+    - name: Create podman orchestration directory
+      file:
+        path: "/opt/podman/pods/{{ env_type }}-pod/"
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+        mode: "u=rwx,g=rx,o=rx"
+
+    # Pod volume directory
+    - name: Create podman volume directories
+      file:
+        path: "/opt/podman/volumes/{{ env_type }}-volume/{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+        mode: "u=rwx,g=rx,o=rx"
+      when: volumes is defined
+      loop: "{{ volumes }}"
+
+    # Pod dockerfile
+    - name: Copy Dockerfile in orchestration dir
+      copy:
+        src: Dockerfile
+        dest: "/opt/podman/pods/{{ env_type }}-pod/"
+        owner: root
+        group: root
+        mode: "u=rwx,g=rx,o=rx"
+      when: dockerfile | default(false) | bool
+
+    # Pod compose file
+    - name: Copy podman-compose file in orchestration dir
+      copy:
+        src: podman-compose.yml
+        dest: "/opt/podman/pods/{{ env_type }}-pod/"
+        owner: root
+        group: root
+        mode: "u=rwx,g=rx,o=rx"
+
+    # Pod configuration templates 
+    - name: Copy pods config templates
+      template:
+        src: "{{ item.src }}"
+        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      when: config_templates is defined
+      loop: "{{ config_templates }}"
+
+    # Pod configuration files
+    - name: Copy pods config files
+      copy:
+        src: "{{ item.src }}"
+        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      when: config_files is defined
+      loop: "{{ config_files }}"
+
+    # Generate Letsencrypt certificate
+    - name: Include letsencrypt generator
+      include_tasks: ../../../defaults/tasks/lab-letsencrypt-generator.yml
+
+    - name: Remove existing /tmp/cert.pem
+      file:
+        path: /tmp/cert.pem
+        state: absent
+
+    - name: merge private key and certificate
+      shell: cat "{{ item }}" >> /tmp/cert.pem
+      loop:
+        - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/privkey.pem"
+        - "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}/cert.pem"
+
+    - name: copy merged certificate
+      copy:
+        src: /tmp/cert.pem
+        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ letsencrypt_cert_dirs }}/cert.pem"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+
+    # Pod systemd service file
+    - name: Copy podman systemd service config
+      template:
+        src: service.j2
+        dest: "/usr/lib/systemd/system/{{ env_type }}-pod.service"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+
+    ## Pod systemd service enable/start
+    - name: Reload systemd daemon
+      command: /usr/bin/systemctl daemon-reload
+      
+    ## Pod systemd service enable/start
+    - name: Enable and Start pods
+      service:
+        name: "{{ env_type }}-pod"
+        enabled: "{{ pod_service.enabled | default(true) }}"
+        state: "{{ pod_service.state | default('started') }}"
+      async: 3000
+      poll: 30

@@ -8,6 +8,7 @@ volumes:
 # Pod dockerfile if required along with pod-compose file
 dockerfile: False
 # Pod state
-state: started
-# Pod state upon reboot
-enabled: True
+pod_service:
+  state: started
+  # Pod state upon reboot
+  enabled: True
