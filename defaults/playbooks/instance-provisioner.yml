@@ -28,8 +28,9 @@
     - name: Saving inventory in /etc/ansible/hosts
       include_tasks: ../tasks/lab-ansible-inventory.yml
 
-    - name: update pod dns records
-      include_tasks: ../tasks/lab-dns-records.yml
+
+# - name: Import bind9 pod update playbook
+#   import_playbook: ../../environments/pods/bind9/update.yml
 
 
 - name: Wait for host to be available

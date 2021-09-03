@@ -8,11 +8,11 @@
     - name: Copy dns records
       template:
         src: example.com.zone.j2
-        dest: "/opt/podman/volumes/{{ env_type }}-volume/var/named/example.com.zone"
+        dest: "/opt/podman/volumes/bind9-volume/var/named/example.com.zone"
       notify: restart_dns_pod
   
   handlers:
     - name: restart_dns_pod
       service:
-        name: "{{ env_type}-pod"
+        name: "bind9-pod"
         state: restarted
