@@ -5,7 +5,7 @@
   connection: localhost
   tasks:
     - name: Include environment variables
-      include_tasks: "../defaults/tasks/lab-env-vars.yml"
+      include_tasks: "../../../defaults/tasks/lab-env-vars.yml"
 
     # Pod orchestration directory
     - name: Create podman orchestration directory
