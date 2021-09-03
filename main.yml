@@ -21,7 +21,7 @@
   vars:
     find_config:
       - ./environments/{{ provisioner }}/{{ env_type }}/config.yml
-      - .defaults/playbooks/pod-provisioner.yml
+      - ./defaults/playbooks/pod-provisioner.yml
   import_playbook: "{{ lookup('first_found', find_config) }}"
   when: 
     - not env_destroy | default(false) | bool
