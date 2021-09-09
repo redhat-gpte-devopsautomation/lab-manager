@@ -18,8 +18,7 @@ services:
       - '/opt/podman/volumes/elk-volume/usr/share/elasticsearch/data:/usr/share/elasticsearch/data:Z'
     ports:
       - 9200:9200
-    networks:
-      - elastic
+
 
   es02:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -37,8 +36,7 @@ services:
         hard: -1
     volumes:
       - '/opt/podman/volumes/elk-volume/usr/share/elasticsearch/data:/usr/share/elasticsearch/data:Z'
-    networks:
-      - elastic
+
 
   es03:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -56,8 +54,7 @@ services:
         hard: -1
     volumes:
       - '/opt/podman/volumes/elk-volume/usr/share/elasticsearch/data:/usr/share/elasticsearch/data:Z'
-    networks:
-      - elastic
+
 
   kib01:
     image: docker.elastic.co/kibana/kibana:7.14.1
@@ -67,11 +64,6 @@ services:
     environment:
       ELASTICSEARCH_URL: http://es01:9200
       ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
-    networks:
-      - elastic
+  
 
 
-
-networks:
-  elastic:
-    driver: bridge
