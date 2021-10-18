@@ -13,4 +13,4 @@
   include_vars: ../vars/common.yml
 
 - name: Include environment variables
-  include_vars: ../../environments/{{ provisioner }}/{{ env_type }}/vars.yml
+  include_vars: ../../environments/{{ provisioner }}/{{ env_name }}/vars.yml

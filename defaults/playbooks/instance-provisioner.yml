@@ -11,7 +11,7 @@
 - name: Import pre-provision playbook from environment
   vars:
     find_provisioner:
-      - ../../environments/{{ provisioner }}/{{ env_type }}/pre-provison.yml
+      - ../../environments/{{ provisioner }}/{{ env_name }}/pre-provison.yml
       - ./none.yml
   import_playbook: "{{ lookup('first_found', find_provisioner) }}"
 

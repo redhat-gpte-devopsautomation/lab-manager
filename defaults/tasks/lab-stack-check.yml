@@ -4,7 +4,7 @@
 - name: Set stack name
   set_fact:
     base_stack_name: "base-stack-{{ guid }}"
-    stack_name: "{{ env_type }}-stack-{{ guid }}"
+    stack_name: "{{ env_name }}-stack-{{ guid }}"
 
 - name: Collect stack requirements
   set_fact:
@@ -46,7 +46,7 @@
       assert:
         that:
           - 'not stack_exist |default(false) | bool'
-        fail_msg: "{{env_type }}: environment already exist"
+        fail_msg: "{{env_name }}: environment already exist"
     
     - name: Check other stacks
       assert:
@@ -64,7 +64,7 @@
       assert:
         that:
           - 'stack_exist |default(false) | bool'
-        fail_msg: "{{ env_type }}: environment doesn't exist"
+        fail_msg: "{{ env_name }}: environment doesn't exist"
     
 
 

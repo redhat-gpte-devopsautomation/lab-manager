@@ -11,7 +11,7 @@
     ## Pod systemd service disable and stop
     - name: dislable and stop pods
       service:
-        name: "{{ env_type }}-pod"
+        name: "{{ env_name }}-pod"
         enabled: false
         state: stopped
       async: 3000
@@ -20,7 +20,7 @@
     # Pod systemd service file
     - name: delete podman systemd service config
       file:
-        path: "/usr/lib/systemd/system/{{ env_type }}-pod.service"
+        path: "/usr/lib/systemd/system/{{ env_name }}-pod.service"
         state: absent
 
     ## Pod systemd service enable/start
@@ -30,12 +30,12 @@
     # Pod orchestration directory
     - name: delete podman orchestration directory
       file:
-        path: "/opt/podman/pods/{{ env_type }}-pod/"
+        path: "/opt/podman/pods/{{ env_name }}-pod/"
         state: absent
 
     # Pod volume directory
     - name: delete podman volume directories
       file:
-        path: "/opt/podman/volumes/{{ env_type }}-volume/"
+        path: "/opt/podman/volumes/{{ env_name }}-volume/"
         state: absent
 

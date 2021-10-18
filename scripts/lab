@@ -57,31 +57,31 @@ if [ "${1}" == "deploy" ];then
       ssh satellite.example.com "sudo hammer subscription refresh-manifest --organization=prod"
       ;;
     molecule) 
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} 
       ;;
     tower)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2}
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2}
       ;;
     multitier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} 
       ;;
     threetier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} 
       ;;
     nodes)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} 
       ;;
     finallab)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} 
       ;;	
     haproxy)
-      ansible-playbook ${LAB_MGR_DIR}/haproxy.yml -e env_type=pod -e pod_type=gitlab
+      ansible-playbook ${LAB_MGR_DIR}/haproxy.yml -e env_name=pod -e pod_type=gitlab
       ;;
     tower_patch) 
       ansible-playbook ${LAB_MGR_DIR}/tower-patch.yml
       ;;
     gitlab)
-      ansible-playbook ${LAB_MGR_DIR}/pod-main.yml -e env_type=pod -e pod_type=gitlab
+      ansible-playbook ${LAB_MGR_DIR}/pod-main.yml -e env_name=pod -e pod_type=gitlab
       ;;
     *)
       COW_MSG "${DEPLOY_ERROR_MSG}"
@@ -91,22 +91,22 @@ if [ "${1}" == "deploy" ];then
 elif [ "${1}" == "destroy" ]; then
   case ${2} in
     molecule) 
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true 
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} -e env_destroy=true 
       ;;
     tower)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} -e env_destroy=true
       ;;
     multitier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} -e env_destroy=true
       ;;
     threetier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} -e env_destroy=true
       ;;
     nodes)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} -e env_destroy=true
       ;;
     finallab)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
+      ansible-playbook ${MAIN_PLAYBOOK} -e env_name=${2} -e env_destroy=true
       ;;
     *)
     	COW_MSG "${DESTROY_ERROR_MSG}"

@@ -1,5 +1,5 @@
 [Unit]
-Description=Podman {{ env_type  }}-pod Service
+Description=Podman {{ env_name  }}-pod Service
 Documentation=man:podman-generate-systemd(1)
 Wants=network.target bind9-pod.service gitlab-pod.service
 After=network-online.target bind9-pod.service gitlab-pod.service
@@ -7,8 +7,8 @@ After=network-online.target bind9-pod.service gitlab-pod.service
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
 Restart=on-failure
-ExecStart=/usr/local/bin/podman-compose -f /opt/podman/pods/{{ env_type  }}-pod/podman-compose.yml up -d
-ExecStop=/usr/local/bin/podman-compose -f /opt/podman/pods/{{ env_type  }}-pod/podman-compose.yml down
+ExecStart=/usr/local/bin/podman-compose -f /opt/podman/pods/{{ env_name  }}-pod/podman-compose.yml up -d
+ExecStop=/usr/local/bin/podman-compose -f /opt/podman/pods/{{ env_name  }}-pod/podman-compose.yml down
 KillMode=none
 Type=forking
 TimeoutSec=900

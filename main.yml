@@ -1,19 +1,22 @@
 ---
 
 - import_playbook: "./defaults/playbooks/instance-provisioner.yml"
-  when: 
-    - 'provisioner == "instances"'
+  when:
+    - 'provisioner == "instance"'
+    - 'env_name is defined'
     - not env_destroy | default(false) | bool 
 
 - import_playbook: "./defaults/playbooks/instance-config.yml"
   when:
-    - 'provisioner == "instances"'
+    - 'provisioner == "instance"'
+    - 'env_name is defined'
     - instance_configure | default(true) | bool
     - not env_destroy | default(false) | bool  
 
 - import_playbook: "./defaults/playbooks/instance-destroy.yml"
   when: 
-    - 'provisioner == "instances"'
+    - 'env_name is defined'
+    - 'provisioner == "instance"'
     - env_destroy | default(false) | bool
 
 - name: Import bind9 pod update playbook
@@ -23,22 +26,22 @@
 - name: Import config/provision playbook from environment
   vars:
     find_config:
-      - ./environments/{{ provisioner }}/{{ env_type }}/config.yml
+      - ./environments/{{ provisioner }}/{{ env_name }}/provisioner.yml
       - ./defaults/playbooks/pod-provisioner.yml
   import_playbook: "{{ lookup('first_found', find_config) }}"
   when: 
     - not env_destroy | default(false) | bool
-    - provisioner == 'pods'
+    - provisioner == 'pod'
 
 - name: Import destroy playbook from environment
   vars:
     find_destroy:
-      - ./environments/{{ provisioner }}/{{ env_type }}/destroy.yml
+      - ./environments/{{ provisioner }}/{{ env_name }}/destroy.yml
       - ./defaults/playbooks/pod-destroy.yml
   import_playbook: "{{ lookup('first_found', find_destroy) }}"
   when: 
     - env_destroy | default(false) | bool
-    - provisioner == 'pods'
+    - provisioner == 'pod'
     
 - name: Import haproxy pod update playbook
   import_playbook: ./environments/pods/haproxy/update.yml

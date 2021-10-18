@@ -1,7 +1,7 @@
-env_type: "{{ env_type }}"
+env_name: "{{ env_name }}"
 guid: "{{ guid }}"
 email: "{{ email }}"
-project_tag: "{{ env_type }}-{{ guid }}"
+project_tag: "{{ env_name }}-{{ guid }}"
 
 # lab_name: mulit-dev
 provider_network: external
@@ -12,7 +12,7 @@ default_metadata:
   owner: "{{ email | default('unknownuser') }}"
   Project: "{{ project_tag }}"
   guid: "{{ guid }}"
-  env_type: "{{ env_type }}"
+  env_name: "{{ env_name }}"
 
 osp_default_rootfs_size: 50
 # Default instance type
@@ -38,7 +38,7 @@ instances:
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
-        value: "{{ env_type }}-{{ email }}"
+        value: "{{ env_name }}-{{ email }}"
       - key: "lab"
         value: "{{ instance_network }}"
       - key: "network"
@@ -62,7 +62,7 @@ instances:
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
-        value: "{{ env_type }}-{{ email }}"
+        value: "{{ env_name }}-{{ email }}"
       - key: "lab"
         value: "{{ instance_network }}"
       - key: "network"
@@ -85,7 +85,7 @@ instances:
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
-        value: "{{ env_type }}-{{ email }}"
+        value: "{{ env_name }}-{{ email }}"
       - key: "lab"
         value: "{{ instance_network }}"
       - key: "network"

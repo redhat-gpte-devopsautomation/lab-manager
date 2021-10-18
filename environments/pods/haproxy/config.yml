@@ -10,7 +10,7 @@
     # Pod orchestration directory
     - name: Create podman orchestration directory
       file:
-        path: "/opt/podman/pods/{{ env_type }}-pod/"
+        path: "/opt/podman/pods/{{ env_name }}-pod/"
         state: directory
         owner: root
         group: root
@@ -20,7 +20,7 @@
     # Pod volume directory
     - name: Create podman volume directories
       file:
-        path: "/opt/podman/volumes/{{ env_type }}-volume/{{ item }}"
+        path: "/opt/podman/volumes/{{ env_name }}-volume/{{ item }}"
         state: directory
         owner: root
         group: root
@@ -33,7 +33,7 @@
     - name: Copy Dockerfile in orchestration dir
       copy:
         src: Dockerfile
-        dest: "/opt/podman/pods/{{ env_type }}-pod/"
+        dest: "/opt/podman/pods/{{ env_name }}-pod/"
         owner: root
         group: root
         mode: "u=rwx,g=rx,o=rx"
@@ -43,7 +43,7 @@
     - name: Copy podman-compose file in orchestration dir
       copy:
         src: podman-compose.yml
-        dest: "/opt/podman/pods/{{ env_type }}-pod/"
+        dest: "/opt/podman/pods/{{ env_name }}-pod/"
         owner: root
         group: root
         mode: "u=rwx,g=rx,o=rx"
@@ -52,7 +52,7 @@
     - name: Copy pods config templates
       template:
         src: "{{ item.src }}"
-        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ item.dest }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
@@ -63,7 +63,7 @@
     - name: Copy pods config files
       copy:
         src: "{{ item.src }}"
-        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ item.dest }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
@@ -88,7 +88,7 @@
     - name: copy merged certificate
       copy:
         src: /tmp/cert.pem
-        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ letsencrypt_cert_dirs }}/cert.pem"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ letsencrypt_cert_dirs }}/cert.pem"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
@@ -97,7 +97,7 @@
     - name: Copy podman systemd service config
       template:
         src: service.j2
-        dest: "/usr/lib/systemd/system/{{ env_type }}-pod.service"
+        dest: "/usr/lib/systemd/system/{{ env_name }}-pod.service"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
@@ -109,7 +109,7 @@
     ## Pod systemd service enable/start
     - name: Enable and Start pods
       service:
-        name: "{{ env_type }}-pod"
+        name: "{{ env_name }}-pod"
         enabled: "{{ pod_service.enabled | default(true) }}"
         state: "{{ pod_service.state | default('started') }}"
       async: 3000

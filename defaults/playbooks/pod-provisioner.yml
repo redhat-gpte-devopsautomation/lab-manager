@@ -10,7 +10,7 @@
     # Pod orchestration directory
     - name: Create podman orchestration directory
       file:
-        path: "/opt/podman/pods/{{ env_type }}-pod/"
+        path: "/opt/podman/pods/{{ env_name }}-pod/"
         state: directory
         owner: root
         group: root
@@ -20,7 +20,7 @@
     # Pod volume directory
     - name: Create podman volume directories
       file:
-        path: "/opt/podman/volumes/{{ env_type }}-volume/{{ item }}"
+        path: "/opt/podman/volumes/{{ env_name }}-volume/{{ item }}"
         state: directory
         owner: root
         group: root
@@ -32,8 +32,8 @@
     # Pod dockerfile
     - name: Copy Dockerfile in orchestration dir
       copy:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/Dockerfile
-        dest: "/opt/podman/pods/{{ env_type }}-pod/"
+        src: ../../environments/{{ provisioner }}/{{ env_name }}/Dockerfile
+        dest: "/opt/podman/pods/{{ env_name }}-pod/"
         owner: root
         group: root
         mode: "u=rwx,g=rx,o=rx"
@@ -42,8 +42,8 @@
     # Pod compose file
     - name: Copy podman-compose file in orchestration dir
       copy:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/podman-compose.yml
-        dest: "/opt/podman/pods/{{ env_type }}-pod/"
+        src: ../../environments/{{ provisioner }}/{{ env_name }}/podman-compose.yml
+        dest: "/opt/podman/pods/{{ env_name }}-pod/"
         owner: root
         group: root
         mode: "u=rwx,g=rx,o=rx"
@@ -51,8 +51,8 @@
     # Pod configuration templates 
     - name: Copy pods config templates
       template:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/{{ item.src }}
-        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
+        src: ../../environments/{{ provisioner }}/{{ env_name }}/{{ item.src }}
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ item.dest }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
@@ -62,8 +62,8 @@
     # Pod configuration files
     - name: Copy pods config files
       copy:
-        src: "../../environments/{{ provisioner }}/{{ env_type }}/{{ item.src }}"
-        dest: "/opt/podman/volumes/{{ env_type }}-volume/{{ item.dest }}"
+        src: "../../environments/{{ provisioner }}/{{ env_name }}/{{ item.src }}"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ item.dest }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
@@ -73,8 +73,8 @@
     # Pod systemd service file
     - name: Copy podman systemd service config
       template:
-        src: ../../environments/{{ provisioner }}/{{ env_type }}/service.j2
-        dest: "/usr/lib/systemd/system/{{ env_type }}-pod.service"
+        src: ../../environments/{{ provisioner }}/{{ env_name }}/service.j2
+        dest: "/usr/lib/systemd/system/{{ env_name }}-pod.service"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
@@ -86,7 +86,7 @@
     ## Pod systemd service enable/start
     - name: Enable and Start pods
       service:
-        name: "{{ env_type }}-pod"
+        name: "{{ env_name }}-pod"
         enabled: "{{ pod_service.enabled | default(true) }}"
         state: "{{ pod_service.state | default('started') }}"
       async: 3000
