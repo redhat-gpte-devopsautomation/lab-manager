@@ -1,14 +1,18 @@
 ---
 
-- name: include access_details variables
-  include_vars: ../../vars/access_details.yml
+# - name: include access_details variables
+#   include_vars: ../../vars/access_details.yml
 
+# - name: Set variables from access_details
+#   set_fact:
+#     guid: "{{ access_details.guid }}"
+#     email: "{{ access_details.email }}"
+#     subdomain: "{{ access_details.subdomain }}"
 - name: Set variables from access_details
   set_fact:
-    guid: "{{ access_details.guid }}"
-    email: "{{ access_details.email }}"
-    subdomain: "{{ access_details.subdomain }}"
-
+    guid: "{{ lookup('ENV', 'GUID') }}"
+    email: "{{ lookkup('ENV', 'OPENTLC_USER_EMAIL') }}"
+    subdomain: "{{ lookup('ENV', 'SUBDOMAIN') }}"
 - name: Include default variables
   include_vars: ../vars/common.yml
 
