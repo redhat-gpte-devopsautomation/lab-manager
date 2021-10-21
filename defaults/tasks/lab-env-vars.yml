@@ -14,6 +14,7 @@
     guid: "{{ lookup('ENV', 'GUID') }}"
     email: "{{ lookup('ENV', 'OPENTLC_USER_EMAIL') }}"
     subdomain: "{{ lookup('ENV', 'SUBDOMAIN') }}"
+    lab_mgr_dir: "{{ lookup('ENV', 'LAB_MGR_DIR') }}"
 
 - name: Include default variables
   include_vars: ../vars/common.yml
