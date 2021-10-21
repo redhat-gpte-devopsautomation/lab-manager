@@ -1,0 +1,9 @@
+---
+
+- name: Node setup
+  hosts: satellites
+  gather_facts: false
+  become: true
+  tasks:     
+    - ping:
+        

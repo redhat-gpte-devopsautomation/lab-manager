@@ -1,0 +1,13 @@
+################################################
+#   Satellite configuration only
+################################################
+
+
+env_name: "{{ env_name }}"
+guid: "{{ guid }}"
+email: "{{ email }}"
+project_tag: "{{ env_name }}-{{ guid }}"
+
+
+default_networking: false
+default_subscription: false
