@@ -41,6 +41,7 @@
           regex: '^gitlab_root_token*'
           line: 'gitlab_root_token: {{ gitlab_initial_token }}'
           state: present
+          create: true
 
       - name: Include environment variables
         include_tasks: "/home/devops/.gitlab"
