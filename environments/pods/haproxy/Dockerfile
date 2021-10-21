@@ -6,4 +6,5 @@ RUN systemctl enable haproxy
 EXPOSE 8443
 EXPOSE 8080
 EXPOSE 8929
+EXPOSE 1936
 CMD [ "/sbin/init" ]
