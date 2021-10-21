@@ -9,5 +9,10 @@ email: "{{ email }}"
 project_tag: "{{ env_name }}-{{ guid }}"
 
 
+# disable default networking
 default_networking: false
+
+# disable default subscription
 default_subscription: false
+# No infra provisioning just configuration
+only_config: true

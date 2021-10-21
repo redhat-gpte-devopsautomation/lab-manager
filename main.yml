@@ -2,6 +2,7 @@
 
 - import_playbook: "./defaults/playbooks/instance-provisioner.yml"
   when:
+    - "not only_config |default(false) |bool"
     - 'provisioner == "instances"'
     - 'env_name is defined'
     - not env_destroy | default(false) | bool 
