@@ -68,6 +68,5 @@
   import_playbook: ./environments/pods/haproxy/config.yml
   when:
     - 'not pod_config |default(false) |bool'
-    - 'env_name is defined'
     - 'env_name != "haproxy"'
     - 'provisioner is defined'

@@ -9,7 +9,7 @@
       include_tasks: "../../../defaults/tasks/lab-env-vars.yml"
 
     - name: Include gitlab workload
-      include_tasks: config_vars.yml
+      include_vars: config_vars.yml
 
     # set gitlab root token 
     - name: Set/reset root token
