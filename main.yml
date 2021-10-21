@@ -21,7 +21,7 @@
     - env_destroy | default(false) | bool
 
 - name: Import bind9 pod update playbook
-  import_playbook: ./environments/pods/bind9/update.yml
+  import_playbook: ./environments/pods/bind9/config.yml
   when: 
     - 'env_name is defined'
     - 'provisioner == "instances"'
@@ -47,8 +47,21 @@
     - env_destroy | default(false) | bool
     - provisioner == 'pods'
     
+- name: Pod configuration only
+  vars:
+    find_update:
+      - ./environments/{{ provisioner }}/{{ env_name }}/config.yml
+      - ./defaults/playbooks/pod_config_none.yml
+  import_playbook: "{{ lookup('first_found', find_update) }}"
+  when:
+    - "pod_config |default(false) |bool"
+    - 'env_name is defined'
+    - 'provisioner is defined'
+
 - name: Import haproxy pod update playbook
   import_playbook: ./environments/pods/haproxy/config.yml
   when:
+    - "not pod_config |default(false) |bool"
     - 'env_name is defined'
+    - 'env_name != "haproxy"'
     - 'provisioner is defined'
