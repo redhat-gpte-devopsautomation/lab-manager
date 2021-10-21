@@ -9,7 +9,7 @@
 
     - name: Refresh manifest
       command: >-
-        "hammer subscription refresh-manifest --organization=prod"
+        /bin/hammer subscription refresh-manifest --organization=prod
       async: 300
       poll: 10
 
