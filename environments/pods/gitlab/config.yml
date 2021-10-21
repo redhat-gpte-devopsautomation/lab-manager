@@ -44,7 +44,7 @@
           create: true
 
       - name: Include environment variables
-        include_tasks: "/home/devops/.gitlab"
+        include_vars: "/home/devops/.gitlab"
 
     # Create Gitlab user
     - name: get list of gitlab users
