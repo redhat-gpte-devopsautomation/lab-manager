@@ -3,6 +3,7 @@
 - name: Include variables
   hosts: localhost
   connection: localhost
+  become: true
   tasks:
     - name: Include environment variables
       include_tasks: ../tasks/lab-env-vars.yml
