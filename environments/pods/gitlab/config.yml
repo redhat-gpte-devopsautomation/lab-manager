@@ -11,6 +11,15 @@
     - name: Include gitlab workload
       include_vars: config_vars.yml
 
+    - name: find current token
+      stat:
+        path: "/home/devops/.gitlab"
+      register: stat_output
+
+    - name: include current gitlab root token
+      include_vars: /home/devops/.gitlab
+      when: stat_output.status.exist | bool
+
     # set gitlab root token 
     - name: Set/reset root token
       when: gitlab_root_token | default('') != gitlab_initial_token
@@ -28,13 +37,13 @@
       - name: Save gitlab root token
         become: true
         lineinfile:
-          path: "{{ lab_mgr_dir }}/vars/access_details.yml"
+          path: "/home/devops/.gitlab"
           regex: '^gitlab_root_token*'
           line: 'gitlab_root_token: {{ gitlab_initial_token }}'
           state: present
 
       - name: Include environment variables
-        include_tasks: "{{ lab_mgr_dir }}/defaults/tasks/lab-env-vars.yml"
+        include_tasks: "/home/devops/.gitlab"
 
     # Create Gitlab user
     - name: get list of gitlab users
