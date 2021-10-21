@@ -11,7 +11,7 @@
 - name: Set variables from access_details
   set_fact:
     guid: "{{ lookup('ENV', 'GUID') }}"
-    email: "{{ lookkup('ENV', 'OPENTLC_USER_EMAIL') }}"
+    email: "{{ lookup('ENV', 'OPENTLC_USER_EMAIL') }}"
     subdomain: "{{ lookup('ENV', 'SUBDOMAIN') }}"
 - name: Include default variables
   include_vars: ../vars/common.yml
