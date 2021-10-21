@@ -6,4 +6,11 @@
   become: true
   tasks:     
     - ping:
+
+    - name: Refresh manifest
+      shell: >-
+        "sudo hammer subscription refresh-manifest --organization=prod"
+      async: 300
+      poll: 10
+
         
