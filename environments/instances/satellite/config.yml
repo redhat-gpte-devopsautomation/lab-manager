@@ -8,7 +8,7 @@
     - ping:
 
     - name: Refresh manifest
-      shell: >-
+      command: >-
         "sudo hammer subscription refresh-manifest --organization=prod"
       async: 300
       poll: 10
