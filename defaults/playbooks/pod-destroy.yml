@@ -4,6 +4,7 @@
   hosts: localhost
   connection: localhost
   gather_facts: false
+  become: true
   tasks:
     - name: Include environment variables
       include_tasks: ../tasks/lab-env-vars.yml
