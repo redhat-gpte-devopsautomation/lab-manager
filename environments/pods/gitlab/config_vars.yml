@@ -34,4 +34,3 @@ gitlab_details:
       repository: https://github.com/redhat-gpte-devopsautomation/aa-build-cloud-labs.git
       visibility: public
 
-      #gitlab_root_token: redhat@123
