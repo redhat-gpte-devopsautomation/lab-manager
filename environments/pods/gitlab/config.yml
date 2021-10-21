@@ -18,7 +18,7 @@
 
     - name: include current gitlab root token
       include_vars: /home/devops/.gitlab
-      when: stat_output.state.exist | bool
+      when: stat_output.stat.exist | bool
 
     # set gitlab root token 
     - name: Set/reset root token
