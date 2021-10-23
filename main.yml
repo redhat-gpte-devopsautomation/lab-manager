@@ -1,5 +1,8 @@
 ---
 
+- import_playbook: "./defaults/playbooks/env-finder.yml"
+
+
 - import_playbook: "./defaults/playbooks/instance-provisioner.yml"
   when:
     - 'not env_destroy | default(false) | bool' 

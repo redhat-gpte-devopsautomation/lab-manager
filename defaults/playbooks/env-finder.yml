@@ -1,6 +1,6 @@
 ---
 
-- name: Include variables
+- name: Find environment
   hosts: localhost
   connection: localhost
   gather_facts: false
@@ -11,8 +11,6 @@
       stat:
         path: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}"
       register: env_list
-
-    - debug: var=env_list
 
     - assert:
         that:
