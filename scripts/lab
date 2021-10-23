@@ -15,7 +15,7 @@ export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 # deploy,destroy
 
 usage() {
-  echo "Usage: $0 (deploy|destroy|reconfigure) [ -i instance_env_name ] [ -p pod_env_nameL ]\n"
+  echo -e  "\e[31m Usage: $0 (deploy|destroy|reconfigure) [ -i instance_env_name ] [ -p pod_env_nameL ] \e[0m \n"
   exit 2
 }
 
