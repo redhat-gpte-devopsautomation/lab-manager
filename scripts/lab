@@ -73,6 +73,7 @@ case ${1} in
   deploy) env_exec_deploy ${@:2};;
   destroy) env_exec_destroy ${@:2};;
   reconfigure) env_exec_reconfigure ${@:2};;
+  reset) env_exec_reset ${@:2};;
   help|*) usage;;
 esac
 
