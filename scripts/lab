@@ -59,10 +59,10 @@ env_exec_reset() {
   while  getopts "hi:p:" arg; do
     case ${arg} in
       i)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} -e env_destroy=true ;;
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} -e env_destroy=true
         ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} ;;
       p)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} -e env_destroy=true ;;
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} -e env_destroy=true
         ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} ;;
       h|*) usage ;;
     esac
