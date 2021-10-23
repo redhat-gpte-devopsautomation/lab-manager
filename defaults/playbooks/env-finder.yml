@@ -9,7 +9,13 @@
   tasks:
     - name: List available envs
       stat:
-        path: "{{ lab_mgr_dir }}/environments/instances"
+        path: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}"
       register: env_list
 
     - debug: var=env_list
+
+    - assert:
+        that:
+          - 'env_list.stat.exists | bool'
+        fail_msg: "{{ env_name }} doesn't exist"
+        success_msg: "{{ env_name }} found"
