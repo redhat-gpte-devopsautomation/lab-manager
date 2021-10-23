@@ -15,7 +15,7 @@ export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 # deploy,destroy
 
 usage() {
-  echo -e  "\e[31m Usage: $0 (deploy|destroy|reconfigure|reset) [ -i instance_env_name ] [ -p pod_env_name ] \e[0m \n"
+  echo -e  "\e[31mUsage: $0 (deploy|destroy|reconfigure|reset) [ -i instance_env_name ] [ -p pod_env_name ] \e[0m \n"
   exit 2
 }
 
@@ -77,7 +77,7 @@ case ${1} in
   help|*) usage;;
 esac
 
-if [ $OPTIND -lt 3 ];
+if [ ${OPTIND} -lt 3 ];
   then 
     echo "No options were passed"
     usage
