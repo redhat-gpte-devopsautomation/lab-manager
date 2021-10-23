@@ -1,0 +1,15 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  vars:
+    lab_mgr_dir: "{{ lookup('ENV', 'LAB_MGR_DIR') }}"
+  tasks:
+    - name: List available envs
+      stat:
+        path: "{{ lab_mgr_dir }}/environments/instances"
+      register: env_list
+
+    - debug: var=env_list
