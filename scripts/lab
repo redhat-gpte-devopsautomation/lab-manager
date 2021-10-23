@@ -4,44 +4,7 @@
 #   - Prakhar Srivastava, psrivast@redhat.com
 # Team: Ansible Automation - GPTE
 # License: GPLv3
-
-# Output Display function, it uses cowsay when installed
-COW_MSG(){
-  which cowsay &> /dev/null
-  if [ "$?" -eq 0 ];then
-	echo -e -n "\e[31m"
-	echo -e "$1" | cowsay -p 
-        echo -e -n "\e[0m"
-  else
-        echo -e "\e[31m-----------------------------"
-	echo -e "$1"
-        echo -e "-----------------------------\e[0m"
-  fi
-}
-
-# Available environments for deploy
-DEPLOY_ENV_TYPES="multitier, threetier, tower, finallab, molecule, nodes, haproxy, tower_patch, gitlab"
-# Available environments for destroy
-DESTROY_ENV_TYPES="multitier, threetier, tower, finallab, molecule, nodes"
-
-# Custom error messages used with COW_MSG function
-LAB_OPTION_ERROR_MSG="Error: Invalid Option\n
-Options: [deploy, destroy]\n
-Example: lab option argument"
-
-LAB_COW_MSG="Error: Invalid Option\n
-Options: [deploy, destroy]\n
-Example: lab option argument"
-
-DEPLOY_ERROR_MSG="
-Error: Invalid Argument\n 
-Arguments: [${DEPLOY_ENV_TYPES}]\n
-Example: lab option argument"
-
-DESTROY_ERROR_MSG="
-Error: Invalid Argument\n
-Arguments: [${DESTROY_ENV_TYPES}]\n
-Example: lab option argument"
+# Version: 2.0
 
 
 # Main Playbook
@@ -51,74 +14,52 @@ export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 # CAlls
 # deploy,destroy
 
+usage() {
+  echo "Usage: $0 (deploy|destroy|reconfigure) [ -i instance_env_name ] [ -p pod_env_nameL ]"
+  exit 2
+}
+
+
+env_exec_deploy() {
+  while  getopts "hi:p:" arg; do
+    case ${arg} in
+      i)
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} ;;
+      p)
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} ;;
+      h|*) usage ;;
+    esac
+  done
+}
+env_exec_destroy() {
+  while  getopts "hi:p:" arg; do
+    case ${arg} in
+      i)
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} -e env_destroy=true ;;
+      p)
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} -e env_destroy=true ;;
+      h|*) usage ;;
+    esac
+  done
+}
+
+env_exec_reconfigure() {
+  while  getopts "hi:p:" arg; do
+    case ${arg} in
+      i)
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} -e only_config=true ;;
+      p)
+        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} -e only_config=true ;;
+      h|*) usage ;;
+    esac
+  done
+}
+
 case ${1} in
-  deploy)
-     ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2}
+  deploy) env_exec_deploy ${@:2};;
+  destroy) env_exec_destroy ${@:2};;
+  reconfigure) env_exec_reconfigure ${@:2};;
+  help|*) usage;;
 esac
 
-# if [ "${1}" == "deploy" ];then
-#   case ${2} in
-#     satellite)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} -e only_config=true
-#       ;;
-#     molecule) 
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2}
-#       ;;
-#     tower)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2}
-#       ;;
-#     multitier)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2}
-#       ;;
-#     threetier)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2}
-#       ;;
-#     nodes)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} 
-#       ;;
-#     finallab)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} 
-#       ;;	
-#     haproxy)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${2} -e only_config=true
-#       ;;
-#     tower_patch) 
-#       ansible-playbook ${LAB_MGR_DIR}/environments/instances/tower/patch.yml
-#       ;;
-#     gitlab)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${2} -e only_config=true
-#       ;;
-#     *)
-#       COW_MSG "${DEPLOY_ERROR_MSG}"
-#       ;;
-#   esac
-  
-# elif [ "${1}" == "destroy" ]; then
-#   case ${2} in
-#     molecule) 
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} -e env_destroy=true
-#       ;;
-#     tower)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} -e env_destroy=truee
-#       ;;
-#     multitier)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} -e env_destroy=true
-#       ;;
-#     threetier)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} -e env_destroy=true
-#       ;;
-#     nodes)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} -e env_destroy=true
-#       ;;
-#     finallab)
-#       ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${2} -e env_destroy=true
-#       ;;
-#     *)
-#     	COW_MSG "${DESTROY_ERROR_MSG}"
-#      ;;
-#   esac
-  
-# else
-#   COW_MSG "${LAB_OPTION_ERROR_MSG}"
-# fi
 
