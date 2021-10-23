@@ -41,8 +41,8 @@ frontend towers
     bind *:8443 ssl crt /etc/ssl/certs/cert.pem
     mode http
     http-request redirect scheme https unless { ssl_fc }
-    use_backend towers
-backend towers
+    use_backend towers-instances
+backend towers-instances
     balance source
 	{% for host in groups['towers'] %}
     server tower{{ loop.index }} {{ host }}:80 check
@@ -54,8 +54,8 @@ frontend towerfl
     bind *:8443 ssl crt /etc/ssl/certs/cert.pem
     mode http
     http-request redirect scheme https unless { ssl_fc }
-    use_backend towerfl
-backend towerfl
+    use_backend towerfl-instances
+backend towerfl-instances
     balance source
 	{% for host in groups['towerfl'] %}
     server tower{{ loop.index }} {{ host }}:80 check
@@ -67,8 +67,8 @@ frontend frontends
     bind *:8080 ssl crt /etc/ssl/certs/cert.pem
     mode http
     http-request redirect scheme https unless { ssl_fc }
-    use_backend frontends
-backend frontends
+    use_backend frontends-instances
+backend frontends-instances
     balance roundrobin
     server  frontend {{ groups['frontends'][0] }}:80 check
 {% endif %}
