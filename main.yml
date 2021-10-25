@@ -1,13 +1,13 @@
 ---
 
-- import_playbook: "{{ collections_dir }}/common/playbooks/env-finder.yml"
+- import_playbook: "{{ collections_dir }}/manager/common/playbooks/env-finder.yml"
   vars:
-    collections_dir: "./collections/ansible_collections/manager"
+    collections_dir: "./collections/ansible_collections/"
 
 
-- import_playbook: "{{ collections_dir }}/common/playbooks/instance-provisioner.yml"
+- import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-provisioner.yml"
   vars:
-    collections_dir: "./collections/ansible_collections/manager"
+    collections_dir: "./collections/ansible_collections/"
   when:
     - 'not env_destroy | default(false) | bool'
     - 'not only_config |default(false) |bool'
@@ -22,9 +22,9 @@
 #     - 'env_name is defined'
 #     - 'provisioner == "instances"'
 
-- import_playbook: "{{ lab_mgr_dir }}/common/playbooks/instance-destroy.yml"
+- import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-destroy.yml"
   vars:
-    collections_dir: "./collections/ansible_collections/manager"
+    collections_dir: "./collections/ansible_collections/"
   when: 
     - 'env_destroy | default(false) | bool'
     - 'env_name is defined'
