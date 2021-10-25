@@ -15,7 +15,9 @@
     - 'provisioner == "instances"'
 
 
-# - import_playbook: "./defaults/playbooks/instance-config.yml"
+# - import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-config.yml"
+#   vars:
+#     collections_dir: "./collections/ansible_collections/"
 #   when:
 #     - 'not env_destroy | default(false) | bool' 
 #     - 'instance_configure | default(true) | bool'

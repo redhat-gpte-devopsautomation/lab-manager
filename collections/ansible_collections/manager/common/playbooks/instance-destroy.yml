@@ -21,16 +21,5 @@
   gather_facts: false
   roles:
     - role: manager.osp.osp_infra_destroy
-    
-  # tasks:
-  #   - name: Destroy heat stack
-  #     include_tasks: ../tasks/lab-env-destroy.yml
+    - role: manager.osp.osp_inventory
 
-  #   - name: Saving inventory in /etc/ansible/hosts
-  #     include_tasks: ../tasks/lab-ansible-inventory.yml
-
-    # - name: update pod dns records
-    #   include_tasks: ../tasks/lab-dns-records.yml
- 
-
-# common_inventory
