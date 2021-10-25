@@ -8,5 +8,5 @@ $TTL 86400
 )
 @  IN  NS control.example.com.
 {% for entry in groups.all %} 
-{{ entry }}	IN A 	{{ hostvars[entry]['ansible_host'] }}
+{{ entry | regex_replace('(\\..*)?$', '') }}	IN A 	{{ hostvars[entry]['ansible_host'] }}
 {% endfor %}
