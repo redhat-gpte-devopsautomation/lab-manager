@@ -27,6 +27,7 @@ env_exec_deploy() {
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=instances \
           -e env_name=${OPTARG} \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -37,6 +38,7 @@ env_exec_deploy() {
         ansible-playbook ${MAIN_PLAYBOOK} \ 
           -e provisioner=pods \
           -e env_name=${OPTARG} \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -55,6 +57,7 @@ env_exec_destroy() {
           -e provisioner=instances \
           -e env_destroy=true \
           -e env_name=${OPTARG} \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -66,6 +69,7 @@ env_exec_destroy() {
           -e provisioner=pods \
           -e provisioner=instances \
           -e env_destroy=true \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -85,6 +89,7 @@ env_exec_reconfigure() {
           -e provisioner=instances \
           -e env_name=${OPTARG} \
           -e only_config=true \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -96,6 +101,7 @@ env_exec_reconfigure() {
           -e provisioner=pods \
           -e env_name=${OPTARG} \
           -e only_config=true 
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -115,6 +121,7 @@ env_exec_reset() {
           -e provisioner=instances \
           -e env_destroy=true \
           -e env_name=${OPTARG} \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -124,6 +131,7 @@ env_exec_reset() {
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=instances \
           -e env_name=${OPTARG} \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -135,6 +143,7 @@ env_exec_reset() {
           -e provisioner=pods \
           -e provisioner=instances \
           -e env_destroy=true \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
@@ -144,6 +153,7 @@ env_exec_reset() {
         ansible-playbook ${MAIN_PLAYBOOK} \ 
           -e provisioner=pods \
           -e env_name=${OPTARG} \
+          -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
