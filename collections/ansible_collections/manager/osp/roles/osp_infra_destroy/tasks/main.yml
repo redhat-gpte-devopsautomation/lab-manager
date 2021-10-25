@@ -1,7 +1,7 @@
 ---
 
 - name: Check Heat template
-  include_tasks: check_status.yml
+  include_tasks: check_stack.yml
 
 - name: Delete Heat stack from generated template
   command: >-

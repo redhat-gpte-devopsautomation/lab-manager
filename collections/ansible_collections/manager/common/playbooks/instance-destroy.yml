@@ -1,13 +1,11 @@
 ---
+
 - name: Include variables
   hosts: localhost
   connection: localhost
   gather_facts: false
   roles:
     - role: manager.common.common_vars
-  # tasks:
-  #   - name: Include environment variables
-  #     include_tasks: ../tasks/lab-env-vars.yml
 
 - name: Import destroy playbook from environment
   vars:
@@ -17,7 +15,7 @@
   import_playbook: "{{ lookup('first_found', find_destroy) }}"
 
 
-- name: Run destroy
+- name: Destroy stack
   hosts: localhost
   connection: localhost
   gather_facts: false

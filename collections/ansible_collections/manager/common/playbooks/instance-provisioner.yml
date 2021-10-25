@@ -6,9 +6,6 @@
   gather_facts: false
   roles:
     - role: manager.common.common_vars
-  # tasks:
-  #   - name: Include environment variables
-  #     include_role: manager.common.common_vars
 
 - name: Import pre-provision playbook from environment
   vars:
