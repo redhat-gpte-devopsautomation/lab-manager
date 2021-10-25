@@ -17,7 +17,7 @@
   import_playbook: "{{ lookup('first_found', find_destroy) }}"
 
 
-- name: Include variables
+- name: Run destroy
   hosts: localhost
   connection: localhost
   gather_facts: false
