@@ -69,6 +69,7 @@ env_exec_destroy() {
           -e provisioner=pods \
           -e provisioner=instances \
           -e env_destroy=true \
+          -e env_name=${OPTARG} \
           -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
@@ -143,6 +144,7 @@ env_exec_reset() {
           -e provisioner=pods \
           -e provisioner=instances \
           -e env_destroy=true \
+          -e env_name=${OPTARG} \
           -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
