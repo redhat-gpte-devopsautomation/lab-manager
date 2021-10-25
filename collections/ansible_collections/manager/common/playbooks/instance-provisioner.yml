@@ -5,7 +5,7 @@
   connection: localhost
   gather_facts: false
   roles:
-    role: manager.common.common_vars
+    - role: manager.common.common_vars
   # tasks:
   #   - name: Include environment variables
   #     include_role: manager.common.common_vars
