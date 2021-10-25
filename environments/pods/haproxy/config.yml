@@ -5,13 +5,9 @@
   become: true
   connection: localhost
   gather_facts: false
+  roles:
+    - role: manager.common.common_vars
   tasks:
-    - name: Clean in-memory inventory
-      meta: refresh_inventory
-
-    - name: Include environment variables
-      include_tasks: "../../../defaults/tasks/lab-env-vars.yml"
-
     - name: copy haproxy.cfg
       template:
         src: haproxy.cfg.j2

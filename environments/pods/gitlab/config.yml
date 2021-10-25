@@ -4,9 +4,9 @@
   become: true
   connection: local
   gather_facts: False
+  roles:
+    - role: manager.common.common_vars
   tasks:
-    - name: Include environment variables
-      include_tasks: "../../../defaults/tasks/lab-env-vars.yml"
 
     - name: Include gitlab workload
       include_vars: config_vars.yml

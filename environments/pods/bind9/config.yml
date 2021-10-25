@@ -5,6 +5,8 @@
   become: true
   connection: local
   gather_facts: False
+  roles:
+    - role: manager.common.common_vars
   tasks:
     - name: Copy dns records
       template:

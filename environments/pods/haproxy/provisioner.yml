@@ -4,10 +4,11 @@
   hosts: localhost
   connection: localhost
   become: true
-  tasks:
-    - name: Include environment variables
-      include_tasks: "../../../defaults/tasks/lab-env-vars.yml"
+  roles:
+    - role: manager.common.common_vars
 
+    - role: manager.common.letsecrypt
+  tasks:
     # Pod orchestration directory
     - name: Create podman orchestration directory
       file:
@@ -72,8 +73,6 @@
       loop: "{{ config_files }}"
 
     # Generate Letsencrypt certificate
-    - name: Include letsencrypt generator
-      include_tasks: ../../../defaults/tasks/lab-letsencrypt-generator.yml
 
     - name: Remove existing /tmp/cert.pem
       file:

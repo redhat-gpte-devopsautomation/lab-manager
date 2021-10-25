@@ -5,10 +5,9 @@
   connection: localhost
   gather_facts: false
   become: true
+  roles:
+    - role: manager.common.common_vars
   tasks:
-    - name: Include environment variables
-      include_tasks: ../tasks/lab-env-vars.yml
-
     ## Pod systemd service disable and stop
     - name: dislable and stop pods
       service:
