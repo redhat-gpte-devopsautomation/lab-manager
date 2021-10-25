@@ -1,0 +1,23 @@
+---
+
+# - name: include access_details variables
+#   include_vars: ../../vars/access_details.yml
+
+# - name: Set variables from access_details
+#   set_fact:
+#     guid: "{{ access_details.guid }}"
+#     email: "{{ access_details.email }}"
+#     subdomain: "{{ access_details.subdomain }}"
+
+- name: Set variables from access_details
+  set_fact:
+    guid: "{{ lookup('ENV', 'GUID') }}"
+    email: "{{ lookup('ENV', 'OPENTLC_USER_EMAIL') }}"
+    subdomain: "{{ lookup('ENV', 'SUBDOMAIN') }}"
+    lab_mgr_dir: "{{ lookup('ENV', 'LAB_MGR_DIR') }}"
+
+- name: Include default variables
+  include_vars: ../vars/common.yml
+
+- name: Include environment variables
+  include_vars: ../../environments/{{ provisioner }}/{{ env_name }}/vars.yml

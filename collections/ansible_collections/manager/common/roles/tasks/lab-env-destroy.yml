@@ -1,0 +1,12 @@
+---
+- name: Check Heat template
+  include: ../tasks/lab-stack-check.yml
+
+- name: Delete Heat stack from generated template
+  command: >-
+    openstack stack delete  
+    --wait {{ stack_name }}
+    --os-cloud {{ guid }}-project 
+
+- pause:
+    seconds: 10

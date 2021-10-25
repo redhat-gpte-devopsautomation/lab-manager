@@ -1,0 +1,23 @@
+---
+
+- name: Configure networking
+  become: true
+  block:
+    - name: DNS IP updated
+      lineinfile:
+        state: present
+        path: /etc/sysconfig/network-scripts/ifcfg-eth0
+        line: "{{ __network_conf }}"
+      loop:
+        - PEERDNS=no
+        - DNS1={{ hostvars['control']['ansible_host'] }}
+      loop_control:
+        loop_var: __network_conf
+      register: network_update
+    
+    - name: restart network manager
+      service:
+        name: NetworkManager
+        state: restarted
+      when: network_update.changed | bool
+    
