@@ -1,4 +1,11 @@
 ---
+- name: Provision started
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "Provisioning started"
 
 - name: Include variables
   hosts: localhost
@@ -43,3 +50,10 @@
           delay: 10
           until: rping is succeeded
 
+- name: Provision finished
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "Provisioning finished"

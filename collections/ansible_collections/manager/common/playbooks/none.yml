@@ -4,4 +4,4 @@
   hosts: localhost
   tasks:
     - debug: 
-        msg: "Welecome to Lab-Manager"
+        msg: "No addtional playbooks found"

@@ -1,4 +1,11 @@
 ---
+- name: Configuration Started
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "Configuration started"
 
 - name: Locate config
   hosts: all:!controls:!bastions:!satellites
@@ -6,6 +13,7 @@
   pre_tasks:
     - name: Reload Inventory
       meta: refresh_inventory
+      
   roles:
     - role: manager.common.common_vars
 
@@ -22,3 +30,11 @@
       - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/config.yml"
       - ./none.yml
   import_playbook: "{{ lookup('first_found', find_config) }}"
+
+- name: Configuration finished
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "Configuration finished"
