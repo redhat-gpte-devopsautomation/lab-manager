@@ -100,7 +100,7 @@ env_exec_reconfigure() {
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=pods \
           -e env_name=${OPTARG} \
-          -e only_config=true 
+          -e only_config=true \
           -e guid=${GUID} \
           -e email=${OPENTLC_USER_EMAIL} \
           -e subdomain=${SUBDOMAIN} \
