@@ -67,7 +67,6 @@ env_exec_destroy() {
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=pods \
-          -e provisioner=instances \
           -e env_destroy=true \
           -e env_name=${OPTARG} \
           -e guid=${GUID} \
@@ -142,7 +141,6 @@ env_exec_reset() {
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=pods \
-          -e provisioner=instances \
           -e env_destroy=true \
           -e env_name=${OPTARG} \
           -e guid=${GUID} \
