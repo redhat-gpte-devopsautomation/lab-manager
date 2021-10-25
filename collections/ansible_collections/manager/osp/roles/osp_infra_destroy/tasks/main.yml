@@ -1,7 +1,7 @@
 ---
 
 - name: Check Heat template
-  include: check-status.yml
+  include: check_status.yml
 
 - name: Delete Heat stack from generated template
   command: >-
