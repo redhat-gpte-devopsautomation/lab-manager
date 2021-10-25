@@ -55,8 +55,8 @@
   hosts: localhost
   connection: local
   gather_facts: false 
-  roles:
-    - meta: refresh_inventory
   tasks:
+    - meta: refresh_inventory
+
     - debug:
         msg: "Provisioning finished"
