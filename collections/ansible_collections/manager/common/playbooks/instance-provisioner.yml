@@ -10,12 +10,12 @@
   #   - name: Include environment variables
   #     include_role: manager.common.common_vars
 
-    - name: Import pre-provision playbook from environment
-      vars:
-        find_provisioner:
-          - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/pre-provison.yml"
-          - ./none.yml
-      import_playbook: "{{ lookup('first_found', find_provisioner) }}"
+- name: Import pre-provision playbook from environment
+  vars:
+    find_provisioner:
+      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/pre-provison.yml"
+      - ./none.yml
+  import_playbook: "{{ lookup('first_found', find_provisioner) }}"
 
 
 # - name: Provision stack
