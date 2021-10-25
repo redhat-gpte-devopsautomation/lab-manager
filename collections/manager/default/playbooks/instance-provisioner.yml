@@ -1,0 +1,54 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Include environment variables
+      include_tasks: ../tasks/lab-env-vars.yml
+
+- name: Import pre-provision playbook from environment
+  vars:
+    find_provisioner:
+      - ../../environments/{{ provisioner }}/{{ env_name }}/pre-provison.yml
+      - ./none.yml
+  import_playbook: "{{ lookup('first_found', find_provisioner) }}"
+
+
+- name: Provision stack
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+   
+    - name: Provision lab environment
+      include_tasks: ../tasks/lab-env-provisioner.yml
+
+    - name: Saving inventory in /etc/ansible/hosts
+      include_tasks: ../tasks/lab-ansible-inventory.yml
+
+
+# - name: Import bind9 pod update playbook
+#   import_playbook: ../../environments/pods/bind9/update.yml
+
+
+- name: Wait for host to be available
+  hosts: all:!controls:!bastions:!satellites
+  gather_facts: false
+  tasks:
+    - when: "env_destroy | default(false) | bool != true"
+      block:
+        - name: wait for host to be available
+          wait_for_connection:
+            delay: 30
+            timeout: 300
+            connect_timeout: 10
+          register: rwait
+    
+        - ping:
+          register: rping
+          retries: 3
+          delay: 10
+          until: rping is succeeded
+

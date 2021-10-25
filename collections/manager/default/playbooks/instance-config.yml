@@ -1,0 +1,24 @@
+---
+
+- name: Locate config
+  hosts: all:!controls:!bastions:!satellites
+  gather_facts: false
+  tasks:
+    - name: Include environment variables
+      include_tasks: ../tasks/lab-env-vars.yml  
+
+    - name: Include networking
+      include_tasks: ../tasks/lab-config-networking.yml
+      when: default_networking | default(true) | bool
+
+    - name: Include subscription
+      include_tasks: ../tasks/lab-config-subscription.yml
+      when: default_subscription | default(true) | bool
+
+
+- name: Import config playbook from environment
+  vars:
+    find_config:
+      - ../../environments/{{ provisioner }}/{{ env_name }}/config.yml
+      - ./none.yml
+  import_playbook: "{{ lookup('first_found', find_config) }}"
