@@ -6,13 +6,12 @@
   gather_facts: false
   roles:
     - role: manager.common.common_vars
-  tasks:
+  # tasks:
   #   - name: Include environment variables
   #     include_role: manager.common.common_vars
 
 - name: Import pre-provision playbook from environment
   vars:
-    lab_mgr_dir: "{{ lookup('ENV', 'LAB_MGR_DIR') }}"
     find_provisioner:
       - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/pre-provison.yml"
       - ./none.yml
