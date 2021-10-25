@@ -4,9 +4,11 @@
   hosts: localhost
   connection: localhost
   gather_facts: false
-  tasks:
-    - name: Include environment variables
-      include_role: manager.common.common_vars
+  roles:
+    role: manager.common.common_vars
+  # tasks:
+  #   - name: Include environment variables
+  #     include_role: manager.common.common_vars
 
 # - name: Import pre-provision playbook from environment
 #   vars:
