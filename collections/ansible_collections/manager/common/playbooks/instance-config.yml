@@ -12,16 +12,7 @@
     - role: manager.common.network_settings
       when: default_networking | default(true) | bool
 
-  tasks:
-    # - name: Include environment variables
-    #   include_tasks: ../tasks/lab-env-vars.yml  
-
-    # - name: Include networking
-    #   include_tasks: ../tasks/lab-config-networking.yml
-    #   when: default_networking | default(true) | bool
-
-    - name: Include subscription
-      include_tasks: ../tasks/lab-config-subscription.yml
+    - role: manager.common.host_subscription
       when: default_subscription | default(true) | bool
 
 

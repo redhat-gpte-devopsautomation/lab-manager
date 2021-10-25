@@ -1,9 +1,3 @@
 ---
 
-
-satellite_url: satellite.example.com
-satellite_user_name: admin
-satellite_user_password: r3d4ht1!
-satellite_org: prod
-satellite_activationkey: gpte-labs-rhel8
 tower_version: 3.8.3-1

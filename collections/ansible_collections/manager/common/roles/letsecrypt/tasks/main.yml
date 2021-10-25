@@ -13,4 +13,3 @@
     --email {{ email }}
     --agree-tos  
     -d control.{{ guid }}.{{ subdomain }} -n
-
