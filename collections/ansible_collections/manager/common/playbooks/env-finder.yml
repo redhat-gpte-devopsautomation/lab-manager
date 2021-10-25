@@ -4,8 +4,6 @@
   hosts: localhost
   connection: localhost
   gather_facts: false
-  vars:
-    lab_mgr_dir: "{{ lookup('ENV', 'LAB_MGR_DIR') }}"
   tasks:
     - name: List available envs
       stat:

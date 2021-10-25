@@ -3,13 +3,22 @@
 - name: Locate config
   hosts: all:!controls:!bastions:!satellites
   gather_facts: false
-  tasks:
-    - name: Include environment variables
-      include_tasks: ../tasks/lab-env-vars.yml  
+  pre_tasks:
+    - name: Reload Inventory
+      meta: refresh_inventory
+  roles:
+    - role: manager.common.common_vars
 
-    - name: Include networking
-      include_tasks: ../tasks/lab-config-networking.yml
+    - role: manager.common.network_settings
       when: default_networking | default(true) | bool
+
+  tasks:
+    # - name: Include environment variables
+    #   include_tasks: ../tasks/lab-env-vars.yml  
+
+    # - name: Include networking
+    #   include_tasks: ../tasks/lab-config-networking.yml
+    #   when: default_networking | default(true) | bool
 
     - name: Include subscription
       include_tasks: ../tasks/lab-config-subscription.yml
@@ -19,6 +28,6 @@
 - name: Import config playbook from environment
   vars:
     find_config:
-      - ../../environments/{{ provisioner }}/{{ env_name }}/config.yml
+      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/config.yml"
       - ./none.yml
   import_playbook: "{{ lookup('first_found', find_config) }}"
