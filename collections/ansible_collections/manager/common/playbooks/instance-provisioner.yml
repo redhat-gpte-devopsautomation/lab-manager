@@ -28,6 +28,7 @@
   gather_facts: false
   roles:
     - role: manager.osp.osp_infra_provisioner
+
     - role: manager.osp.osp_inventory
 
 
@@ -50,10 +51,12 @@
           delay: 10
           until: rping is succeeded
 
-- name: Provision finished
+- name: Reload Inventory
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: false 
+  roles:
+    - meta: refresh_inventory
   tasks:
     - debug:
         msg: "Provisioning finished"

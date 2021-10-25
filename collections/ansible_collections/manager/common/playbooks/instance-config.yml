@@ -7,13 +7,9 @@
     - debug:
         msg: "Configuration started"
 
-- name: Locate config
+- name: Configure stack
   hosts: all:!controls:!bastions:!satellites
-  gather_facts: false
-  pre_tasks:
-    - name: Reload Inventory
-      meta: refresh_inventory
-      
+  gather_facts: false 
   roles:
     - role: manager.common.common_vars
 
