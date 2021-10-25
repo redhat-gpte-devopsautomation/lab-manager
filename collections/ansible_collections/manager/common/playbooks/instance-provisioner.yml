@@ -19,11 +19,13 @@
   import_playbook: "{{ lookup('first_found', find_provisioner) }}"
 
 
-# - name: Provision stack
-#   hosts: localhost
-#   connection: localhost
-#   gather_facts: false
-#   tasks:
+- name: Provision stack
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  roles:
+    - role: manager.osp.osp_infra_provisioner
+  # tasks:
    
 #     - name: Provision lab environment
 #       include_tasks: ../tasks/lab-env-provisioner.yml

@@ -1,0 +1,4 @@
+---
+
+lab_mgr_dir: "{{ lookup('ENV', 'LAB_MGR_DIR') }}"
+cloud_provider: "{{ lookup('ENV', 'CLOUD_PROVIDER') }}"
