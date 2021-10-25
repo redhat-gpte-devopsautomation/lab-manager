@@ -24,9 +24,25 @@ env_exec_deploy() {
   while  getopts "hi:p:" arg; do
     case ${arg} in
       i)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances \
+          -e env_name=${OPTARG} \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+          ;;
       p)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \ 
+          -e provisioner=pods \
+          -e env_name=${OPTARG} \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+        ;;
       h|*) usage ;;
     esac
   done
@@ -35,9 +51,27 @@ env_exec_destroy() {
   while  getopts "hi:p:" arg; do
     case ${arg} in
       i)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} -e env_destroy=true ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances \
+          -e env_destroy=true \
+          -e env_name=${OPTARG} \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+        ;;
       p)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} -e env_destroy=true ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods \
+          -e provisioner=instances \
+          -e env_destroy=true \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+        ;;
       h|*) usage ;;
     esac
   done
@@ -47,9 +81,27 @@ env_exec_reconfigure() {
   while  getopts "hi:p:" arg; do
     case ${arg} in
       i)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} -e only_config=true ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances \
+          -e env_name=${OPTARG} \
+          -e only_config=true \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+        ;;
       p)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} -e only_config=true ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods \
+          -e env_name=${OPTARG} \
+          -e only_config=true 
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}       
+        ;;
       h|*) usage ;;
     esac
   done
@@ -59,11 +111,45 @@ env_exec_reset() {
   while  getopts "hi:p:" arg; do
     case ${arg} in
       i)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} -e env_destroy=true
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=instances -e env_name=${OPTARG} ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances \
+          -e env_destroy=true \
+          -e env_name=${OPTARG} \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+       
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances \
+          -e env_name=${OPTARG} \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+          ;;
       p)
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} -e env_destroy=true
-        ansible-playbook ${MAIN_PLAYBOOK} -e provisioner=pods -e env_name=${OPTARG} ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods \
+          -e provisioner=instances \
+          -e env_destroy=true \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+        ;;
+        ansible-playbook ${MAIN_PLAYBOOK} \ 
+          -e provisioner=pods \
+          -e env_name=${OPTARG} \
+          -e email=${OPENTLC_USER_EMAIL} \
+          -e subdomain=${SUBDOMAIN} \
+          -e lab_mgr_dir=${LAB_MGR_DIR} \
+          -e cloud_provider=${CLOUD_PROVIDER} \
+          -e internal_domain=${INTERNAL_DOMAIN}
+        ;;
       h|*) usage ;;
     esac
   done
