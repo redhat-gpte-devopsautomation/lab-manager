@@ -129,7 +129,7 @@ env_exec_reset() {
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
           -e internal_domain=${INTERNAL_DOMAIN}
-          ;;
+        ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=pods \
