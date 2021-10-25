@@ -150,7 +150,7 @@ env_exec_reset() {
           -e cloud_provider=${CLOUD_PROVIDER} \
           -e internal_domain=${INTERNAL_DOMAIN}
 
-        ansible-playbook ${MAIN_PLAYBOOK} \ 
+        ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=pods \
           -e env_name=${OPTARG} \
           -e guid=${GUID} \
