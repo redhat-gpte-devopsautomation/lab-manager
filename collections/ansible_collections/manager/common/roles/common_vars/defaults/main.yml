@@ -1,0 +1,16 @@
+---
+
+cloud_provider: "{{ lookup('ENV', 'CLOUD_PROVIDER') }}"
+guid: "{{ lookup('ENV', 'GUID') }}"
+email: "{{ lookup('ENV', 'OPENTLC_USER_EMAIL') }}"
+subdomain: "{{ lookup('ENV', 'SUBDOMAIN') }}"
+lab_mgr_dir: "{{ lookup('ENV', 'LAB_MGR_DIR') }}"
+internal_domain: example.com
+user_private_key_file: /home/devops/.ssh/{{ guid }}key.pem
+user_public_key_file: /home/devops/.ssh/{{ guid }}key.pub
+satellite_url: satellite.example.com
+satellite_user_name: admin
+satellite_user_password: r3d4ht1!
+satellite_org: prod
+satellite_activationkey: gpte-labs-rhel8
+tower_version: 3.8.3-1

@@ -1,0 +1,10 @@
+---
+
+- name: Set internal domain
+  set_fact: 
+    internal_domain: internal.local
+  when: 'cloud_provider == "ec2"'
+
+
+- name: Include environment variables
+  include_vars: ../../environments/{{ provisioner }}/{{ env_name }}/vars.yml
