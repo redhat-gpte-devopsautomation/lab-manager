@@ -6,7 +6,4 @@
   become: true
   roles:
     - role: manager.common.common_vars
-    - role: manager.localpod.provisioner
-
-
-   
+    - role: manager.local_pod.provisioner
