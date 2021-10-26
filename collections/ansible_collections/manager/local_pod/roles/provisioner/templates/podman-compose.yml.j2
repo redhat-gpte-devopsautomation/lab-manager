@@ -4,7 +4,7 @@ version: 2
 services:
 {% set volume_dir = '/opt/podman/volumes/' %}
 {% for pod in pods %}
-  {{ pod.name }}:\
+  {{ pod.name }}:
 {% if pod.dockerfile == true %}
     build:
       context: .
