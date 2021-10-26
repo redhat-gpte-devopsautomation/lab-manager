@@ -47,3 +47,6 @@ instances:
       - DefaultSG
       - WebSG
       - HostSG
+
+tower_setup_dir_path: /tmp
+tower_version: 3.8.3-1
