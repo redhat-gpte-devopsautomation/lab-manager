@@ -1,0 +1,50 @@
+{# Jinja podman-compose template #}
+
+version: 2
+services:
+{% set volume_dir = '/opt/podman/volumes/' %}
+{% for pod in pods %}
+  {{ pod.name }}:
+{% if pod.dockerfile == true %}
+    build:
+      context: .
+      dockerfile: /opt/podman/pods/{{ pod.name }}-pod/Dockerfile
+    image: localhost/{{ pod.name }}
+{% else %}
+    image: {{ pod.image }}
+{% endif %}
+
+    container_name: {{ pod.name }}
+    hostname: {{ pod.name }}
+    restart: always
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://{{ groups['controls'][0] }}:5050'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+    ports:
+{% for port in pod.ports %}
+     - {{ port }}
+{% endfor %}
+
+    volumes:
+{% if pod.volumes.templates is defined %}
+{% for vol in pod.volumes.templates %}
+    - '{{ volume_dir }}/{{ pod.name }}-volume/{{ vol.dest }}/{{ vol.src | regex_replace('(\\.j2)?$', '') }}:{{ vol.dest }}/{{ vol.src | regex_replace('(\\.j2)?$', '') }}:Z'
+{% endfor %}
+{% endif %}
+
+{% if pod.volumes.files is defined %}
+{% for vol in pod.volumes.files %}
+    - '{{ volume_dir }}/{{ pod.name }}-volume/{{ vol.dest }}/{{ vol.src }}:{{ vol.dest }}/{{ vol.src }}:Z'
+{% endfor %}
+{% endif %}
+
+{% if pod.volumes.directories is defined %}
+{% for vol in pod.volumes.directories %}
+    - '{{ volume_dir }}/{{ pod.name }}-volume/{{ vol.dest }}:{{ vol.src }}:Z'
+{% endfor %}
+{% endif %}
+
+
+
+{% endfor %}
