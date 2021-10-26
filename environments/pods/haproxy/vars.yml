@@ -32,10 +32,5 @@ pods:
       state: started
       enabled: true
 
-# # Pod volumes
-# volumes:
-#   - /etc/haproxy
-#   - /etc/ssl/certs
-# # Pod dockerfile if required along with pod-compose file
-
-# letsencrypt_cert_dirs: /etc/ssl/certs/
+# Pod's Letsencypt ssl certificate directory
+ssl_cert_dirs: /etc/ssl/certs/
