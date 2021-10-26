@@ -6,6 +6,7 @@
   become: true
   roles:
     - role: manager.common.common_vars
-  tasks:
-    # Pod orchestration directory
+    - role: manager.localpod.provisioner
+
+
    

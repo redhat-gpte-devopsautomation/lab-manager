@@ -1,5 +1,4 @@
 ---
-
 pods:
   - name: bind9
     dockerfile: True
@@ -24,8 +23,10 @@ pods:
         - src: /var/named/
           dest: /var/named
     systemd:
-      wants_services:
-      after_services:
+      # Space separated list of wants
+      wants_services: network.target
+      # Space separated list of after services
+      after_services: network-online.target
       state: started
       enabled: true
 
