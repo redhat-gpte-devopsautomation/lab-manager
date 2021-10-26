@@ -40,7 +40,7 @@
     - 'provisioner == "instances"'
 
 # Pod provisioner and destroyer
-- name: Import config/provision playbook from environment
+- name: Provision Pods
   vars:
     collections_dir: "./collections/ansible_collections/"
     find_config:
@@ -49,11 +49,11 @@
   import_playbook: "{{ lookup('first_found', find_config) }}"
   when: 
     - 'not env_destroy | default(false) | bool'
-    - 'not only_config |default(false) |bool'
+    - 'not only_config | default(false) |bool'
     - 'env_name is defined'
     - 'provisioner == "pods"'
 
-- name: Import destroy playbook from environment
+- name: Destroy Pods
   vars:
     collections_dir: "./collections/ansible_collections/"
     find_destroy:
