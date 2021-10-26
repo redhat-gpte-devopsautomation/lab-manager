@@ -15,9 +15,15 @@ pods:
       - "8929:8929"
       - "1936:1936"
     volumes:
+      # Voluume source (src) will created in
+      # /opt/podman/volumes/{{ name }}-volume/{{ src }}
+      # dest is mount location in container
       templates:
         - src: haproxy.cfg.j2
           dest: /etc/haproxy/
+        directories:
+          - src: /etc/ssl/certs
+            dest: /etc/ssl/certs
     systemd:
       # Space separated list of wants
       wants_services: network.target bind9-pod.service gitlab-pod.service
@@ -26,10 +32,10 @@ pods:
       state: started
       enabled: true
 
-# Pod volumes
-volumes:
-  - /etc/haproxy
-  - /etc/ssl/certs
-# Pod dockerfile if required along with pod-compose file
+# # Pod volumes
+# volumes:
+#   - /etc/haproxy
+#   - /etc/ssl/certs
+# # Pod dockerfile if required along with pod-compose file
 
-letsencrypt_cert_dirs: /etc/ssl/certs/
+# letsencrypt_cert_dirs: /etc/ssl/certs/
