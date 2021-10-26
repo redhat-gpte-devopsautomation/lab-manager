@@ -18,7 +18,6 @@ pods:
       templates:
         - src: haproxy.cfg.j2
           dest: /etc/haproxy/
-
     systemd:
       # Space separated list of wants
       wants_services: network.target bind9-pod.service gitlab-pod.service

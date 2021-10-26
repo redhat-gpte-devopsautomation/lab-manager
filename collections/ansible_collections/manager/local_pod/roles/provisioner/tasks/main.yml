@@ -76,7 +76,7 @@
     - name: Copy podman-compose file in orchestration dir
       template:
         src: "{{ podman_compose_file }}"
-        dest: "/opt/podman/pods/{{ item.name }}-pod/"
+        dest: "/opt/podman/pods/{{ item.name }}-pod/podman-compose.yml"
         owner: root
         group: root
         mode: "u=rwx,g=rx,o=rx"
