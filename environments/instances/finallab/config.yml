@@ -28,7 +28,7 @@
 
     - name: Copy inventory file
       copy:
-        src: inventory.j2
+        src: inventory
         dest: "{{ tower_setup_dir_path }}/ansible-tower-setup/inventory"
       tags:
         - install-tower
