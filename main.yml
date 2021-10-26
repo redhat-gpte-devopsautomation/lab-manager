@@ -51,7 +51,7 @@
     - 'not env_destroy | default(false) | bool'
     - 'not only_config |default(false) |bool'
     - 'env_name is defined'
-    - provisioner == 'pods'
+    - 'provisioner == "pods"'
 
 - name: Import destroy playbook from environment
   vars:
@@ -62,9 +62,8 @@
   import_playbook: "{{ lookup('first_found', find_destroy) }}"
   when:
     - 'env_destroy | default(false) | bool'
-    - 'not only_config |default(false) |bool'
     - 'env_name is defined'
-    - provisioner == 'pods'
+    - 'provisioner == "pods"'
     
 - name: Pod Reconfigure / workload
   vars:
@@ -77,7 +76,7 @@
     - 'not env_destroy | default(false) | bool'
     - 'only_config |default(false) |bool'
     - 'env_name is defined'
-    - provisioner == 'pods'
+    - 'provisioner == "pods"'
 
 - name: Import haproxy pod update playbook
   import_playbook: "{{ lab_mgr_dir }}/environments/pods/haproxy/config.yml"
