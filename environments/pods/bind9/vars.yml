@@ -19,9 +19,9 @@ pods:
       files:
         - src: named.conf
           dest: /etc/
-      directories:
-        - src: /var/named/
-          dest: /var/named
+      # directories:
+      #   - src: /var/named/
+      #     dest: /var/named
     systemd:
       # Space separated list of wants
       wants_services: network.target
