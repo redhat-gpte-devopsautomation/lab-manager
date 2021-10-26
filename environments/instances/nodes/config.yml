@@ -4,6 +4,8 @@
   hosts: nodes
   gather_facts: false
   become: true
+  roles:
+    - role: manager.common.common_vars
   tasks:     
     - name: Configure user's password
       user:

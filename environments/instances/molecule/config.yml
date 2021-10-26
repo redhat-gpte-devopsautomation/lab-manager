@@ -3,6 +3,8 @@
 - hosts: moleculenodes
   become: true
   gather_facts: false
+  roles:
+    - role: manager.common.common_vars
   tasks:
     - name: Configure motd
       copy:
