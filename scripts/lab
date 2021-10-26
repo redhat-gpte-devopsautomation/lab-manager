@@ -35,7 +35,7 @@ env_exec_deploy() {
           -e internal_domain=${INTERNAL_DOMAIN}
           ;;
       p)
-        ansible-playbook ${MAIN_PLAYBOOK} \ 
+        ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=pods \
           -e env_name=${OPTARG} \
           -e guid=${GUID} \
