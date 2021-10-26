@@ -1,0 +1,137 @@
+---
+- name: Create podman orchestration directory
+  file:
+    path: "/opt/podman/pods/{{ item.name }}-pod/"
+    state: directory
+    owner: root
+    group: root
+    recurse: true
+    mode: "u=rwx,g=rx,o=rx"
+  loop: "{{ pods }}"
+
+# Pod volume directory
+- name: Create volume dir for templates
+  file:
+    path: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+    state: directory
+    owner: root
+    group: root
+    recurse: true
+    mode: "u=rwx,g=rx,o=rx"
+  loop: "{{ pods |subelements('volumes.templates', 'skip_missing=true') }}"
+
+- name: Create volume dir for files
+  file:
+    path: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+    state: directory
+    owner: root
+    group: root
+    recurse: true
+    mode: "u=rwx,g=rx,o=rx"
+  loop: "{{ pods |subelements('volumes.files', 'skip_missing=true') }}"
+
+- name: Create volume directories
+  file:
+    path: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+    state: directory
+    owner: root
+    group: root
+    recurse: true
+    mode: "u=rwx,g=rx,o=rx"
+  loop: "{{ pods |subelements('volumes.directories', 'skip_missing=true') }}"
+
+
+# Pod dockerfile
+- name: Block for Dockerfile
+  block:
+    - name: Find dockerfile
+      vars:
+        find_dockerfile:
+          - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/Dockerfile.j2"
+          - "Dockerfile.j2"
+      set_fact: 
+        docker_file: "{{ lookup('first_found', find_dockerfile) }}"
+
+    - name: Copy Dockerfile in orchestration dir
+      template:
+        src: "{{ docker_file }}"
+        dest: "/opt/podman/pods/{{ item.name }}-pod/Dockerfile"
+        owner: root
+        group: root
+        mode: "u=rwx,g=rx,o=rx"
+      when: item.dockerfile |default(false) | bool
+      loop: "{{ pods }}"
+
+# Pod compose file
+- name: Block for Podman Compose file
+  block:
+    - name: Find podman compose file
+      vars:
+        find_podman_compose:
+          - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/podman-compose.yml.j2"
+          - "podman-compose.yml.j2"
+      set_fact: 
+        podman_compose_file: "{{ lookup('first_found', find_podman_compose) }}"
+
+    - name: Copy podman-compose file in orchestration dir
+      template:
+        src: "{{ podman_compose_file }}"
+        dest: "/opt/podman/pods/{{ item.name }}-pod/"
+        owner: root
+        group: root
+        mode: "u=rwx,g=rx,o=rx"
+      loop: "{{ pods }}"
+
+# Pod configuration templates 
+- name: Copy pods config templates
+  template:
+    src: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ item.0.name }}/{{ item.1.src }}"
+    dest: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  loop: "{{ pods |subelements('volumes.templates', 'skip_missing=true') }}"
+
+# Pod configuration files
+- name: Copy pods config files
+  copy:
+    src: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ item.0.name }}/{{ item.1.src }}"
+    dest: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  loop: "{{ pods |subelements('volumes.files', 'skip_missing=true') }}"
+
+# Pod systemd service file
+- name: Block for systemd service file
+  block:
+    - name: Find systemd service file
+      vars:
+        find_systemd_service:
+          - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/service.j2"
+          - "service.j2"
+      set_fact: 
+        systemd_service_file: "{{ lookup('first_found', find_systemd_service) }}"
+
+    - name: Copy podman systemd service config
+      template:
+        src: "{{ systemd_service_file }}"
+        dest: "/usr/lib/systemd/system/{{ item.name }}-pod.service"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      loop: "{{ pods }}"
+
+## Pod systemd service enable/start
+- name: Reload systemd daemon
+  command: /usr/bin/systemctl daemon-reload
+  
+## Pod systemd service enable/start
+- name: Enable and Start pods
+  service:
+    name: "{{ item.name }}-pod"
+    enabled: "{{ item.systemd.enabled | default(true) }}"
+    state: "{{ item.systemd.state | default('started') }}"
+  async: 3000
+  poll: 30
+  loop: "{{ pods }}"
