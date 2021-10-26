@@ -48,7 +48,7 @@
       vars:
         find_dockerfile:
           - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/Dockerfile.j2"
-          - "Dockerfile.j2"
+          - "./templates/Dockerfile.j2"
       set_fact: 
         docker_file: "{{ lookup('first_found', find_dockerfile) }}"
 
@@ -69,7 +69,7 @@
       vars:
         find_podman_compose:
           - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/podman-compose.yml.j2"
-          - "podman-compose.yml.j2"
+          - "./templates/podman-compose.yml.j2"
       set_fact: 
         podman_compose_file: "{{ lookup('first_found', find_podman_compose) }}"
 
@@ -109,7 +109,7 @@
       vars:
         find_systemd_service:
           - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/service.j2"
-          - "service.j2"
+          - "./templates/service.j2"
       set_fact: 
         systemd_service_file: "{{ lookup('first_found', find_systemd_service) }}"
 
