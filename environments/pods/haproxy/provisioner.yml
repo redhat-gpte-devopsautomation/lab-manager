@@ -4,11 +4,13 @@
   hosts: localhost
   connection: localhost
   become: true
-  roles:
-    # - role: manager.common.common_vars
-    - role: manager.common.letsecrypt
-    - role: manager.local_pod.provisioner
   tasks:
+    - include_role:
+        name: manager.common.letsecrypt
+
+    - include_role:
+        name: manager.local_pod.provisioner
+
     # Generate Letsencrypt certificate
     - name: Remove existing /tmp/cert.pem
       file:

@@ -1,9 +1,9 @@
 ---
 
-- name: Include variables
+- name: Creating pods
   hosts: localhost
   connection: localhost
   become: true
-  roles:
-    - role: manager.local_pod.provisioner
-      when: pods is defined
+  tasks:
+    - include_role:
+        name: manager.local_pod.provisioner

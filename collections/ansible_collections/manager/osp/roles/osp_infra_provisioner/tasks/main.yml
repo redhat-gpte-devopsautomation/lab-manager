@@ -43,16 +43,3 @@
     --os-cloud {{ guid }}-project
   register: heat_info
 
-# - name: show hot outputs
-#   debug:
-#     var: heat_info
-#     verbosity: 3
-
-# - name: set fact for hot_outputs
-#   set_fact:
-#     hot_outputs: "{{ (heat_info.stdout | from_json) }}"
-
-# - name: show hot_outputs
-#   debug:
-#     var: hot_outputs
-
