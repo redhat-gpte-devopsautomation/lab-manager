@@ -64,7 +64,7 @@
 - name: Check if additinal stacks are in filter list
   assert:
     that:
-      - 'filter_stack_list | length !> 0'
+      - 'filter_stack_list | length != 0'
     fail_msg: >-
       {{filter_stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
       Please run: lab destroy -i {{ filter_stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
