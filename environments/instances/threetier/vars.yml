@@ -94,5 +94,5 @@ instances:
       - DefaultSG
       - HostSG
 
-# stacks_required:
-#   - finallab
+stacks_required:
+  - finallab
