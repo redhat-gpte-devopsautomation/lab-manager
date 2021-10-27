@@ -34,12 +34,12 @@
     openstack stack create -f json 
     --wait -t /tmp/{{ env_name }} 
     --os-cloud {{ guid }}-project
-    {{ stack_name }}
+    {{ env_name }}-stack-{{ guid }}
 
 - name: Grab outputs
   command: >-
     openstack stack show -f json 
-    {{ stack_name }} 
+    {{ env_name }}-stack-{{ guid }} 
     --os-cloud {{ guid }}-project
   register: heat_info
 

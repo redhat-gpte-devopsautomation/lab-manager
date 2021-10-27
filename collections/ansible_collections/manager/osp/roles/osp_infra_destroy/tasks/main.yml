@@ -6,7 +6,7 @@
 - name: Delete Heat stack from generated template
   command: >-
     openstack stack delete  
-    --wait {{ stack_name }}
+    --wait {{ env_name }}-stack-{{ guid }}
     --os-cloud {{ guid }}-project 
 
 - pause:
