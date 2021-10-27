@@ -18,6 +18,7 @@
     group: root
     recurse: true
     mode: "u=rwx,g=rx,o=rx"
+  when: pods is defined
   loop: "{{ pods |subelements('volumes.templates', 'skip_missing=true') }}"
 
 - name: Create volume dir for files
@@ -28,6 +29,7 @@
     group: root
     recurse: true
     mode: "u=rwx,g=rx,o=rx"
+  when: pods is defined
   loop: "{{ pods |subelements('volumes.files', 'skip_missing=true') }}"
 
 - name: Create volume directories
@@ -38,6 +40,7 @@
     group: root
     recurse: true
     mode: "u=rwx,g=rx,o=rx"
+  when: pods is defined
   loop: "{{ pods |subelements('volumes.directories', 'skip_missing=true') }}"
 
 
@@ -90,6 +93,7 @@
     owner: root
     group: root
     mode: "u=rw,g=r,o=r"
+  when: pods is defined
   loop: "{{ pods |subelements('volumes.templates', 'skip_missing=true') }}"
 
 # Pod configuration files
@@ -100,6 +104,7 @@
     owner: root
     group: root
     mode: "u=rw,g=r,o=r"
+  when: pods is defined
   loop: "{{ pods |subelements('volumes.files', 'skip_missing=true') }}"
 
 # Pod systemd service file
