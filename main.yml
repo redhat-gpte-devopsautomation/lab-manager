@@ -1,5 +1,13 @@
 ---
 
+- name: Include variables
+  hosts:
+  - localhost
+  - all
+  tasks:
+    - include_vars:
+        file: "{{ lab_mgr_dir }}/environments/{{ env_name }}/vars.yml"
+
 - import_playbook: "{{ collections_dir }}/manager/common/playbooks/env-finder.yml"
   vars:
     collections_dir: "./collections/ansible_collections/"
