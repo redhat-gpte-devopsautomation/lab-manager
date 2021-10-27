@@ -6,16 +6,28 @@
 #     base_stack_name: "base-stack-{{ guid }}"
 #     stack_name: "{{ env_name }}-stack-{{ guid }}"
 
+# - name: Collect stack requirements
+#   set_fact:
+#     stack_required: "{{ stack_required | default([]) + [ item + '-stack-' + guid ] }}"
+#   loop: "{{ requirements | default(['']) }}"
+
+# - name: Create stack_list
+#   set_fact:
+#      stack_list: "{{ stack_list |default([]) + [ item ] }}"
+#   when:
+#     - 'item != "Stack Name"'
+#     - 'item != base_stack_name'
+#   loop: "{{ stacks.stdout_lines | regex_replace('\"','') }}"
+
 - name: exempted stack lists
   set_fact:
     exempted_stacks:
       - "base-stack-{{ guid }}"
     requested_stack: "{{ env_name }}-stack-{{ guid }}"
 
-# - name: Collect stack requirements
-#   set_fact:
-#     stack_required: "{{ stack_required | default([]) + [ item + '-stack-' + guid ] }}"
-#   loop: "{{ requirements | default(['']) }}"
+- name: Print exempted stacks
+  debug:
+    msg: exempted_stacks
 
 - name: Add required stacks in exempted stack list
   set_fact:
@@ -28,15 +40,7 @@
     -f csv --os-cloud={{ guid }}-project
   register: __cloud_stacks
 
-# - name: Create stack_list
-#   set_fact:
-#      stack_list: "{{ stack_list |default([]) + [ item ] }}"
-#   when:
-#     - 'item != "Stack Name"'
-#     - 'item != base_stack_name'
-#   loop: "{{ stacks.stdout_lines | regex_replace('\"','') }}"
-
-- name: Create stack_list
+- name: filter stack_list
   set_fact:
      current_stack_list: "{{ current_stack_list |default([]) + [ item ] }}"
   when:
@@ -47,17 +51,18 @@
 - name: Check if requested stack is exist
   assert:
     that:
-      - 'requested_stack in current_stack_list'
+      - 'requested_stack in current_stack_list | default(['']) '
     fail_msg: "{{env_name }}: environment already exist"
 
-- name: Check other stacks
+- name: Check if additinal stacks are in filter list
   assert:
     that:
-      - 'current_stack_list | length > 0'
+      - 'current_stack_list |  default([''] | length > 0'
     fail_msg: >-
       {{stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
       Please run: lab destroy -i {{ stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
 
+- pause:
 # - name: Check stack if stack exist
 #   set_fact: 
 #     stack_exist: yes
