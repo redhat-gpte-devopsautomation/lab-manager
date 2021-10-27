@@ -25,14 +25,15 @@
       - "base-stack-{{ guid }}"
     requested_stack: "{{ env_name }}-stack-{{ guid }}"
 
-- name: Print exempted stacks
-  debug:
-    msg: exempted_stacks
-
 - name: Add required stacks in exempted stack list
   set_fact:
     exempted_stacks: "{{ exempted_stacks + [ item + '-stack-' + guid ] }}"
   loop: "{{ stacks_required | default(['']) }}"
+
+- name: Print exempted stacks
+  debug:
+    msg: "{{ exempted_stacks }}"
+    verbosity: 2
 
 - name: Gather existing stack list
   command: >-
@@ -40,24 +41,31 @@
     -f csv --os-cloud={{ guid }}-project
   register: __cloud_stacks
 
+
+
 - name: filter stack_list
   set_fact:
-     current_stack_list: "{{ current_stack_list |default([]) + [ item ] }}"
+     filter_stack_list: "{{ filter_stack_list |default([]) + [ item ] }}"
   when:
     - 'item != "Stack Name"'
     - 'item not in exempted_stacks'
   loop: "{{ __cloud_stacks.stdout_lines | regex_replace('\"','') }}"
 
+- name: Print exempted stacks
+  debug:
+    msg: "{{ filter_stack_list }}"
+    verbosity: 2
+
 - name: Check if requested stack is exist
   assert:
     that:
-      - 'requested_stack in current_stack_list | default(['']) '
+      - 'requested_stack in filter_stack_list | default(['']) '
     fail_msg: "{{env_name }}: environment already exist"
 
 - name: Check if additinal stacks are in filter list
   assert:
     that:
-      - 'current_stack_list |  default([''] | length > 0'
+      - 'filter_stack_list |  default([''] | length > 0'
     fail_msg: >-
       {{stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
       Please run: lab destroy -i {{ stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
