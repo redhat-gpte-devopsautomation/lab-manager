@@ -1,16 +1,16 @@
 ---
 
-- import_playbook: instance-provisioner.yml
+- import_playbook: "instance-provisioner.yml"
   when:
     - 'not env_destroy | default(false) | bool'
     - 'not only_config |default(false) |bool'
 
-- import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-config.yml"
+- import_playbook: "instance-config.yml"
   when:
     - 'not env_destroy | default(false) | bool' 
     - 'instance_configure | default(true) | bool'
 
-- import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-destroy.yml"
+- import_playbook: "instance-destroy.yml"
   when: 
     - 'env_destroy | default(false) | bool'
 
