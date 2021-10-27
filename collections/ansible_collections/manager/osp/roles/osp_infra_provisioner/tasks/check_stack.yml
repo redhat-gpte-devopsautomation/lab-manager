@@ -50,7 +50,7 @@
     - 'item not in exempted_stacks'
   loop: "{{ __cloud_stacks.stdout_lines | regex_replace('\"','') }}"
 
-- name: Print exempted stacks
+- name: Print filter stacks
   debug:
     msg: "{{ filter_stack_list }}"
     verbosity: 2
@@ -58,7 +58,7 @@
 - name: Check if requested stack is exist
   assert:
     that:
-      - 'requested_stack in filter_stack_list'
+      - 'requested_stack not in filter_stack_list'
     fail_msg: "{{env_name }}: environment already exist"
 
 - name: Check if additinal stacks are in filter list
