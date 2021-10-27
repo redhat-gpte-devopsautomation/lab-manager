@@ -1,7 +1,9 @@
 ---
 
 - name: Set collection dir
-  hosts: localhost:all
+  hosts: 
+    - localhost
+    - all
   tasks:
     - set_fact:
         collections_dir: "./collections/ansible_collections/"
