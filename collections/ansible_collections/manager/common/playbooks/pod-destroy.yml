@@ -1,6 +1,6 @@
 ---
 
-- name: Include variables
+- name: Deleting pods
   hosts: localhost
   connection: localhost
   gather_facts: false
