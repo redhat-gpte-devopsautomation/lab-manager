@@ -8,7 +8,7 @@
 
 - name: Collect stack requirements
   set_fact:
-    stack_required: "{{ stack_required | default([]) + [ item + '-stack-'' + guid ] }}"
+    stack_required: "{{ stack_required | default([]) + [ item + '-stack-' + guid ] }}"
   loop: "{{ requirements | default(['']) }}"
 
 - name: Gather stack info
