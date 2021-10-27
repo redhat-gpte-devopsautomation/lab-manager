@@ -32,7 +32,8 @@ env_exec_deploy() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
           ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
@@ -43,7 +44,8 @@ env_exec_deploy() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
         ;;
       h|*) usage ;;
     esac
@@ -62,7 +64,8 @@ env_exec_destroy() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
         ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
@@ -74,8 +77,9 @@ env_exec_destroy() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
-        ;;
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
+          ;;
       h|*) usage ;;
     esac
   done
@@ -94,7 +98,8 @@ env_exec_reconfigure() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
         ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
@@ -106,7 +111,8 @@ env_exec_reconfigure() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}       
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
         ;;
       h|*) usage ;;
     esac
@@ -126,8 +132,9 @@ env_exec_reset() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
-       
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
+
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=instances \
           -e env_name=${OPTARG} \
@@ -136,7 +143,8 @@ env_exec_reset() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
         ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
@@ -148,7 +156,8 @@ env_exec_reset() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
 
         ansible-playbook ${MAIN_PLAYBOOK} \
           -e provisioner=pods \
@@ -158,7 +167,8 @@ env_exec_reset() {
           -e subdomain=${SUBDOMAIN} \
           -e lab_mgr_dir=${LAB_MGR_DIR} \
           -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e internal_domain=${INTERNAL_DOMAIN} \
+          -e collections_dir="./collections/ansible_collections/"
         ;;
       h|*) usage ;;
     esac
