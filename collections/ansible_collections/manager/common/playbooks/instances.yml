@@ -1,6 +1,6 @@
 ---
 
-- import_playbook: instance-provisioner.yml"
+- import_playbook: instance-provisioner.yml
   when:
     - 'not env_destroy | default(false) | bool'
     - 'not only_config |default(false) |bool'
