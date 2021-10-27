@@ -1,16 +1,15 @@
 ---
 
+- import_playbook: "{{ collections_dir }}/manager/common/playbooks/env-finder.yml"
+  vars:
+    collections_dir: "./collections/ansible_collections/"
+
 - name: Include variables
   hosts:
   - localhost
   - all
   roles:
     - manager.common.common_vars
-
-- import_playbook: "{{ collections_dir }}/manager/common/playbooks/env-finder.yml"
-  vars:
-    collections_dir: "./collections/ansible_collections/"
-
 
 - import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-provisioner.yml"
   vars:
