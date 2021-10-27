@@ -1,70 +1,103 @@
 #################################
 # Heat Stack Check tasks file
 #################################
-- name: Set stack name
-  set_fact:
-    base_stack_name: "base-stack-{{ guid }}"
-    stack_name: "{{ env_name }}-stack-{{ guid }}"
+# - name: Set stack name
+#   set_fact:
+#     base_stack_name: "base-stack-{{ guid }}"
+#     stack_name: "{{ env_name }}-stack-{{ guid }}"
 
-- name: Collect stack requirements
+- name: exempted stack lists
   set_fact:
-    stack_required: "{{ stack_required | default([]) + [ item + '-stack-' + guid ] }}"
-  loop: "{{ requirements | default(['']) }}"
+    exempted_stacks:
+      - "base-stack-{{ guid }}"
+    requested_stack: "{{ env_name }}-stack-{{ guid }}"
 
-- name: Gather stack info
+# - name: Collect stack requirements
+#   set_fact:
+#     stack_required: "{{ stack_required | default([]) + [ item + '-stack-' + guid ] }}"
+#   loop: "{{ requirements | default(['']) }}"
+
+- name: Add required stacks in exempted stack list
+  set_fact:
+    exempted_stacks: "{{ exempted_stacks + [ item + '-stack-' + guid ] }}"
+  loop: "{{ stacks_required | default(['']) }}"
+
+- name: Gather existing stack list
   command: >-
     openstack stack list -c "Stack Name"  
     -f csv --os-cloud={{ guid }}-project
-  register: stacks
+  register: __cloud_stacks
+
+# - name: Create stack_list
+#   set_fact:
+#      stack_list: "{{ stack_list |default([]) + [ item ] }}"
+#   when:
+#     - 'item != "Stack Name"'
+#     - 'item != base_stack_name'
+#   loop: "{{ stacks.stdout_lines | regex_replace('\"','') }}"
 
 - name: Create stack_list
   set_fact:
-     stack_list: "{{ stack_list |default([]) + [ item ] }}"
+     current_stack_list: "{{ current_stack_list |default([]) + [ item ] }}"
   when:
     - 'item != "Stack Name"'
-    - 'item != base_stack_name'
-  loop: "{{ stacks.stdout_lines | regex_replace('\"','') }}"
+    - 'item not in exempted_stacks'
+  loop: "{{ __cloud_stacks.stdout_lines | regex_replace('\"','') }}"
 
-- name: Check stack if stack exist
-  set_fact: 
-    stack_exist: yes
-  when: stack_name in stack_list | default([])
+- name: Check if requested stack is exist
+  assert:
+    that:
+      - 'requested_stack in current_stack_list'
+    fail_msg: "{{env_name }}: environment already exist"
 
-- name: Check stacks other than required
-  set_fact:
-     additional_stack_exist: yes
-  when: 
-    - 'item not in stacks_required | default([])'
-    - 'item != stack_name'  
-  loop: "{{ stack_list | default([]) }}"
+- name: Check other stacks
+  assert:
+    that:
+      - 'current_stack_list | length > 0'
+    fail_msg: >-
+      {{stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
+      Please run: lab destroy -i {{ stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
+
+# - name: Check stack if stack exist
+#   set_fact: 
+#     stack_exist: yes
+#   when: stack_name in stack_list | default([])
+
+# - name: Check stacks other than required
+#   set_fact:
+#      additional_stack_exist: yes
+#   when: 
+#     - 'item not in stacks_required | default([])'
+#     - 'item != stack_name'  
+#   loop: "{{ stack_list | default([]) }}"
 
 #################################
-- name: Deployment assertion block
-  when: "env_destroy | default(false) | bool != true"
-  block:
-    - name: Stack already exist
-      assert:
-        that:
-          - 'not stack_exist |default(false) | bool'
-        fail_msg: "{{env_name }}: environment already exist"
+# - name: Deployment assertion block
+#   when: "env_destroy | default(false) | bool != true"
+#   block:
+#     - name: Stack already exist
+#       assert:
+#         that:
+#           - 'not stack_exist |default(false) | bool'
+#         fail_msg: "{{env_name }}: environment already exist"
     
-    - name: Check other stacks
-      assert:
-        that:
-          - 'not additional_stack_exist | default(false) | bool'
-        fail_msg: >-
-          {{stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
-          Please run: lab destroy -i {{ stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
+#     - name: Check other stacks
+#       assert:
+#         that:
+#           - 'not additional_stack_exist | default(false) | bool'
+#         fail_msg: >-
+#           {{stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
+#           Please run: lab destroy -i {{ stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
 
 #################################
-- name: Destroy assertion block
-  when: "env_destroy | default(false) | bool"
-  block:
-    - name: Stack doesn't exist
-      assert:
-        that:
-          - 'stack_exist |default(false) | bool'
-        fail_msg: "{{ env_name }}: environment doesn't exist"
+# - name: Destroy assertion block
+#   when: "env_destroy | default(false) | bool"
+#   block:
+#     - name: Stack doesn't exist
+#       assert:
+#         that:
+#           - 'stack_exist |default(false) | bool'
+#         fail_msg: "{{ env_name }}: environment doesn't exist"
     
 
 
