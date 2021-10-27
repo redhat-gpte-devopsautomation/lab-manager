@@ -6,14 +6,18 @@
 lab-manager
 ===========
 
-.To deploy
-*lab deploy <env name>*
+.To deploy instances
+*lab deploy -i <env_name>*
 
-.To destroy
+.To destroy instances
 
-*lab destroy <env name>*
+*lab destroy -i  <env_name>*
 
+.To deploy pods
+*lab deploy -p <env_name>*
 
+.To destroy pods
+*lab destroy -p <env_name>*
 
 
 Author Information
