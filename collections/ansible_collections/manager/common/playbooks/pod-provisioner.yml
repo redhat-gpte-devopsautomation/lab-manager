@@ -5,5 +5,5 @@
   connection: localhost
   become: true
   roles:
-    # - role: manager.common.common_vars
     - role: manager.local_pod.provisioner
+      when: pods is defined
