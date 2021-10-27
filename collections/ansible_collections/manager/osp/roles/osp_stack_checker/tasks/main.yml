@@ -38,17 +38,28 @@
     msg: "{{ filter_stack_list }}"
     verbosity: 2
 
-- name: Check if requested stack is exist
-  assert:
-    that:
-      - 'requested_stack not in filter_stack_list'
-    fail_msg: "{{env_name }}: environment already exist"
+- name: block for provision
+  when: not env_destroy | default(false) | bool
+  block:
+    - name: Check if requested stack is exist
+      assert:
+        that:
+          - 'requested_stack not in filter_stack_list'
+        fail_msg: "{{env_name }}: environment already exist"
 
-- name: Check if additinal stacks are in filter list
-  assert:
-    that:
-      - 'filter_stack_list | length == 0'
-    fail_msg: >-
-      {{filter_stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
-      Please run: lab destroy -i {{ filter_stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
+    - name: Check if additinal stacks are in filter list
+      assert:
+        that:
+          - 'filter_stack_list | length == 0'
+        fail_msg: >-
+          {{filter_stack_list[0] |default('') | regex_replace('(-.*)?$','') }}: environment is already exist,
+          Please run: lab destroy -i {{ filter_stack_list[0] |default('') | regex_replace('(-.*)?$','') }}
 
+- name: block for provision
+  when: env_destroy | default(false) | bool
+  block:
+  - name: Stack doesn't exist
+    assert:
+      that:
+        - 'requested_stack in filter_stack_list'
+      fail_msg: "{{ env_name }}: environment doesn't exist"

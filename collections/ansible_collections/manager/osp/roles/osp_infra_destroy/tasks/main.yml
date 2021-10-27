@@ -1,7 +1,8 @@
 ---
 
-- name: Check Heat template
-  include_tasks: check_stack.yml
+- name: Check osp stack
+  include_role:
+    name: manager.osp.osp_stack_checker
 
 - name: Delete Heat stack from generated template
   command: >-
