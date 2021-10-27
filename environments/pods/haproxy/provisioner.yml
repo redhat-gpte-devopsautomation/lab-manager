@@ -5,7 +5,7 @@
   connection: localhost
   become: true
   roles:
-    - role: manager.common.common_vars
+    # - role: manager.common.common_vars
     - role: manager.common.letsecrypt
     - role: manager.local_pod.provisioner
   tasks:

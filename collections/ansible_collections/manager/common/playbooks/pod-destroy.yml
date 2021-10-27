@@ -5,8 +5,8 @@
   connection: localhost
   gather_facts: false
   become: true
-  roles:
-    - role: manager.common.common_vars
+  # roles:
+  #   - role: manager.common.common_vars
   tasks:
     ## Pod systemd service disable and stop
     - name: dislable and stop pods

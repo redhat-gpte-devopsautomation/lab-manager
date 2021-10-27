@@ -4,8 +4,8 @@
   hosts: localhost
   connection: localhost
   gather_facts: false
-  roles:
-    - role: manager.common.common_vars
+  # roles:
+  #   - role: manager.common.common_vars
 
 - name: Import destroy playbook from environment
   vars:
