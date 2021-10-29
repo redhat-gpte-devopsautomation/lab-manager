@@ -20,7 +20,7 @@ services:
 
     ports:
 {% for port in pod.ports %}
-     - {{ port }}
+     - '{{ port }}'
 {% endfor %}
 
     volumes:

@@ -23,7 +23,7 @@ services:
         gitlab_rails['gitlab_shell_ssh_port'] = 2224
     ports:
 {% for port in pod.ports %}
-     - {{ port }}
+     - '{{ port }}'
 {% endfor %}
 
     volumes:
