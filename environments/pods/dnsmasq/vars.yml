@@ -12,19 +12,10 @@ pods:
     ports:
       - "53:53/udp"
       - "53:53/tcp"
-    
     volumes:
       files:
         - src: dnsmasq.conf
           dest: /etc/        
-    #   templates:
-    #     - src: example.com.zone.j2
-    #       dest: /var/named/
-    #   files:
-
-      # directories:
-      #   - src: /var/named/
-      #     dest: /var/named
     systemd:
       # Space separated list of wants
       wants_services: network.target
