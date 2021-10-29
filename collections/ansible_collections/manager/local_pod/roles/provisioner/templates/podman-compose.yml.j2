@@ -18,11 +18,14 @@ services:
     hostname: {{ pod.name }}
     restart: always
 
+{% if pod.ports is defined %}
     ports:
 {% for port in pod.ports %}
      - '{{ port }}'
 {% endfor %}
+{% endif %}
 
+{% if pod.volumes is defined %}
     volumes:
 {% if pod.volumes.templates is defined %}
 {% for vol in pod.volumes.templates %}
@@ -40,6 +43,7 @@ services:
 {% for vol in pod.volumes.directories %}
     - '{{ volume_dir }}/{{ pod.name }}-volume/{{ vol.dest }}:{{ vol.src }}:Z'
 {% endfor %}
+{% endif %}
 {% endif %}
 
 
