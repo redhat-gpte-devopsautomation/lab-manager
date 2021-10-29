@@ -5,20 +5,20 @@ pods:
     image: registry.access.redhat.com/ubi8/ubi-init:8.3
     docker:
       run:
-        - yum install -y bind
-        - systemctl enable named
+        - yum install -y dnsmasq
+        - systemctl enable dnsmasq
       expose: 53/udp 53/tcp
       cmd: /sbin/init
     ports:
       - "53:53/udp"
       - "53:53/tcp"
-    volumes:
-      templates:
-        - src: example.com.zone.j2
-          dest: /var/named/
-      files:
-        - src: named.conf
-          dest: /etc/
+    # volumes:
+    #   templates:
+    #     - src: example.com.zone.j2
+    #       dest: /var/named/
+    #   files:
+    #     - src: named.conf
+    #       dest: /etc/
       # directories:
       #   - src: /var/named/
       #     dest: /var/named
