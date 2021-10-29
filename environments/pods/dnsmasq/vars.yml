@@ -13,8 +13,8 @@ pods:
       - "53:53/udp"
       - "53:53/tcp"
     volumes:
-      files:
-        - src: dnsmasq.conf
+      templates:
+        - src: dnsmasq.conf.j2
           dest: /etc/        
     systemd:
       # Space separated list of wants
