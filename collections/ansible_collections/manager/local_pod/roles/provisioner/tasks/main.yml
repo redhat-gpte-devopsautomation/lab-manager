@@ -6,7 +6,7 @@
     owner: root
     group: root
     recurse: true
-    mode: "u=rwx,g=rx,o=rx"
+    mode: "u=rwx,g=rwx,o=rx"
   loop: "{{ pods }}"
 
 # Pod volume directory
@@ -17,7 +17,7 @@
     owner: root
     group: root
     recurse: true
-    mode: "u=rwx,g=rx,o=rx"
+    mode: "u=rwx,g=rwx,o=rx"
   when: pods is defined
   loop: "{{ pods |subelements('volumes.templates', 'skip_missing=true') }}"
 
@@ -28,7 +28,7 @@
     owner: root
     group: root
     recurse: true
-    mode: "u=rwx,g=rx,o=rx"
+    mode: "u=rwx,g=rwx,o=rx"
   when: pods is defined
   loop: "{{ pods |subelements('volumes.files', 'skip_missing=true') }}"
 
@@ -61,7 +61,7 @@
         dest: "/opt/podman/pods/{{ item.name }}-pod/Dockerfile"
         owner: root
         group: root
-        mode: "u=rwx,g=rx,o=rx"
+        mode: "u=rw,g=r,o=r"
       when: item.dockerfile |default(false) | bool
       loop: "{{ pods }}"
 
@@ -82,7 +82,7 @@
         dest: "/opt/podman/pods/{{ item.name }}-pod/podman-compose.yml"
         owner: root
         group: root
-        mode: "u=rwx,g=rx,o=rx"
+        mode: "u=rw,g=r,o=r"
       loop: "{{ pods }}"
 
 # Pod configuration templates 
