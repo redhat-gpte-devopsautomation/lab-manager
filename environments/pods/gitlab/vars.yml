@@ -1,6 +1,6 @@
 ---
 pods:
-  - name: haproxy
+  - name: gitlab
     dockerfile: False
     image: gitlab/gitlab-ee:latest
     ports:
