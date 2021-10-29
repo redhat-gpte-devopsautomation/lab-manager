@@ -8,6 +8,7 @@
   import_playbook: "{{ lookup('first_found', find_config) }}"
   when:
     - 'not env_destroy | default(false) | bool' 
+    - 'not only_config |default(false) |bool'
 
 - name: Destroy Pods
   vars:
