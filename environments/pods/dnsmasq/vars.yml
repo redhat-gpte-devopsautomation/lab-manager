@@ -1,7 +1,7 @@
 ---
 pods:
   - name: dnsmasq
-    dockerfile: false
+    dockerfile: True
     image: registry.access.redhat.com/ubi8/ubi-init:8.3
     docker:
       run:
