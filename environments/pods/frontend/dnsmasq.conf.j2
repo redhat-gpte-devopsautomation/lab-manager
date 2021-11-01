@@ -1,0 +1,7 @@
+port=53
+user=root
+group=root
+expand-hosts
+domain={{ lookup('ENV', 'INTERNAL_DOMAIN') }}
+server=8.8.8.8
+server=8.8.4.4

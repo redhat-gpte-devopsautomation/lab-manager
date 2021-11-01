@@ -1,0 +1,19 @@
+---
+
+- name: update dnsmasq pod 
+  hosts: localhost
+  become: true
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Create hosts file
+      template:
+        src: hosts.j2
+        dest: "/etc/hosts"
+      notify: restart_dnsmasq_pod
+  
+  handlers:
+    - name: restart_dnsmasq_pod
+      service:
+        name: "dnsmasq-pod"
+        state: restarted
