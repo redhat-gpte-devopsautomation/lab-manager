@@ -19,7 +19,7 @@ services:
     restart: always
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://{{ groups['controls'][0] }}:5050'
+        external_url 'http://{{ groups['bastions'][0] }}:5050'
         gitlab_rails['gitlab_shell_ssh_port'] = 2224
     ports:
 {% for port in pod.ports %}

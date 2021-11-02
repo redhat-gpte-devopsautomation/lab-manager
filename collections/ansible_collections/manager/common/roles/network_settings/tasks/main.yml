@@ -10,7 +10,7 @@
         line: "{{ __network_conf }}"
       loop:
         - PEERDNS=no
-        - DNS1={{ hostvars[groups.controls.0]['ansible_host'] }}
+        - DNS1={{ hostvars[groups.bastions.0]['ansible_host'] }}
       loop_control:
         loop_var: __network_conf
       register: network_update
