@@ -14,9 +14,21 @@ export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 # CAlls
 # deploy,destroy
 
+
+
 usage() {
-  echo -e  "\e[31mUsage: $0 (deploy|destroy|reconfigure|reset) [ -i instance_env_name ] [ -p pod_env_name ] \e[0m \n"
+  CMD_NAME=$(basename ${0})
+  echo -e  "\e[31mUsage: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ] \e[0m \n"
+  echo -e  "\e[31mUsage: $CMD_NAME prep  -c course_name \e[0m \n"
   exit 2
+}
+
+count_cmd_args() {
+  if [ ${OPTIND} -lt 3 ];
+    then 
+      echo "No options were passed"
+      usage
+  fi
 }
 
 common_environment_vars="
@@ -108,18 +120,44 @@ env_exec_reset() {
     esac
   done
 }
+course_exec_prep() {
+  while  getopts "hc:" arg; do
+    case ${arg} in
+    c)
+      ansible-playbook ${LAB_MGR_DIR}/course_prep.yml \
+      -e course_name=${OPTARG} \
+      ${common_environment_vars}
+      ;;
+    h|*) usage
+      ;;
+}
 
 case ${1} in
-  deploy) env_exec_deploy ${@:2};;
-  destroy) env_exec_destroy ${@:2};;
-  reconfigure) env_exec_reconfigure ${@:2};;
-  reset) env_exec_reset ${@:2};;
+  deploy) 
+    count_cmd_args
+    env_exec_deploy ${@:2}
+    ;;
+  destroy) 
+    count_cmd_args
+    env_exec_destroy ${@:2}
+    ;;
+  reconfigure)
+    count_cmd_args
+    env_exec_reconfigure ${@:2}
+    ;;
+  reset)
+    count_cmd_args
+    env_exec_reset ${@:2}
+    ;;
+  prep) 
+    count_cmd_args
+    course_exec_prep
+    ;;
+
   help|*) usage;;
 esac
 
-if [ ${OPTIND} -lt 3 ];
-  then 
-    echo "No options were passed"
-    usage
-fi
+
+
+
 

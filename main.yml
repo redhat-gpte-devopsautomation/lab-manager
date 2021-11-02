@@ -1,7 +1,16 @@
 ---
 
-- name: Check if env_name is exist in provisioner
-  import_playbook: "{{ collections_dir }}/manager/common/playbooks/env-finder.yml"
+- name: Find env
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Env finder
+      include_role:
+        name: manager.common.env_finder
+         
+
+# - name: Check if env_name is exist in provisioner
+#   import_playbook: "{{ collections_dir }}/manager/common/playbooks/env-finder.yml"
     
 
 - name: Include variables
@@ -22,3 +31,4 @@
   when: 
     - 'env_name is defined'
     - 'provisioner == "pods"'
+

@@ -1,0 +1,34 @@
+---
+
+- name: Find env
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Env finder
+      vars:
+        provisioner: courses
+        course_name: "{{ course_name }}"
+      include_role:
+        name: manager.common.env_finder
+
+    - name: Include course requirements
+      vars:
+        provisioner: courses
+        course_name: "{{ course_name }}"
+      include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ course_name }}/requirements.yml"
+      
+    - name: Deploy pods
+      vars:
+        provisioner: pods
+      shell: >-
+        /usr/local/bin/lab deploy -p {{ item }}
+      when: course_requirements.pods is defined
+      loop: "{{ course_requirements.pods }}"
+
+    - name: Deploy instances
+      vars:
+        provisioner: pods
+      shell: /usr/local/bin/lab deploy -i {{ item }}
+      when: course_requirements.instances is defined
+      loop: "{{ course_requirements.instances }}"
+
