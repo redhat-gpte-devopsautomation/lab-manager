@@ -192,7 +192,7 @@ case ${1} in
     ;;
   cleanup) 
     count_args ${@:2}
-    course_exec_prep ${@:2}
+    course_exec_cleanup ${@:2}
     ;;
 
   help|h) usage
