@@ -26,11 +26,10 @@ usage() {
   exit 2
 }
 
-count_cmd_args() {
-  if [ ${#@} -lt 3 ];
+count_args() {
+  if [ ${#@} -lt 2 ];
     then 
-      echo -e  "\e[31mLess arguments were passed \e[0m "
-      usage
+      usage "Less arguments were passed"
       exit 2
   fi
 }
@@ -155,7 +154,7 @@ course_exec_prep() {
 
 case ${1} in
   deploy) 
-    count_cmd_args
+    count_args ${@:2}
     env_exec_deploy ${@:2}
     ;;
   destroy) 
@@ -163,15 +162,15 @@ case ${1} in
     env_exec_destroy ${@:2}
     ;;
   reconfigure)
-    count_cmd_args
+    count_args ${@:2}
     env_exec_reconfigure ${@:2}
     ;;
   reset)
-    count_cmd_args
+    count_args ${@:2}
     env_exec_reset ${@:2}
     ;;
   prep) 
-    count_cmd_args
+    count_args ${@:2}
     course_exec_prep
     ;;
 
