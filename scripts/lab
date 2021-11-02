@@ -120,6 +120,7 @@ env_exec_reset() {
     esac
   done
 }
+
 course_exec_prep() {
   while  getopts "hc:" arg; do
     case ${arg} in
@@ -131,6 +132,7 @@ course_exec_prep() {
       h|*) usage
         ;;
     esac
+  done
 }
 
 case ${1} in
