@@ -149,7 +149,6 @@ course_exec_prep() {
         ;;
       *) usage "Invalid option"
         ;;
-        ;;
     esac
   done
 }
