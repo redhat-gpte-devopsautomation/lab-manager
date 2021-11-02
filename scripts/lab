@@ -11,9 +11,6 @@
 MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
 PREP_PLAYBOOK=${LAB_MGR_DIR}/course_prep.yml
 export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
-# CAlls
-# deploy,destroy
-
 
 
 usage() {
@@ -21,7 +18,7 @@ usage() {
   echo -e  "\e[31m"
   echo -e  "${1}"
   echo -e "Usage-1: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ]"
-  echo -e "Usage-2: $CMD_NAME prep  -c course_name"
+  echo -e "Usage-2: $CMD_NAME (prep|cleanup)  -c course_name"
   echo -e "\e[0m \n"
   exit 2
 }
@@ -175,7 +172,7 @@ case ${1} in
     env_exec_deploy ${@:2}
     ;;
   destroy) 
-    count_cmd_args
+    count_args
     env_exec_destroy ${@:2}
     ;;
   reconfigure)
