@@ -18,8 +18,10 @@ export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 
 usage() {
   CMD_NAME=$(basename ${0})
-  echo -e  "\e[31mUsage: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ] \e[0m \n"
-  echo -e  "\e[31mUsage: $CMD_NAME prep  -c course_name \e[0m \n"
+  echo -e  "\e[31m \n"
+  echo -e "Usage: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ] \e[0m \n"
+  echo -e  "Usage: $CMD_NAME prep  -c course_name"
+  echo -e "\e[0m \n"
   exit 2
 }
 
