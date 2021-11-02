@@ -123,13 +123,14 @@ env_exec_reset() {
 course_exec_prep() {
   while  getopts "hc:" arg; do
     case ${arg} in
-    c)
-      ansible-playbook ${LAB_MGR_DIR}/course_prep.yml \
-      -e course_name=${OPTARG} \
-      ${common_environment_vars}
-      ;;
-    h|*) usage
-      ;;
+      c)
+        ansible-playbook ${LAB_MGR_DIR}/course_prep.yml \
+        -e course_name=${OPTARG} \
+        ${common_environment_vars}
+        ;;
+      h|*) usage
+        ;;
+    esac
 }
 
 case ${1} in
