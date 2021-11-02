@@ -26,7 +26,7 @@ usage() {
 }
 
 count_cmd_args() {
-  if [ ${OPTIND} -lt 3 ];
+  if [ ${OPTIND} -lt 2 ];
     then 
       echo "No options were passed"
       usage
