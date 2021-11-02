@@ -171,7 +171,7 @@ case ${1} in
     ;;
   prep) 
     count_args ${@:2}
-    course_exec_prep
+    course_exec_prep ${@:2}
     ;;
 
   help|h) usage

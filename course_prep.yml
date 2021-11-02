@@ -7,15 +7,13 @@
     - name: Env finder
       vars:
         provisioner: courses
-        course_name: "{{ course_name }}"
       include_role:
         name: manager.common.env_finder
 
     - name: Include course requirements
       vars:
         provisioner: courses
-        course_name: "{{ course_name }}"
-      include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ course_name }}/requirements.yml"
+      include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/requirements.yml"
       
     - name: Deploy pods
       vars:
