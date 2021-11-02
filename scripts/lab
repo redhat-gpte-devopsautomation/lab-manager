@@ -19,6 +19,7 @@ export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 usage() {
   CMD_NAME=$(basename ${0})
   echo -e  "\e[31m"
+  echo -e  "${1}"
   echo -e "Usage-1: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ]"
   echo -e "Usage-2: $CMD_NAME prep  -c course_name"
   echo -e "\e[0m \n"
@@ -57,7 +58,10 @@ env_exec_deploy() {
           -e provisioner=pods -e env_name=${OPTARG} \
           ${common_environment_vars}
         ;;
-      h|*) usage ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
@@ -75,7 +79,10 @@ env_exec_destroy() {
           -e provisioner=pods -e env_destroy=true -e env_name=${OPTARG} \
           ${common_environment_vars}
           ;;
-      h|*) usage ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
@@ -93,7 +100,10 @@ env_exec_reconfigure() {
           -e provisioner=pods -e env_name=${OPTARG} -e only_config=true \
           ${common_environment_vars}
         ;;
-      h|*) usage ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
@@ -119,7 +129,10 @@ env_exec_reset() {
           -e provisioner=pods -e env_name=${OPTARG} \
           ${common_environment_vars}
         ;;
-      h|*) usage ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
@@ -132,7 +145,10 @@ course_exec_prep() {
         -e course_name=${OPTARG} \
         ${common_environment_vars}
         ;;
-      h|*) usage
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
         ;;
     esac
   done
@@ -163,8 +179,7 @@ case ${1} in
   help|h) usage
     ;;
   *)
-    echo -e  "\e[31mInvalid argument\e[0m "
-    usage
+    usage "Invalid argument"
     ;;
 esac
 
