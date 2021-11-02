@@ -8,8 +8,8 @@
 
 
 # Main Playbook
-#LAB_MGR_DIR=${LAB}
 MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
+PREP_PLAYBOOK=${LAB_MGR_DIR}/course_prep.yml
 export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
 # CAlls
 # deploy,destroy
@@ -140,8 +140,8 @@ course_exec_prep() {
   while  getopts "hc:" arg; do
     case ${arg} in
       c)
-        ansible-playbook ${LAB_MGR_DIR}/course_prep.yml \
-        -e course_name=${OPTARG} \
+        ansible-playbook ${PREP_PLAYBOOK} \
+        -e env_name=${OPTARG} \
         ${common_environment_vars}
         ;;
       h) usage
@@ -180,8 +180,4 @@ case ${1} in
     usage "Invalid argument"
     ;;
 esac
-
-
-
-
 
