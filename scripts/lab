@@ -152,6 +152,23 @@ course_exec_prep() {
   done
 }
 
+course_exec_cleanup() {
+  while  getopts "hc:" arg; do
+    case ${arg} in
+      c)
+        ansible-playbook ${PREP_PLAYBOOK} \
+        -e env_name=${OPTARG} \
+        - env_destroy=true \
+        ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
+
 case ${1} in
   deploy) 
     count_args ${@:2}
@@ -169,7 +186,11 @@ case ${1} in
     count_args ${@:2}
     env_exec_reset ${@:2}
     ;;
-  prep) 
+  prep)
+    count_args ${@:2}
+    course_exec_prep ${@:2}
+    ;;
+  cleanup) 
     count_args ${@:2}
     course_exec_prep ${@:2}
     ;;

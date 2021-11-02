@@ -14,19 +14,43 @@
       vars:
         provisioner: courses
       include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/requirements.yml"
-      
-    - name: Deploy pods
-      vars:
-        provisioner: pods
-      shell: >-
-        /usr/local/bin/lab deploy -p {{ item }}
-      when: course_requirements.pods is defined
-      loop: "{{ course_requirements.pods }}"
 
-    - name: Deploy instances
-      vars:
-        provisioner: pods
-      shell: /usr/local/bin/lab deploy -i {{ item }}
-      when: course_requirements.instances is defined
-      loop: "{{ course_requirements.instances }}"
+    - name: Provision environment as course prep
+      when:
+        - 'not env_destroy | default(false) | bool'
+        - 'not only_config |default(false) |bool'
+      block:  
+        - name: Deploy pods
+          vars:
+            provisioner: pods
+          shell: >-
+            /usr/local/bin/lab deploy -p {{ item }}
+          when: course_requirements.pods is defined
+          loop: "{{ course_requirements.pods }}"
+
+        - name: Deploy instances
+          vars:
+            provisioner: pods
+          shell: /usr/local/bin/lab deploy -i {{ item }}
+          when: course_requirements.instances is defined
+          loop: "{{ course_requirements.instances }}"
+
+    - name: Destroy environment as course prep
+      when: env_destroy | default(false) | bool
+      block:  
+        - name: destroy pods
+          vars:
+            provisioner: pods
+          shell: >-
+            /usr/local/bin/lab destroy -p {{ item }}
+          when: course_requirements.pods is defined
+          loop: "{{ course_requirements.pods }}"
+
+        - name: destroy instances
+          vars:
+            provisioner: pods
+          shell: /usr/local/bin/lab destroy -i {{ item }}
+          ignore_errors: true
+          when: course_requirements.instances is defined
+          loop: "{{ course_requirements.instances }}"
 
