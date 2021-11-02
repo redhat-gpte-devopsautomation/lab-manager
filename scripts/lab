@@ -158,7 +158,7 @@ course_exec_cleanup() {
       c)
         ansible-playbook ${PREP_PLAYBOOK} \
         -e env_name=${OPTARG} \
-        - env_destroy=true \
+        -e env_destroy=true \
         ${common_environment_vars}
         ;;
       h) usage
