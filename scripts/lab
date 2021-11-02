@@ -172,7 +172,7 @@ case ${1} in
     env_exec_deploy ${@:2}
     ;;
   destroy) 
-    count_args
+    count_args ${@:2}
     env_exec_destroy ${@:2}
     ;;
   reconfigure)
