@@ -1,5 +1,23 @@
 ---
 
+- name: Install lab-manager packages
+  hosts: localhost
+  become: True
+  gather_facts: false
+  tasks:
+    - name: Install podman runtime packages
+      yum:
+        name: 
+          - podman-2.2.1-7*
+          - python3
+        state: present
+
+    - name: Install python library podman-compose for orchestration
+      pip:
+        name: podman-compose==0.1.5
+        state: present
+
+
 - name: Find env
   hosts: localhost
   gather_facts: false
