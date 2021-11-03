@@ -1,8 +1,11 @@
 ---
+- name: Set host FQDN
+  set_fact:
+    letsencrypt_node: "{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}"
 
 - name: Check if letsencrypt certificate exist
   stat:
-    path: "/etc/letsencrypt/live/{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}"
+    path: "/etc/letsencrypt/live/{{ letsencrypt_node }}"
   register: cert_stat
         
 - name: Generate letsencrypt certificate
@@ -12,4 +15,4 @@
     --standalone 
     --email "{{ email }}"
     --agree-tos  
-    -d "{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}" -n
+    -d "{{ letsencrypt_node }}" -n
