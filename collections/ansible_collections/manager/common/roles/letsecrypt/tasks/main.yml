@@ -10,6 +10,6 @@
   command: >-
     certbot-3 certonly 
     --standalone 
-    --email {{ email }}
+    --email "{{ email }}"
     --agree-tos  
-    -d {{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }} -n
+    -d "{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}" -n
