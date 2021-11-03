@@ -6,7 +6,7 @@ $TTL 86400
               604800      ;Expire
               86400       ;Minimum TTL
 )
-@  IN  NS control.example.com.
+@  IN  NS {{ groups['bastions'][0] }}.
 {% for entry in groups.all %} 
 {{ entry | regex_replace('(\\..*)?$', '') }}	IN A 	{{ hostvars[entry]['ansible_host'] }}
 {% endfor %}
