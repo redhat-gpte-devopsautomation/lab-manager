@@ -2,7 +2,7 @@
 
 - name: Check if letsencrypt certificate exist
   stat:
-    path: "/etc/letsencrypt/live/control.{{ guid }}.{{ subdomain }}"
+    path: "/etc/letsencrypt/live/{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}"
   register: cert_stat
         
 - name: Generate letsencrypt certificate
@@ -12,4 +12,4 @@
     --standalone 
     --email {{ email }}
     --agree-tos  
-    -d control.{{ guid }}.{{ subdomain }} -n
+    -d {{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }} -n
