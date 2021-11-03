@@ -18,8 +18,9 @@
         state: present
 
     - include_role:
-      when: cloud_provider == 'osp'
         name: manager.osp.osp_inventory
+      when: cloud_provider == 'osp'
+      
 
 - name: Find env
   hosts: localhost
