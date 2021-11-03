@@ -17,6 +17,9 @@
         name: podman-compose==0.1.5
         state: present
 
+    - include_role:
+      when: cloud_provider == 'osp'
+        name: manager.osp.osp_inventory
 
 - name: Find env
   hosts: localhost

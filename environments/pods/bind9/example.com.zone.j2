@@ -1,5 +1,5 @@
 $TTL 86400
-@ IN SOA control.example.com. root.control.example.com. (
+@ IN SOA {{ groups['bastions'][0] }}. root.{{ groups['bastions'][0] }}. (
               3           ;Serial
               3600        ;Refresh
               1800        ;Retry

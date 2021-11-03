@@ -34,7 +34,7 @@ frontend gitlab
     use_backend gitlab-pod
 backend gitlab-pod
     balance source
-    server host control.example.com:5050 check
+    server host {{ groups['bastions'][0] }}:5050 check
 
 {% if groups['towers'] is defined %}
 frontend towers
