@@ -62,3 +62,17 @@
           retries: 999
           delay: 20
 
+    - name: "Create katello client activation key"
+      theforeman.foreman.katello_activation_key:
+        server_url: "{{ satellite_url }}"
+        username: "{{ satellite_admin }}"
+        password: "{{ satellite_admin_password }}"
+        organization: "{{ satellite_org }}"
+        validate_certs: false
+        name: "gpte-labs-rhel8"
+        lifecycle_environment: "Library"
+        content_overrides:
+          - label: "{{ item.label }}"
+            override: enabled
+      when: item.label is defined
+      loop: "{{ satellite_repos }}"
