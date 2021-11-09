@@ -33,6 +33,10 @@
           loop: "{{ satellite_repos }}"
           register: __repos_list
 
+        - debug: 
+            msg: "{{ __repos_list }}"
+            verbosity: 2
+
         - name: Sync repository
           theforeman.foreman.katello_sync:
             server_url: "{{ satellite_url }}"
