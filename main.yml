@@ -3,10 +3,15 @@
 - name: Find env
   hosts: localhost
   gather_facts: false
+  become: true
   tasks:
     - name: Env finder
       include_role:
         name: manager.common.env_finder
+
+    - name: Install collections
+      include_role:
+        name: manager.common.install_collections
 
 
 - name: Include variables
