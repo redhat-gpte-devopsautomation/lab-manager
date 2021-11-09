@@ -2,7 +2,7 @@
 
 - name: Set requirements file path
   set_fact:
-    requirements_path: "{{ lab-manager }}/environments/{{ provisioner }}/{{ env_name }}/requirements.yml"
+    requirements_path: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/requirements.yml"
 
 - name: Check if requirements.yml exists
   stat:
