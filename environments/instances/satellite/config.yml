@@ -19,7 +19,7 @@
       when: satellite_add_repos | default(false) | bool
       block:
         - name: Setting up satellite repository
-          theforeman.foreman.repository_set:
+          theforeman.foreman.katello_repository_set:
             server_url: "{{ satellite_url }}"
             username: "{{ satellite_admin }}"
             password: "{{ satellite_admin_password }}"
@@ -33,7 +33,7 @@
           loop: "{{ satellite_repos }}"
 
         - name: Sync repository
-          theforeman.foreman.repository_sync:
+          theforeman.foreman.katello_sync:
             server_url: "{{ satellite_url }}"
             username: "{{ satellite_admin }}"
             password: "{{ satellite_admin_password }}"
