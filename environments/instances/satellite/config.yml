@@ -31,6 +31,7 @@
             - releasever: "{{ item.releasever | default(omit) }}"
               basearch: "{{ item.basearch | default(omit) }}"
           loop: "{{ satellite_repos }}"
+          register: __repos_list
 
         - name: Sync repository
           theforeman.foreman.katello_sync:
@@ -69,10 +70,9 @@
         password: "{{ satellite_admin_password }}"
         organization: "{{ satellite_org }}"
         validate_certs: false
-        name: "gpte-labs-rhel8"
+        name: "{{ satellite_activation_key }}"
         lifecycle_environment: "Library"
         content_overrides:
-          - label: "{{ item.label }}"
+          - label: "{{ item.item.label }}"
             override: enabled
-      when: item.label is defined
-      loop: "{{ satellite_repos }}"
+      loop: "{{ __repos_list.results }}"
