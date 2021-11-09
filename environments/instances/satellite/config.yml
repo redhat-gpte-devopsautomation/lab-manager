@@ -63,16 +63,16 @@
           retries: 999
           delay: 20
 
-    - name: "Create katello client activation key"
-      theforeman.foreman.katello_activation_key:
-        server_url: "{{ satellite_url }}"
-        username: "{{ satellite_admin }}"
-        password: "{{ satellite_admin_password }}"
-        organization: "{{ satellite_org }}"
-        validate_certs: false
-        name: "{{ satellite_activation_key }}"
-        lifecycle_environment: "Library"
-        content_overrides:
-          - label: "{{ item.item.label }}"
-            override: enabled
-      loop: "{{ __repos_list.results }}"
+        - name: "Create katello client activation key"
+          theforeman.foreman.katello_activation_key:
+            server_url: "{{ satellite_url }}"
+            username: "{{ satellite_admin }}"
+            password: "{{ satellite_admin_password }}"
+            organization: "{{ satellite_org }}"
+            validate_certs: false
+            name: "{{ satellite_activation_key }}"
+            lifecycle_environment: "Library"
+            content_overrides:
+              - label: "{{ item.item.label }}"
+                override: enabled
+          loop: "{{ __repos_list.results }}"
