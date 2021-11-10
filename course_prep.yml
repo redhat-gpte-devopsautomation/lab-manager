@@ -12,6 +12,11 @@
           - python3
         state: present
 
+    - name: Install openstacksdk
+      yum:
+        name: python3-openstacksdk
+      when: cloud_provider == 'osp'
+
     - name: Install python library podman-compose for orchestration
       pip:
         name: podman-compose==0.1.5
