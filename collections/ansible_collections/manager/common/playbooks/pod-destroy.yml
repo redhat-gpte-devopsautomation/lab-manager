@@ -7,29 +7,31 @@
   become: true
   tasks:
     ## Pod systemd service disable and stop
-    - name: dislable and stop pods
-      service:
-        name: "{{ env_name }}-pod"
-        enabled: false
-        state: stopped
-      async: 3000
-      poll: 30
-
-    # Pod systemd service file
     - name: find systemd unit file
       stat:
         path: "/usr/lib/systemd/system/{{ env_name }}-pod.service"
       register: s_unit_file
 
-    - name: delete podman systemd service config
-      file:
-        path: "/usr/lib/systemd/system/{{ env_name }}-pod.service"
-        state: absent
+    - name: Systemd Unit block
       when: s_unit_file.stat.exists | bool
+      block:
+        - name: dislable and stop pods
+          service:
+            name: "{{ env_name }}-pod"
+            enabled: false
+            state: stopped
+          async: 3000
+          poll: 30
 
-    ## Pod systemd service enable/start
-    - name: Reload systemd daemon
-      command: /usr/bin/systemctl daemon-reload
+        # Pod systemd service file
+        - name: delete podman systemd service config
+          file:
+            path: "/usr/lib/systemd/system/{{ env_name }}-pod.service"
+            state: absent
+
+        ## Pod systemd service enable/start
+        - name: Reload systemd daemon
+          command: /usr/bin/systemctl daemon-reload
 
     # Pod orchestration directory
     - name: delete podman orchestration directory
