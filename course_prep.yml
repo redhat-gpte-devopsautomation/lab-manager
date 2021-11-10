@@ -20,6 +20,8 @@
     - name: Install collections
       include_role:
         name: manager.common.install_collections
+      vars:
+        provisioner: courses
 
 - name: Find env
   hosts: localhost
