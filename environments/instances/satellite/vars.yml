@@ -25,9 +25,6 @@ satellite_activation_key: gpte-labs-rhel8
 satellite_repos:
   - name: 'Red Hat Ansible Automation Platform 2.0 Early Access for RHEL 8 x86_64 (RPMs)'
     product: 'Red Hat Ansible Automation Platform'
+    label: 'ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-rpms'
     sync: true
-  - name: 'Ansible Tower 3.7 Text-Only Advisories x86_64'
-    product: 'Red Hat Ansible Automation Platform'
-    basearch: 'x86_64'
-    sync: true
-
+  

@@ -33,10 +33,6 @@
           loop: "{{ satellite_repos }}"
           register: __repos_list
 
-        - debug: 
-            msg: "{{ __repos_list }}"
-            verbosity: 2
-
         - name: Sync repository
           theforeman.foreman.katello_sync:
             server_url: "{{ satellite_url }}"
@@ -61,7 +57,7 @@
           loop: "{{ repo_sync_sleeper.results }}"
           loop_control:
             loop_var: repo_sync_sleeper_item
-          when: repo_sync_sleeper_item.ansible_job_id is defined  # Skip items that were skipped in the previous task
+          when: repo_sync_sleeper_item.ansible_job_id is defined  
           register: async_job_result
           until: async_job_result.finished
           retries: 999
@@ -74,9 +70,10 @@
             password: "{{ satellite_admin_password }}"
             organization: "{{ satellite_org }}"
             validate_certs: false
-            name: "{{ satellite_activation_key }}"
+            name: {{ satellite_activation_key }}
             lifecycle_environment: "Library"
             content_overrides:
-              - label: "{{ item.item.label }}"
+              - label: "{{ item.label }}"
                 override: enabled
-          loop: "{{ __repos_list.results }}"
+          when: item.label is defined
+          loop: "{{ satellite_repos }}"
