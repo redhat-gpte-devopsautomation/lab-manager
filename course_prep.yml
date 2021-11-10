@@ -46,7 +46,7 @@
     - name: Include course requirements
       vars:
         provisioner: courses
-      include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/requirements.yml"
+      include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/vars.yml"
 
     - name: Provision environment as course prep
       when:

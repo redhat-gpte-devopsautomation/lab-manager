@@ -3,10 +3,3 @@ collections:
   - name: openstack.cloud
     version: '1.5.2'
 
-course_requirements:
-  pods:
-    - gitlab
-    - bind9
-    - haproxy
-  # instances:
-  #   - threetier
