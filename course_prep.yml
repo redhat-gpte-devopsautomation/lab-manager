@@ -17,6 +17,12 @@
         name: podman-compose==0.1.5
         state: present
 
+    - name: Install collections
+      include_role:
+        name: manager.common.install_collections
+      vars:
+        provisioner: courses
+
     - include_role:
         name: manager.osp.osp_inventory
       when: cloud_provider == 'osp'
