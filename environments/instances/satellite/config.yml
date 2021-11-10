@@ -31,7 +31,6 @@
             - releasever: "{{ item.releasever | default(omit) }}"
               basearch: "{{ item.basearch | default(omit) }}"
           loop: "{{ satellite_repos }}"
-          register: __repos_list
 
         - name: Sync repository
           theforeman.foreman.katello_sync:
@@ -70,7 +69,7 @@
             password: "{{ satellite_admin_password }}"
             organization: "{{ satellite_org }}"
             validate_certs: false
-            name: {{ satellite_activation_key }}
+            name: "{{ satellite_activation_key }}"
             lifecycle_environment: "Library"
             content_overrides:
               - label: "{{ item.label }}"
