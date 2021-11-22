@@ -6,6 +6,21 @@
 # License: GPLv3
 # Version: 2.0
 
+####### this is temporary code ##############
+if [ ! -f /srv/vmanager/bin/activate ]; then
+  sudo -- bash -c '
+  python3 -m venv /srv/vmanager;
+  python3 -m pip install \
+        ansible==2.9.20 \
+        cryptography==3.2.1 \
+        openstacksdk==0.36.4 \
+        python-openstackclient==4.0.1'
+  source /srv/vmanager/bin/activate
+else
+  source /srv/vmanager/bin/activate
+fi
+
+####### End of temp code #######
 
 # Main Playbook
 MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
