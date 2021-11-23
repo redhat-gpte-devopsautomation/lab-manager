@@ -1,5 +1,5 @@
 ---
-- name: Node setup
+- name: Refreshing satellite manifest
   hosts: satellites
   gather_facts: false
   become: true

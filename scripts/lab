@@ -156,12 +156,12 @@ env_exec_reset() {
 env_exec_refresh() {
   while  getopts "hi:" arg; do
     case ${arg} in
-      i) if [ "${OPTARG}" -eq "satellite" ]; then
+      i) if [ "${OPTARG}" == "satellite" ]; then
             ansible-playbook ${LAB_MGR_DIR}/environments/instances/${OPTARG}/refresh.yml \
             -e provisioner=instances -e env_name=${OPTARG} \
             ${common_environment_vars}
           else
-            echo "Doesn't support refresh"
+            echo "${OPTARG} - Doesn't support refresh"
           fi
          ;;
       h) usage
