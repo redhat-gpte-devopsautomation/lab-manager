@@ -1,63 +1,60 @@
 ---
 
-- name: Add repository and synchronize
-  when: satellite_add_repos | default(false) | bool
-  block:
-    - name: Setting up satellite repository
-      theforeman.foreman.katello_repository_set:
-        server_url: "{{ satellite_url }}"
-        username: "{{ satellite_admin }}"
-        password: "{{ satellite_admin_password }}"
-        organization: "{{ satellite_org }}"
-        validate_certs: false
-        name: "{{ item.name }}"
-        product: "{{ item.product }}"
-        repositories:
-        - releasever: "{{ item.releasever | default(omit) }}"
-          basearch: "{{ item.basearch | default(omit) }}"
-      loop: "{{ satellite_repos }}"
+- name: Setting up satellite repository
+  theforeman.foreman.katello_repository_set:
+    server_url: "{{ satellite_url }}"
+    username: "{{ satellite_admin }}"
+    password: "{{ satellite_admin_password }}"
+    organization: "{{ satellite_org }}"
+    validate_certs: false
+    name: "{{ item.name }}"
+    product: "{{ item.product }}"
+    repositories:
+    - releasever: "{{ item.releasever | default(omit) }}"
+      basearch: "{{ item.basearch | default(omit) }}"
+  loop: "{{ satellite_repos }}"
 
-    - name: Sync repository
-      theforeman.foreman.katello_sync:
-        server_url: "{{ satellite_url }}"
-        username: "{{ satellite_admin }}"
-        password: "{{ satellite_admin_password }}"
-        organization: "{{ satellite_org }}"
-        validate_certs: false
-        product: "{{ item.product }}"
-        repository: >-
-          {{ item.name | regex_replace('[()]')
-          ~ (' ' + item.basearch if item.basearch | default(None) else '' )
-          ~ ( ' ' + item.releasever if item.releasever | default(None)  else '' ) }}
-      loop: "{{ satellite_repos }}"
-      async: 999999
-      poll: 0
-      register: repo_sync_sleeper
-      when: item.1.sync | default(true) | bool
+- name: Sync repository
+  theforeman.foreman.katello_sync:
+    server_url: "{{ satellite_url }}"
+    username: "{{ satellite_admin }}"
+    password: "{{ satellite_admin_password }}"
+    organization: "{{ satellite_org }}"
+    validate_certs: false
+    product: "{{ item.product }}"
+    repository: >-
+      {{ item.name | regex_replace('[()]')
+      ~ (' ' + item.basearch if item.basearch | default(None) else '' )
+      ~ ( ' ' + item.releasever if item.releasever | default(None)  else '' ) }}
+  loop: "{{ satellite_repos }}"
+  async: 999999
+  poll: 0
+  register: repo_sync_sleeper
+  when: item.1.sync | default(true) | bool
 
-    - name: Wait until all Syncs have finished
-      async_status:
-        jid: "{{ repo_sync_sleeper_item.ansible_job_id }}"
-      loop: "{{ repo_sync_sleeper.results }}"
-      loop_control:
-        loop_var: repo_sync_sleeper_item
-      when: repo_sync_sleeper_item.ansible_job_id is defined  
-      register: async_job_result
-      until: async_job_result.finished
-      retries: 999
-      delay: 20
+- name: Wait until all Syncs have finished
+  async_status:
+    jid: "{{ repo_sync_sleeper_item.ansible_job_id }}"
+  loop: "{{ repo_sync_sleeper.results }}"
+  loop_control:
+    loop_var: repo_sync_sleeper_item
+  when: repo_sync_sleeper_item.ansible_job_id is defined  
+  register: async_job_result
+  until: async_job_result.finished
+  retries: 999
+  delay: 20
 
-    - name: "Create katello client activation key"
-      theforeman.foreman.katello_activation_key:
-        server_url: "{{ satellite_url }}"
-        username: "{{ satellite_admin }}"
-        password: "{{ satellite_admin_password }}"
-        organization: "{{ satellite_org }}"
-        validate_certs: false
-        name: "{{ satellite_activation_key }}"
-        lifecycle_environment: "Library"
-        content_overrides:
-          - label: "{{ item.label }}"
-            override: enabled
-      when: item.label is defined
-      loop: "{{ satellite_repos }}"
+- name: "Create katello client activation key"
+  theforeman.foreman.katello_activation_key:
+    server_url: "{{ satellite_url }}"
+    username: "{{ satellite_admin }}"
+    password: "{{ satellite_admin_password }}"
+    organization: "{{ satellite_org }}"
+    validate_certs: false
+    name: "{{ satellite_activation_key }}"
+    lifecycle_environment: "Library"
+    content_overrides:
+      - label: "{{ item.label }}"
+        override: enabled
+  when: item.label is defined
+  loop: "{{ satellite_repos }}"

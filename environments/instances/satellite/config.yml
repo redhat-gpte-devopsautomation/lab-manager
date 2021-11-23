@@ -13,15 +13,7 @@
   hosts: satellites
   gather_facts: false
   become: true
-  vars:
-    satellite_add_repos: "{{ lookup('ENV', 'SATELLITE_ADD_REPOS') }}"
   tasks:     
-
-    - name: Refresh manifest
-      command: >-
-        /bin/hammer subscription refresh-manifest --organization=prod
-      async: 300
-      poll: 10
     
     - name: Added new repositories
       include_tasks: add_repos.yml

@@ -38,6 +38,7 @@ usage() {
   echo -e  "${1}"
   echo -e "Usage-1: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ]"
   echo -e "Usage-2: $CMD_NAME (prep|cleanup)  -c course_name"
+  echo -e "Usage-2: $CMD_NAME refresh -i satellite"
   echo -e "\e[0m \n"
   exit 2
 }
@@ -152,6 +153,25 @@ env_exec_reset() {
   done
 }
 
+env_exec_refresh() {
+  while  getopts "hi:" arg; do
+    case ${arg} in
+      i) if [ "${OPTARG}" -eq "satellite" ]; then
+            ansible-playbook ${LAB_MGR_DIR}/environments/instances/${OPTARG}/refresh.yml \
+            -e provisioner=instances -e env_name=${OPTARG} \
+            ${common_environment_vars}
+          else
+            echo "Doesn't support refresh"
+          fi
+         ;;
+      h) usage
+         ;;
+      *) usage "Invalid option"
+         ;;
+    esac
+  done
+}
+
 course_exec_prep() {
   while  getopts "hc:" arg; do
     case ${arg} in
@@ -201,6 +221,10 @@ case ${1} in
   reset)
     count_args ${@:2}
     env_exec_reset ${@:2}
+    ;;
+  refresh)
+    count_args ${@:2}
+    env_exec_refresh ${@:2}
     ;;
   prep)
     count_args ${@:2}
