@@ -34,7 +34,7 @@ instances:
     network: "{{ instance_network | default('default') }}"
     tags:
       - key: "AnsibleGroup"
-        value: "apps"
+        value: "application_servers,app_servers"
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
@@ -59,7 +59,7 @@ instances:
     network: "{{ instance_network | default('default') }}"
     tags:
       - key: "AnsibleGroup"
-        value: "appdbs"
+        value: "database_servers"
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
@@ -83,7 +83,7 @@ instances:
     network: "{{ instance_network | default('default') }}"
     tags:
       - key: "AnsibleGroup"
-        value: "frontends"
+        value: "load_balancers"
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
