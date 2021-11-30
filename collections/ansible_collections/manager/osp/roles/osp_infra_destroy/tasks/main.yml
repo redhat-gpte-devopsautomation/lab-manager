@@ -1,12 +1,13 @@
 ---
 
-- name: Check Heat template
-  include_tasks: check_stack.yml
+- name: Check osp stack
+  include_role:
+    name: manager.osp.osp_stack_checker
 
 - name: Delete Heat stack from generated template
   command: >-
     openstack stack delete  
-    --wait {{ stack_name }}
+    --wait {{ env_name }}-stack-{{ guid }}
     --os-cloud {{ guid }}-project 
 
 - pause:

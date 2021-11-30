@@ -1,0 +1,22 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  become: true
+  tasks:
+    - include_role:
+        name: manager.local_pod.provisioner
+
+    - name: Create hosts file
+      template:
+        src: hosts.j2
+        dest: "/etc/hosts"
+      notify: restart_dnsmasq_pod
+  
+  handlers:
+    - name: restart_dnsmasq_pod
+      service:
+        name: "dnsmasq-pod"
+        state: restarted
+

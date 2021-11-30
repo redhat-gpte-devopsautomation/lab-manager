@@ -1,19 +1,34 @@
 ---
+pods:
+  - name: bind9
+    dockerfile: True
+    image: registry.access.redhat.com/ubi8/ubi-init:8.3
+    docker:
+      run:
+        - yum install -y bind
+        - systemctl enable named
+      expose: 53/udp 53/tcp
+      cmd: /sbin/init
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      templates:
+        - src: example.com.zone.j2
+          dest: /var/named/
+      files:
+        - src: named.conf
+          dest: /etc/
+      # directories:
+      #   - src: /var/named/
+      #     dest: /var/named
+    systemd:
+      # Space separated list of wants
+      wants_services: network.target
+      # Space separated list of after services
+      after_services: network-online.target
+      state: started
+      enabled: true
 
-# Pod volumes
-volumes:
-  - /var/named/
-  - /etc/
-# Pod dockerfile if required along with pod-compose file
-dockerfile: True
-config_templates:
-  - src: example.com.zone.j2
-    dest: /var/named/example.com.zone
-config_files:
-  - src: named.conf
-    dest: /etc/named.conf
-# Pod state
-pod_service:
-  state: started
-  # Pod state upon reboot
-  enabled: True
+
+

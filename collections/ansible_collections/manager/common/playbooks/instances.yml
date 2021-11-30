@@ -1,0 +1,25 @@
+---
+
+- import_playbook: "instance-provisioner.yml"
+  when:
+    - 'not env_destroy | default(false) | bool'
+    - 'not only_config |default(false) |bool'
+
+- import_playbook: "instance-destroy.yml"
+  when: 
+    - 'env_destroy | default(false) | bool'
+
+- name: Reconfigure bind9 pod
+  import_playbook: "{{ lab_mgr_dir }}/environments/pods/bind9/config.yml"
+  when:
+    - 'not only_config |default(false) |bool'
+
+- import_playbook: "instance-config.yml"
+  when:
+    - 'not env_destroy | default(false) | bool' 
+    - 'instance_configure | default(true) | bool'
+
+- name: Reconfigure haproxy pod
+  import_playbook: "{{ lab_mgr_dir }}/environments/pods/haproxy/config.yml"
+  when:
+    - 'not only_config |default(false) |bool'

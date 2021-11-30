@@ -16,3 +16,15 @@ default_networking: false
 default_subscription: false
 # No infra provisioning just configuration
 only_config: true
+
+satellite_url: "https://satellite.{{ guid }}.{{ subdomain }}"
+satellite_admin: admin
+satellite_admin_password: r3dh4t1!
+satellite_org: prod
+satellite_activation_key: gpte-labs-rhel8
+satellite_repos:
+  - name: 'Red Hat Ansible Automation Platform 2.0 Early Access for RHEL 8 x86_64 (RPMs)'
+    product: 'Red Hat Ansible Automation Platform'
+    label: 'ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-rpms'
+    sync: true
+  

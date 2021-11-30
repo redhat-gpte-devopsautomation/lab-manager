@@ -4,8 +4,8 @@
   become: true
   connection: local
   gather_facts: False
-  roles:
-    - role: manager.common.common_vars
+  # roles:
+  #   - role: manager.common.common_vars
   tasks:
 
     - name: Include gitlab workload

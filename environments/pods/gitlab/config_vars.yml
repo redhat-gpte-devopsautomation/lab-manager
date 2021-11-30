@@ -1,7 +1,7 @@
 ---
 # Gitlab Pod variables for configuration
 gitlab_pod_name: gitlab
-gitlab_host_url: control.example.com:5050
+gitlab_host_url: "{{ groups['bastions'][0] }}:5050"
 gitlab_initial_token: RedHat@123
 gitlab_details:
   user:

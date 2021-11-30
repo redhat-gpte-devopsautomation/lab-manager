@@ -2,7 +2,7 @@
 {% if item != "bastions,controls" %}
 [{{ item }}]
 {%   for entry in groups[item]  %} 
-{{ entry }}.example.com ansible_host={{ hostvars[entry]['ansible_host'] }}
+{{ entry }} ansible_host={{ hostvars[entry]['ansible_host'] }}
 {%  endfor %}
 {% endif %}
 {% endfor %}

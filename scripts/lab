@@ -6,46 +6,78 @@
 # License: GPLv3
 # Version: 2.0
 
+####### this is temporary code ##############
+if [ ! -f /srv/vmanager/bin/activate ]; then
+  sudo -- bash -c '
+  python3 -m venv /srv/vmanager;
+  source /srv/vmanager/bin/activate;
+  python3 -m pip install \
+        ansible==2.9.20 \
+        cryptography==3.2.1 \
+        openstacksdk==0.36.4 \
+        python-openstackclient==4.0.1 \
+        python-heatclient==2.4.0 \
+        selinux==0.2.1;
+  deactivate'
+  source /srv/vmanager/bin/activate
+else
+  source /srv/vmanager/bin/activate
+fi
+
+####### End of temp code #######
 
 # Main Playbook
-#LAB_MGR_DIR=${LAB}
 MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
+PREP_PLAYBOOK=${LAB_MGR_DIR}/course_prep.yml
 export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
-# CAlls
-# deploy,destroy
+
 
 usage() {
-  echo -e  "\e[31mUsage: $0 (deploy|destroy|reconfigure|reset) [ -i instance_env_name ] [ -p pod_env_name ] \e[0m \n"
+  CMD_NAME=$(basename ${0})
+  echo -e  "\e[31m"
+  echo -e  "${1}"
+  echo -e "Usage-1: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ]"
+  echo -e "Usage-2: $CMD_NAME (prep|cleanup)  -c course_name"
+  echo -e "Usage-2: $CMD_NAME refresh -i satellite"
+  echo -e "\e[0m \n"
   exit 2
 }
 
+count_args() {
+  if [ ${#@} -lt 2 ];
+    then 
+      usage "Less arguments were passed"
+      exit 2
+  fi
+}
+
+common_environment_vars="
+-e guid=${GUID} \
+-e email=${OPENTLC_USER_EMAIL} \
+-e subdomain=${SUBDOMAIN} \
+-e lab_mgr_dir=${LAB_MGR_DIR} \
+-e cloud_provider=${CLOUD_PROVIDER} \
+-e internal_domain=${INTERNAL_DOMAIN} \
+-e collections_dir='./collections/ansible_collections/'
+"
 
 env_exec_deploy() {
   while  getopts "hi:p:" arg; do
     case ${arg} in
       i)
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=instances \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e provisioner=instances -e env_name=${OPTARG} \
+          ${common_environment_vars}
           ;;
       p)
-        ansible-playbook ${MAIN_PLAYBOOK} \ 
-          -e provisioner=pods \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods -e env_name=${OPTARG} \
+          ${common_environment_vars}
         ;;
-      h|*) usage ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
@@ -54,29 +86,19 @@ env_exec_destroy() {
     case ${arg} in
       i)
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=instances \
-          -e env_destroy=true \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e provisioner=instances -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
+
         ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=pods \
-          -e env_destroy=true \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e provisioner=pods -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
+          ;;
+      h) usage
         ;;
-      h|*) usage ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
@@ -86,29 +108,18 @@ env_exec_reconfigure() {
     case ${arg} in
       i)
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=instances \
-          -e env_name=${OPTARG} \
-          -e only_config=true \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e provisioner=instances -e env_name=${OPTARG} -e only_config=true \
+          ${common_environment_vars}
         ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=pods \
-          -e env_name=${OPTARG} \
-          -e only_config=true \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}       
+          -e provisioner=pods -e env_name=${OPTARG} -e only_config=true \
+          ${common_environment_vars}
         ;;
-      h|*) usage ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
@@ -118,64 +129,116 @@ env_exec_reset() {
     case ${arg} in
       i)
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=instances \
-          -e env_destroy=true \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
-       
+          -e provisioner=instances -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
+
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=instances \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e provisioner=instances -e env_name=${OPTARG} \
+          ${common_environment_vars}
         ;;
       p)
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=pods \
-          -e env_destroy=true \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e provisioner=pods -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
 
         ansible-playbook ${MAIN_PLAYBOOK} \
-          -e provisioner=pods \
-          -e env_name=${OPTARG} \
-          -e guid=${GUID} \
-          -e email=${OPENTLC_USER_EMAIL} \
-          -e subdomain=${SUBDOMAIN} \
-          -e lab_mgr_dir=${LAB_MGR_DIR} \
-          -e cloud_provider=${CLOUD_PROVIDER} \
-          -e internal_domain=${INTERNAL_DOMAIN}
+          -e provisioner=pods -e env_name=${OPTARG} \
+          ${common_environment_vars}
         ;;
-      h|*) usage ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
+
+env_exec_refresh() {
+  while  getopts "hi:" arg; do
+    case ${arg} in
+      i) if [ "${OPTARG}" == "satellite" ]; then
+            ansible-playbook ${LAB_MGR_DIR}/environments/instances/${OPTARG}/refresh.yml \
+            -e provisioner=instances -e env_name=${OPTARG} \
+            ${common_environment_vars}
+          else
+            echo "${OPTARG} - Doesn't support refresh"
+          fi
+         ;;
+      h) usage
+         ;;
+      *) usage "Invalid option"
+         ;;
+    esac
+  done
+}
+
+course_exec_prep() {
+  while  getopts "hc:" arg; do
+    case ${arg} in
+      c)
+        ansible-playbook ${PREP_PLAYBOOK} \
+        -e env_name=${OPTARG} \
+        ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
+
+course_exec_cleanup() {
+  while  getopts "hc:" arg; do
+    case ${arg} in
+      c)
+        ansible-playbook ${PREP_PLAYBOOK} \
+        -e env_name=${OPTARG} \
+        -e env_destroy=true \
+        ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
     esac
   done
 }
 
 case ${1} in
-  deploy) env_exec_deploy ${@:2};;
-  destroy) env_exec_destroy ${@:2};;
-  reconfigure) env_exec_reconfigure ${@:2};;
-  reset) env_exec_reset ${@:2};;
-  help|*) usage;;
-esac
+  deploy) 
+    count_args ${@:2}
+    env_exec_deploy ${@:2}
+    ;;
+  destroy) 
+    count_args ${@:2}
+    env_exec_destroy ${@:2}
+    ;;
+  reconfigure)
+    count_args ${@:2}
+    env_exec_reconfigure ${@:2}
+    ;;
+  reset)
+    count_args ${@:2}
+    env_exec_reset ${@:2}
+    ;;
+  refresh)
+    count_args ${@:2}
+    env_exec_refresh ${@:2}
+    ;;
+  prep)
+    count_args ${@:2}
+    course_exec_prep ${@:2}
+    ;;
+  cleanup) 
+    count_args ${@:2}
+    course_exec_cleanup ${@:2}
+    ;;
 
-if [ ${OPTIND} -lt 3 ];
-  then 
-    echo "No options were passed"
-    usage
-fi
+  help|h) usage
+    ;;
+  *)
+    usage "Invalid argument"
+    ;;
+esac
 

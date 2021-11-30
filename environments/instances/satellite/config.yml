@@ -1,16 +1,19 @@
 ---
+- name: Find env
+  hosts: localhost
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install collections
+      include_role:
+        name: manager.common.install_collections
+
 
 - name: Node setup
   hosts: satellites
   gather_facts: false
   become: true
   tasks:     
-    - ping:
-
-    - name: Refresh manifest
-      command: >-
-        /bin/hammer subscription refresh-manifest --organization=prod
-      async: 300
-      poll: 10
-
-        
+    
+    - name: Added new repositories
+      include_tasks: add_repos.yml

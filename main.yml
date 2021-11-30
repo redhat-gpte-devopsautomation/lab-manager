@@ -1,87 +1,35 @@
 ---
 
-- import_playbook: "{{ collections_dir }}/manager/common/playbooks/env-finder.yml"
-  vars:
-    collections_dir: "./collections/ansible_collections/"
+- name: Find env
+  hosts: localhost
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Env finder
+      include_role:
+        name: manager.common.env_finder
+
+    - name: Install collections
+      include_role:
+        name: manager.common.install_collections
 
 
-- import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-provisioner.yml"
-  vars:
-    collections_dir: "./collections/ansible_collections/"
-  when:
-    - 'not env_destroy | default(false) | bool'
-    - 'not only_config |default(false) |bool'
-    - 'env_name is defined'
-    - 'provisioner == "instances"'
+- name: Include variables
+  hosts: localhost:all
+  roles:
+    - manager.common.common_vars
 
 
-- import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-config.yml"
-  vars:
-    collections_dir: "./collections/ansible_collections/"
-  when:
-    - 'not env_destroy | default(false) | bool' 
-    - 'instance_configure | default(true) | bool'
-    - 'env_name is defined'
-    - 'provisioner == "instances"'
-
-- import_playbook: "{{ collections_dir }}/manager/common/playbooks/instance-destroy.yml"
-  vars:
-    collections_dir: "./collections/ansible_collections/"
+- name: Import instances deployer and destroyer
+  import_playbook: "{{ collections_dir }}/manager/common/playbooks/instances.yml"
   when: 
-    - 'env_destroy | default(false) | bool'
     - 'env_name is defined'
     - 'provisioner == "instances"'
 
-- name: Import bind9 pod update playbook
-  import_playbook: "{{ lab_mgr_dir }}/environments/pods/bind9/config.yml"
-  when:
-    - 'not only_config |default(false) |bool'
-    - 'env_name is defined'
-    - 'provisioner == "instances"'
 
-# Pod provisioner and destroyer
-- name: Import config/provision playbook from environment
-  vars:
-    collections_dir: "./collections/ansible_collections/"
-    find_config:
-      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/provisioner.yml"
-      - "{{ collections_dir }}/manager/common/playbooks/pod-provisioner.yml"
-  import_playbook: "{{ lookup('first_found', find_config) }}"
+- name: Import pods deployer and destroyer
+  import_playbook: "{{ collections_dir }}/manager/common/playbooks/pods.yml"
   when: 
-    - 'not env_destroy | default(false) | bool'
-    - 'not only_config |default(false) |bool'
     - 'env_name is defined'
-    - provisioner == 'pods'
+    - 'provisioner == "pods"'
 
-- name: Import destroy playbook from environment
-  vars:
-    collections_dir: "./collections/ansible_collections/"
-    find_destroy:
-      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/destroy.yml"
-      - "{{ collections_dir }}/manager/common/playbooks/pod-destroy.yml"
-  import_playbook: "{{ lookup('first_found', find_destroy) }}"
-  when:
-    - 'env_destroy | default(false) | bool'
-    - 'not only_config |default(false) |bool'
-    - 'env_name is defined'
-    - provisioner == 'pods'
-    
-- name: Pod Reconfigure / workload
-  vars:
-    collections_dir: "./collections/ansible_collections/"
-    find_update:
-      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/config.yml"
-      - "{{ collections_dir }}/manager/common/playbooks/pod_config_none.yml"
-  import_playbook: "{{ lookup('first_found', find_update) }}"
-  when:
-    - 'not env_destroy | default(false) | bool'
-    - 'only_config |default(false) |bool'
-    - 'env_name is defined'
-    - provisioner == 'pods'
-
-- name: Import haproxy pod update playbook
-  import_playbook: "{{ lab_mgr_dir }}/environments/pods/haproxy/config.yml"
-  when:
-    - 'not only_config |default(false) |bool'
-    - 'env_name != "haproxy"'
-    - 'provisioner is defined'

@@ -1,7 +1,0 @@
----
-
-- name: Pod config
-  hosts: localhost
-  tasks:
-    - debug: 
-        msg: "No pod config found in environment"

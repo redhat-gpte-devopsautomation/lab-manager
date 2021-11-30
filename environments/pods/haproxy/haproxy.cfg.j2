@@ -21,10 +21,10 @@ listen  stats
     mode http
     http-request redirect scheme https unless { ssl_fc }
     stats enable
-    stats auth admin:password
-    stats uri  /haproxy?stats
+    stats auth admin:r3dh4t1!
+    stats uri /
     stats hide-version
-    stats refresh 30s
+    stats refresh 10s
     stats show-node
 
 frontend gitlab
@@ -34,7 +34,7 @@ frontend gitlab
     use_backend gitlab-pod
 backend gitlab-pod
     balance source
-    server host control.example.com:5050 check
+    server gitlab {{ groups['bastions'][0] }}:5050 check
 
 {% if groups['towers'] is defined %}
 frontend towers

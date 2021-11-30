@@ -1,0 +1,85 @@
+---
+
+- name: Install lab-manager packages
+  hosts: localhost
+  become: True
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: /usr/libexec/platform-python
+  tasks:
+    - name: Install podman runtime packages
+      yum:
+        name: 
+          - podman-2.2.1-7*
+          - python3
+        state: present
+
+    - name: Install python library podman-compose for orchestration
+      pip:
+        name: podman-compose==0.1.5
+        state: present
+
+    - name: Install collections
+      include_role:
+        name: manager.common.install_collections
+      vars:
+        provisioner: courses
+
+    - include_role:
+        name: manager.osp.osp_inventory
+      when: cloud_provider == 'osp'
+      
+
+- name: Find env
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Env finder
+      vars:
+        provisioner: courses
+      include_role:
+        name: manager.common.env_finder
+
+    - name: Include course requirements
+      vars:
+        provisioner: courses
+      include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/vars.yml"
+
+    - name: Provision environment as course prep
+      when:
+        - 'not env_destroy | default(false) | bool'
+        - 'not only_config |default(false) |bool'
+      block:  
+        - name: Deploy pods
+          vars:
+            provisioner: pods
+          shell: >-
+            /usr/local/bin/lab deploy -p {{ item }}
+          when: course_requirements.pods is defined
+          loop: "{{ course_requirements.pods }}"
+
+        - name: Deploy instances
+          vars:
+            provisioner: pods
+          shell: /usr/local/bin/lab deploy -i {{ item }}
+          when: course_requirements.instances is defined
+          loop: "{{ course_requirements.instances }}"
+
+    - name: Destroy environment as course prep
+      when: env_destroy | default(false) | bool
+      block:  
+        - name: destroy instances
+          vars:
+            provisioner: pods
+          shell: /usr/local/bin/lab destroy -i {{ item }}
+          ignore_errors: true
+          when: course_requirements.instances is defined
+          loop: "{{ course_requirements.instances }}"
+
+        - name: destroy pods
+          vars:
+            provisioner: pods
+          shell: >-
+            /usr/local/bin/lab destroy -p {{ item }}
+          when: course_requirements.pods is defined
+          loop: "{{ course_requirements.pods }}"
