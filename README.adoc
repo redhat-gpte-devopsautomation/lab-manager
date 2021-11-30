@@ -1,31 +1,3 @@
-:name: lab-manager
-:author1: Mitesh The Mouse <mitsharm@redhat.com>
-:author2: Prakhar Srivastava <psrivast@redhat.com>
-:team: GPTE 
+= Lab-Manager Documents
 
-lab-manager
-===========
-
-.To deploy instances
-*lab deploy -i <env_name>*
-
-.To destroy instances
-
-*lab destroy -i  <env_name>*
-
-.To deploy pods
-*lab deploy -p <env_name>*
-
-.To destroy pods
-*lab destroy -p <env_name>*
-
-
-Author Information
-------------------
-
-* Author/owner:
-** {author1}
-** {author2}
-
-* Team:
-** {team}
+link:./docs/README.adoc[]
