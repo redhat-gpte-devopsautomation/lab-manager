@@ -27,4 +27,8 @@ satellite_repos:
     product: 'Red Hat Ansible Automation Platform'
     label: 'ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-rpms'
     sync: true
+  - name: 'Red Hat Ansible Automation Platform 2.1 for RHEL 8 x86_64 (RPMs)'
+    product: 'Red Hat Ansible Automation Platform'
+    label: 'ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms'
+    sync: true
   

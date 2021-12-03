@@ -94,7 +94,9 @@ image::./images/new-pod-lab-manager.jpg[Tree,width=100%,align="center"]
 | {counter:srn}|lab refresh -i satellite | Refresh satellite manifest
 | {counter:srn}|lab prep -c aa-developer | Deploy classroom environment pods
 | {counter:srn}|lab reconfigure -i satellite | Adding aap2 early access repository in satellite. This is work around which will go away in future
-| {counter:srn}|sudo subscription-manager repos --enable=ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-rpms | Enable early access repository in bastion/control node.
+| {counter:srn}|sudo subscription-manager repos --enable=ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-rpms | Enable AAP2.0 early access repository in bastion/control node.
+| {counter:srn}|sudo subscription-manager repos --enable=ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms | Enable AAP2.1 access repository in bastion/control node.
+
 | {counter:srn}|sudo yum repolist all | List all repositories
 | {counter:srn}|lab deploy -i aap2 | Provision nodes to run demo
 |===
