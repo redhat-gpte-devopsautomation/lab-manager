@@ -33,4 +33,6 @@ gitlab_details:
     - name: osp-build-cloud
       repository: https://github.com/redhat-gpte-devopsautomation/aa-build-cloud-labs.git
       visibility: public
-
+    - name: postgresql
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-postgresql.git
+      visibility: public
