@@ -12,3 +12,10 @@ satellite_user_password: "{{ access_details.satellite_password }}"
 satellite_org: prod
 satellite_activationkey: gpte-labs-rhel8
 tower_version: 3.8.3-1
+rhel_repos:
+  - ansible-2.9-for-rhel-8-x86_64-rpms
+  - openstack-16-tools-for-rhel-8-x86_64-rpms
+  - prod_EPEL_8_epe_8
+  - rhel-8-for-x86_64-appstream-rpms
+  - rhel-8-for-x86_64-baseos-rpms
+  - satellite-tools-6.8-for-rhel-8-x86_64-rpms
