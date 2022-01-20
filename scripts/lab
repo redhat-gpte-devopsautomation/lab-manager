@@ -30,7 +30,7 @@ fi
 MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
 PREP_PLAYBOOK=${LAB_MGR_DIR}/course_prep.yml
 export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
-
+sudo cp ${LAB_MGR_DIR}/scripts/lab-manager-completion.bash /etc/bash_completion.d/
 
 usage() {
   CMD_NAME=$(basename ${0})
