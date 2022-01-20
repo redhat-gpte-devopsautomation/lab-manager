@@ -17,77 +17,88 @@ defaults
     timeout server 50000
 
 listen  stats
-    bind *:1936 ssl crt /etc/ssl/certs/cert.pem
-    mode http
-    http-request redirect scheme https unless { ssl_fc }
+    bind *:49201 ssl crt /etc/ssl/certs/cert.pem
     stats enable
     stats auth admin:r3dh4t1!
     stats uri /
     stats hide-version
-    stats refresh 10s
+    stats refresh 30s
     stats show-node
 
-frontend gitlab
-    bind *:8929 ssl crt /etc/ssl/certs/cert.pem
-    mode http
-    http-request redirect scheme https unless { ssl_fc }
-    use_backend gitlab-pod
+#### bastion frontend #########
+frontend bastion
+    option http-server-close
+    option forwardfor
+    http-request add-header X-Forwarded-Proto https
+    http-request add-header X-Forwarded-Port 443
+
+    bind *:49202 ssl crt /etc/ssl/certs/cert.pem
+    use_backend satellite-instances if { dst_port 49202 }
+
+    bind *:49203 ssl crt /etc/ssl/certs/cert.pem
+    use_backend gitlab-pod if { dst_port 49203 }
+
+{% if groups['towers'] is defined %}
+    bind *:49204 ssl crt /etc/ssl/certs/cert.pem
+    use_backend tower-instances if { dst_port 49204 }
+{% endif %}
+
+{% if groups['towerhubs'] is defined %}
+    bind *:49205 ssl crt /etc/ssl/certs/cert.pem
+    use_backend towerhub-instances if { dst_port 49205 }
+{% endif %}
+
+{% if groups['towerfl'] is defined %}
+    bind *:49204 ssl crt /etc/ssl/certs/cert.pem
+    use_backend towerfl-instances if { dst_port 49204 }
+{% endif %}
+
+{% if groups['frontends'] is defined %}
+    bind *:49206 ssl crt /etc/ssl/certs/cert.pem
+    use_backend frontend-instances if { dst_port 49206 }
+{% endif %}
+
+
+##### Backends ######
+
+backend satellite-instances
+    balance source
+    server satellite satellite.example.com:443 check ssl verify none
+
 backend gitlab-pod
     balance source
     server gitlab {{ groups['bastions'][0] }}:5050 check
 
 {% if groups['towers'] is defined %}
-frontend towers
-    bind *:8443 ssl crt /etc/ssl/certs/cert.pem
-    option http-server-close
-    option forwardfor
-    http-request add-header X-Forwarded-Proto https
-    http-request add-header X-Forwarded-Port 443
-    use_backend towers-instances
-backend towers-instances
+backend tower-instances
     balance source
-	{% for host in groups['towers'] %}
+ {% for host in groups['towers'] %}
     server tower{{ loop.index }} {{ host }}:443 check ssl verify none
-	{% endfor %}
+ {% endfor %}
 {% endif %}
 
 
 {% if groups['towerhubs'] is defined %}
-frontend towerhubs
-    bind *:49201 ssl crt /etc/ssl/certs/cert.pem
-    option http-server-close
-    option forwardfor
-    http-request add-header X-Forwarded-Proto https
-    http-request add-header X-Forwarded-Port 443
-    use_backend towerhubs
-backend towerhubs
+backend towerhub-instances
     balance source
-        {% for host in groups['towerhubs'] %}
+ {% for host in groups['towerhubs'] %}
     server towerhub{{ loop.index }} {{ host }}:443 check ssl verify none
-        {% endfor %}
+ {% endfor %}
 {% endif %}
 
 
 {% if groups['towerfl'] is defined %}
-frontend towerfl
-    bind *:8443 ssl crt /etc/ssl/certs/cert.pem
-    mode http
-    http-request redirect scheme https unless { ssl_fc }
-    use_backend towerfl-instances
 backend towerfl-instances
     balance source
-	{% for host in groups['towerfl'] %}
+ {% for host in groups['towerfl'] %}
     server tower{{ loop.index }} {{ host }}:80 check
-	{% endfor %}
+ {% endfor %}
 {% endif %}
 
 {% if groups['frontends'] is defined %}
-frontend frontends
-    bind *:8080 ssl crt /etc/ssl/certs/cert.pem
-    mode http
-    http-request redirect scheme https unless { ssl_fc }
-    use_backend frontends-instances
-backend frontends-instances
+backend frontend-instances
     balance roundrobin
     server  frontend {{ groups['frontends'][0] }}:80 check
 {% endif %}
+
+

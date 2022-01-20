@@ -10,11 +10,12 @@ pods:
       expose: 8443 8080 8929 1936
       cmd: /sbin/init
     ports:
-      - "8080:8080"
-      - "8443:8443"
-      - "8929:8929"
-      - "1936:1936"
       - "49201:49201"
+      - "49202:49202"
+      - "49203:49203"
+      - "49204:49204"
+      - "49205:49205"
+      - "49206:49206"
     volumes:
       # Voluume source (src) will created in
       # /opt/podman/volumes/{{ name }}-volume/{{ src }}
