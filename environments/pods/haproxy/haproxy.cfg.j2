@@ -39,15 +39,34 @@ backend gitlab-pod
 {% if groups['towers'] is defined %}
 frontend towers
     bind *:8443 ssl crt /etc/ssl/certs/cert.pem
-    mode http
-    http-request redirect scheme https unless { ssl_fc }
+    option http-server-close
+    option forwardfor
+    http-request add-header X-Forwarded-Proto https
+    http-request add-header X-Forwarded-Port 443
     use_backend towers-instances
 backend towers-instances
     balance source
 	{% for host in groups['towers'] %}
-    server tower{{ loop.index }} {{ host }}:80 check
+    server tower{{ loop.index }} {{ host }}:443 check ssl verify none
 	{% endfor %}
 {% endif %}
+
+
+{% if groups['towerhubs'] is defined %}
+frontend towerhubs
+    bind *:49201 ssl crt /etc/ssl/certs/cert.pem
+    option http-server-close
+    option forwardfor
+    http-request add-header X-Forwarded-Proto https
+    http-request add-header X-Forwarded-Port 443
+    use_backend towerhubs
+backend towerhubs
+    balance source
+        {% for host in groups['towerhubs'] %}
+    server towerhub{{ loop.index }} {{ host }}:443 check ssl verify none
+        {% endfor %}
+{% endif %}
+
 
 {% if groups['towerfl'] is defined %}
 frontend towerfl

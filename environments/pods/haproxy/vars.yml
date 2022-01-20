@@ -14,6 +14,7 @@ pods:
       - "8443:8443"
       - "8929:8929"
       - "1936:1936"
+      - "49201:49201"
     volumes:
       # Voluume source (src) will created in
       # /opt/podman/volumes/{{ name }}-volume/{{ src }}
