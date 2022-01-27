@@ -9,8 +9,10 @@
 
 - name: Configure stack
   hosts: all:!controls:!bastions:!satellites
-  gather_facts: false 
+  gather_facts: false
   roles:
+    - role: manager.common.common_vars
+
     - role: manager.common.network_settings
       when: default_networking | default(true) | bool
 
