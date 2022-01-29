@@ -5,7 +5,7 @@ project_tag: "{{ env_name }}-{{ guid }}"
 
 # lab_name: mulit-dev
 provider_network: external
-instance_network: dev
+instance_network: default
 # all_ssh_authorized_keys: "{{ opentlc_admin_pub_keys + [user_pub_key|d()] }}"
 all_ssh_authorized_keys: testkeys
 default_metadata:
@@ -93,6 +93,7 @@ instances:
     security_groups:
       - DefaultSG
       - HostSG
+default_networking: false
 
 stacks_required:
   - finallab

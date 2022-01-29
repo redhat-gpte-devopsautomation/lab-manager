@@ -15,7 +15,7 @@ guid: "{{ guid }}"
 email: "{{ email }}"
 project_tag: "{{ env_name }}-{{ guid }}"
 provider_network: external
-instance_network: dev
+instance_network: default
 all_ssh_authorized_keys: testkeys
 default_metadata:
   owner: "{{ email | default('unknownuser') }}"
@@ -55,3 +55,5 @@ instances:
       - DefaultSG
       - WebSG
       - HostSG
+
+default_networking: false
