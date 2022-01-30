@@ -38,24 +38,27 @@ frontend bastion
     bind *:49203 ssl crt /etc/ssl/certs/cert.pem
     use_backend gitlab-pod if { dst_port 49203 }
 
+    bind *:49204 ssl crt /etc/ssl/certs/cert.pem
+    use_backend vscode-server if { dst_port 49204 }
+
 {% if groups['towers'] is defined %}
     bind *:49204 ssl crt /etc/ssl/certs/cert.pem
-    use_backend tower-instances if { dst_port 49204 }
+    use_backend tower-instances if { dst_port 49205 }
 {% endif %}
 
 {% if groups['towerhubs'] is defined %}
     bind *:49205 ssl crt /etc/ssl/certs/cert.pem
-    use_backend towerhub-instances if { dst_port 49205 }
+    use_backend towerhub-instances if { dst_port 49206 }
 {% endif %}
 
 {% if groups['towerfl'] is defined %}
     bind *:49204 ssl crt /etc/ssl/certs/cert.pem
-    use_backend towerfl-instances if { dst_port 49204 }
+    use_backend towerfl-instances if { dst_port 49205 }
 {% endif %}
 
 {% if groups['frontends'] is defined %}
     bind *:49206 ssl crt /etc/ssl/certs/cert.pem
-    use_backend frontend-instances if { dst_port 49206 }
+    use_backend frontend-instances if { dst_port 49205 }
 {% endif %}
 
 
@@ -68,6 +71,10 @@ backend satellite-instances
 backend gitlab-pod
     balance source
     server gitlab {{ groups['bastions'][0] }}:5050 check
+
+backend vscode-server
+    balance source
+    server vscode-server {{ groups['bastions'][0] }}:8080 check
 
 {% if groups['towers'] is defined %}
 backend tower-instances
