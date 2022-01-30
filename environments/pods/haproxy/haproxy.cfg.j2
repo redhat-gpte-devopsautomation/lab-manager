@@ -33,51 +33,51 @@ frontend bastion
     http-request add-header X-Forwarded-Port 443
 
     bind *:49202 ssl crt /etc/ssl/certs/cert.pem
-    use_backend satellite-instances if { dst_port 49202 }
+    use_backend satellite-49202 if { dst_port 49202 }
 
     bind *:49203 ssl crt /etc/ssl/certs/cert.pem
-    use_backend gitlab-pod if { dst_port 49203 }
+    use_backend gitlab-49203 if { dst_port 49203 }
 
     bind *:49204 ssl crt /etc/ssl/certs/cert.pem
-    use_backend vscode-server if { dst_port 49204 }
+    use_backend vscode-49204 if { dst_port 49204 }
 
 {% if groups['towers'] is defined %}
     bind *:49204 ssl crt /etc/ssl/certs/cert.pem
-    use_backend tower-instances if { dst_port 49205 }
+    use_backend tower-49210 if { dst_port 49210 }
 {% endif %}
 
 {% if groups['towerhubs'] is defined %}
     bind *:49205 ssl crt /etc/ssl/certs/cert.pem
-    use_backend towerhub-instances if { dst_port 49206 }
+    use_backend towerhub-49211 if { dst_port 49211 }
 {% endif %}
 
 {% if groups['towerfl'] is defined %}
     bind *:49204 ssl crt /etc/ssl/certs/cert.pem
-    use_backend towerfl-instances if { dst_port 49205 }
+    use_backend towerfl-49210 if { dst_port 49210 }
 {% endif %}
 
 {% if groups['frontends'] is defined %}
     bind *:49206 ssl crt /etc/ssl/certs/cert.pem
-    use_backend frontend-instances if { dst_port 49205 }
+    use_backend frontend-49210 if { dst_port 49210 }
 {% endif %}
 
 
 ##### Backends ######
 
-backend satellite-instances
+backend satellite-49202
     balance source
     server satellite satellite.example.com:443 check ssl verify none
 
-backend gitlab-pod
+backend gitlab-49203
     balance source
     server gitlab {{ groups['bastions'][0] }}:5050 check
 
-backend vscode-server
+backend vscode-49204
     balance source
     server vscode-server {{ groups['bastions'][0] }}:8080 check
 
 {% if groups['towers'] is defined %}
-backend tower-instances
+backend tower-49210
     balance source
  {% for host in groups['towers'] %}
     server tower{{ loop.index }} {{ host }}:443 check ssl verify none
@@ -86,7 +86,7 @@ backend tower-instances
 
 
 {% if groups['towerhubs'] is defined %}
-backend towerhub-instances
+backend towerhub-49211
     balance source
  {% for host in groups['towerhubs'] %}
     server towerhub{{ loop.index }} {{ host }}:443 check ssl verify none
@@ -95,7 +95,7 @@ backend towerhub-instances
 
 
 {% if groups['towerfl'] is defined %}
-backend towerfl-instances
+backend towerfl-49210
     balance source
  {% for host in groups['towerfl'] %}
     server tower{{ loop.index }} {{ host }}:80 check
@@ -103,7 +103,7 @@ backend towerfl-instances
 {% endif %}
 
 {% if groups['frontends'] is defined %}
-backend frontend-instances
+backend frontend-49210
     balance roundrobin
     server  frontend {{ groups['frontends'][0] }}:80 check
 {% endif %}
