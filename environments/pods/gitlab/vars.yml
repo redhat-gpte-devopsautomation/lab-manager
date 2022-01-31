@@ -2,7 +2,7 @@
 pods:
   - name: gitlab
     dockerfile: False
-    image: gitlab/gitlab-ee:latest
+    image: gitlab/gitlab-ee:14.7.0-ee.0
     ports:
       - '5050:5050'
       - '2224:22'
