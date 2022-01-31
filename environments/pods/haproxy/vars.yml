@@ -7,15 +7,10 @@ pods:
       run:
         - yum install -y haproxy
         - systemctl enable haproxy
-      expose: 8443 8080 8929 1936
+      expose: "49201-49220:49201-49220"
       cmd: /sbin/init
     ports:
-      - "49201:49201"
-      - "49202:49202"
-      - "49203:49203"
-      - "49204:49204"
-      - "49205:49205"
-      - "49206:49206"
+      - "49201-49220:49201-49220"
     volumes:
       # Voluume source (src) will created in
       # /opt/podman/volumes/{{ name }}-volume/{{ src }}

@@ -42,22 +42,22 @@ frontend bastion
     use_backend vscode-49204 if { dst_port 49204 }
 
 {% if groups['towers'] is defined %}
-    bind *:49204 ssl crt /etc/ssl/certs/cert.pem
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend tower-49210 if { dst_port 49210 }
 {% endif %}
 
 {% if groups['towerhubs'] is defined %}
-    bind *:49205 ssl crt /etc/ssl/certs/cert.pem
+    bind *:49211 ssl crt /etc/ssl/certs/cert.pem
     use_backend towerhub-49211 if { dst_port 49211 }
 {% endif %}
 
 {% if groups['towerfl'] is defined %}
-    bind *:49204 ssl crt /etc/ssl/certs/cert.pem
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend towerfl-49210 if { dst_port 49210 }
 {% endif %}
 
 {% if groups['frontends'] is defined %}
-    bind *:49206 ssl crt /etc/ssl/certs/cert.pem
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend frontend-49210 if { dst_port 49210 }
 {% endif %}
 
