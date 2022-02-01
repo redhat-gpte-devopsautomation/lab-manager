@@ -93,6 +93,7 @@ instances:
     security_groups:
       - DefaultSG
       - HostSG
+default_networking: false
 
 stacks_required:
   - finallab
