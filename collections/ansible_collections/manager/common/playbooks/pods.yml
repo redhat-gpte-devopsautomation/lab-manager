@@ -1,4 +1,10 @@
 ---
+- name: Provision stack
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  roles:
+    - role: manager.osp.osp_inventory 
 
 - name: Provision Pods
   vars:
