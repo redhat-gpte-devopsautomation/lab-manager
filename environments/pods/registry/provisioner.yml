@@ -17,14 +17,19 @@
 
     - name: copy certificates
       copy:
-        src: "{{ item }}"
-        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ ssl_cert_dirs }}/"
+        content: "/etc/letsencrypt/live/{{ letsencrypt_node }}/privkey.pem"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ ssl_cert_dirs }}/privkey.pem"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
-      loop:
-        - "/etc/letsencrypt/archive/{{ letsencrypt_node }}/privkey1.pem"
-        - "/etc/letsencrypt/archive/{{ letsencrypt_node }}/cert1.pem"
+
+    - name: copy certificates
+      copy:
+        content: "/etc/letsencrypt/live/{{ letsencrypt_node }}/cert.pem"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ ssl_cert_dirs }}/cert.pem"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
 
     ## Pod systemd service enable/start
     - name: Enable and Start pods
