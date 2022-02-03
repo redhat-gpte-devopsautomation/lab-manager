@@ -18,12 +18,12 @@ services:
     hostname: {{ pod.name }}
     restart: always
     environment:
-      REGISTRY_AUTH=htpasswd
-      REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm"
-      REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
-      REGISTRY_HTTP_TLS_CERTIFICATE=/certs/cert.pem
-      REGISTRY_HTTP_TLS_KEY=/certs/privkey.pem
-      REGISTRY_COMPATIBILITY_SCHEMA1_ENABLED=true
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/cert.pem
+      REGISTRY_HTTP_TLS_KEY: /certs/privkey.pem
+      REGISTRY_COMPATIBILITY_SCHEMA1_ENABLED: true
     ports:
 {% for port in pod.ports %}
      - '{{ port }}'

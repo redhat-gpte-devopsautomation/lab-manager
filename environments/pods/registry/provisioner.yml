@@ -15,21 +15,24 @@
       set_fact:
         letsencrypt_node: "{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}"
 
-    - name: copy certificates
-      copy:
-        content: "/etc/letsencrypt/live/{{ letsencrypt_node }}/privkey.pem"
-        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ ssl_cert_dirs }}/privkey.pem"
-        owner: root
-        group: root
-        mode: "u=rw,g=r,o=r"
+    - name: copy private key in /tmp
+      shell: (umask 022; cat /etc/letsencrypt/live/{{ letsencrypt_node }}/privkey.pem > /tmp/privkey.pem)
+
+    - name: copy certificate in /tmp
+      shell: (umask 022; cat /etc/letsencrypt/live/{{ letsencrypt_node }}/cert.pem > /tmp/cert.pem)
 
     - name: copy certificates
       copy:
-        content: "/etc/letsencrypt/live/{{ letsencrypt_node }}/cert.pem"
-        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ ssl_cert_dirs }}/cert.pem"
+        src: "/tmp/{{ item }}"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ ssl_cert_dirs }}/{{ item }}"
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
+      loop:
+        - privkey.pem
+        - cert.pem
+
+
 
     ## Pod systemd service enable/start
     - name: Enable and Start pods
