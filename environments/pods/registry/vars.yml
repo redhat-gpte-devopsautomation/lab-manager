@@ -6,16 +6,17 @@ pods:
     ports:
       - '5000:5000'
     volumes:
-      directory: 
+      directories: 
         #/opt/registry/data:/var/lib/registry:z
         - src: /var/lib/registry
           dest: /var/lib/registry
-        #/opt/registry/auth:/auth:z 
-        - src: htpasswd
-          dest: /auth
         #/opt/registry/certs:/certs:z \
         - src: /certs
           dest: /certs
+      files:
+        #/opt/registry/auth:/auth:z 
+        - src: htpasswd
+          dest: /auth
         
     systemd:
       # Space separated list of wants
