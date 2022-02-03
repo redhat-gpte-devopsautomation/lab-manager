@@ -27,4 +27,4 @@ pods:
       enabled: true
 
 # Pod's Letsencypt ssl certificate directory
-ssl_cert_dirs: /certs/
+ssl_cert_dirs: /certs
