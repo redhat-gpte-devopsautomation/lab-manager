@@ -23,8 +23,9 @@
         group: root
         mode: "u=rw,g=r,o=r"
       loop:
-        - "/etc/letsencrypt/live/{{ letsencrypt_node }}/privkey.pem"
-        - "/etc/letsencrypt/live/{{ letsencrypt_node }}/cert.pem"
+        - "/etc/letsencrypt/archive/{{ letsencrypt_node }}/privkey1.pem"
+        - "/etc/letsencrypt/archive/{{ letsencrypt_node }}/cert1.pem"
+
     ## Pod systemd service enable/start
     - name: Enable and Start pods
       service:
