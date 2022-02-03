@@ -1,0 +1,47 @@
+---
+
+- name: Include variables
+  hosts: localhost
+  connection: localhost
+  become: true
+  tasks:
+    - include_role:
+        name: manager.common.letsecrypt
+
+    - include_role:
+        name: manager.local_pod.provisioner
+
+    # Generate Letsencrypt certificate
+    # - name: Remove existing /tmp/cert.pem
+    #   file:
+    #     path: /tmp/haproxy.pem
+    #     state: absent
+      
+    - name: Set host FQDN
+      set_fact:
+        letsencrypt_node: "{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}"
+
+    # - name: merge private key and certificate
+    #   shell: cat "{{ item }}" >> /tmp/haproxy.pem
+    #   loop:
+    #     - "/etc/letsencrypt/live/{{ letsencrypt_node }}/privkey.pem"
+    #     - "/etc/letsencrypt/live/{{ letsencrypt_node }}/cert.pem"
+
+    - name: copy merged certificate
+      copy:
+        src: "{{ item }}"
+        dest: "/opt/podman/volumes/{{ env_name }}-volume/{{ ssl_cert_dirs }}/"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      loop:
+        - "/etc/letsencrypt/live/{{ letsencrypt_node }}/privkey.pem"
+        - "/etc/letsencrypt/live/{{ letsencrypt_node }}/cert.pem"
+    ## Pod systemd service enable/start
+    - name: Enable and Start pods
+      service:
+        name: "{{ item.name }}-pod"
+        state: restarted
+      async: 3000
+      poll: 30
+      loop: "{{ pods }}"
