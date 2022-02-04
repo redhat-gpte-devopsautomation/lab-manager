@@ -41,6 +41,9 @@ frontend bastion
     bind *:49204 ssl crt /etc/ssl/certs/cert.pem
     use_backend vscode-49204 if { dst_port 49204 }
 
+    bind *:49205 ssl crt /etc/ssl/certs/cert.pem
+    use_backend registry-49204 if { dst_port 49205 }
+
 {% if groups['towers'] is defined %}
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend tower-49210 if { dst_port 49210 }
@@ -75,6 +78,10 @@ backend gitlab-49203
 backend vscode-49204
     balance source
     server vscode-server {{ groups['bastions'][0] }}:8080 check
+
+backend registry-49205
+    balance source
+    server registry {{ groups['bastions'][0] }}:5000 check ssl verify none
 
 {% if groups['towers'] is defined %}
 backend tower-49210
