@@ -42,7 +42,7 @@ frontend bastion
     use_backend vscode-49204 if { dst_port 49204 }
 
     bind *:49205 ssl crt /etc/ssl/certs/cert.pem
-    use_backend registry-49204 if { dst_port 49205 }
+    use_backend registry-49205 if { dst_port 49205 }
 
 {% if groups['towers'] is defined %}
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
