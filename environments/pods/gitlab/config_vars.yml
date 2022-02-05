@@ -36,3 +36,7 @@ gitlab_details:
     - name: postgresql
       repository: https://github.com/redhat-gpte-devopsautomation/aa-postgresql.git
       visibility: public
+    - name: molecule-project
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-molecule-project.git
+      visibility: public
+    
