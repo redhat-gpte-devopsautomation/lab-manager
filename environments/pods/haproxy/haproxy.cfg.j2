@@ -56,12 +56,12 @@ frontend bastion
 
 {% if groups['automationcontrollers'] is defined %}
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
-    use_backend tower-49210 if { dst_port 49210 }
+    use_backend control-49210 if { dst_port 49210 }
 {% endif %}
 
 {% if groups['automationhubs'] is defined %}
     bind *:49211 ssl crt /etc/ssl/certs/cert.pem
-    use_backend towerhub-49211 if { dst_port 49211 }
+    use_backend ah-49211 if { dst_port 49211 }
 {% endif %}
 
 {% if groups['towerfl'] is defined %}
@@ -94,19 +94,19 @@ backend registry-49205
     server registry {{ groups['bastions'][0] }}:5000 check ssl verify none
 
 {% if groups['automationcontrollers'] is defined %}
-backend tower-49210
+backend control-49210
     balance source
- {% for host in groups['towers'] %}
-    server tower{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% for host in groups['automationcontrollers'] %}
+    server control{{ loop.index }} {{ host }}:443 check ssl verify none
  {% endfor %}
 {% endif %}
 
 
 {% if groups['automationhubs'] is defined %}
-backend towerhub-49211
+backend ah-49211
     balance source
- {% for host in groups['towerhubs'] %}
-    server towerhub{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% for host in groups['automationhubs'] %}
+    server ah{{ loop.index }} {{ host }}:443 check ssl verify none
  {% endfor %}
 {% endif %}
 
