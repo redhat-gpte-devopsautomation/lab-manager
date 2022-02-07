@@ -5,5 +5,5 @@ course_requirements:
     - gitlab
     - bind9
     - haproxy
-  instances:
-    - ac
+  #instances:
+  #  - ac
