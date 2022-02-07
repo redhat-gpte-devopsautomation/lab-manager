@@ -93,6 +93,24 @@ backend registry-49205
     balance source
     server registry {{ groups['bastions'][0] }}:5000 check ssl verify none
 
+{% if groups['automationcontrollers'] is defined %}
+backend tower-49210
+    balance source
+ {% for host in groups['towers'] %}
+    server tower{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+
+{% if groups['automationhubs'] is defined %}
+backend towerhub-49211
+    balance source
+ {% for host in groups['towerhubs'] %}
+    server towerhub{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+
 {% if groups['towers'] is defined %}
 backend tower-49210
     balance source
@@ -109,7 +127,6 @@ backend towerhub-49211
     server towerhub{{ loop.index }} {{ host }}:443 check ssl verify none
  {% endfor %}
 {% endif %}
-
 
 {% if groups['towerfl'] is defined %}
 backend towerfl-49210
