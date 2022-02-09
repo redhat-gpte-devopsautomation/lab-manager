@@ -18,7 +18,9 @@
       lineinfile:
         path: /home/cloud-user/.bashrc
         insertafter: 'EOF'
-        line: "export GUID={{ guid }}"
+        line: |
+          export GUID={{ guid }}
+          export INTERNAL_DOMAIN={{ internal_domain }}
         state: present
     
     - name: Install packages
