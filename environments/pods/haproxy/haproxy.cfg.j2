@@ -63,7 +63,10 @@ frontend bastion
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend frontend-49210 if { dst_port 49210 }
 {% endif %}
-
+{% if groups['loadbalancers'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend frontend-49210 if { dst_port 49210 }
+{% endif %}
 
 ##### Backends ######
 
@@ -114,5 +117,9 @@ backend frontend-49210
     balance roundrobin
     server  frontend {{ groups['frontends'][0] }}:80 check
 {% endif %}
-
+{% if groups['loadbalancers'] is defined %}
+backend frontend-49210
+    balance roundrobin
+    server  frontend {{ groups['frontends'][0] }}:80 check
+{% endif %}
 

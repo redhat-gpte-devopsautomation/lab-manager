@@ -14,6 +14,16 @@
         src: /etc/openstack/clouds.yaml
         dest: /etc/openstack/clouds.yaml
 
+    - name: Copy ssh keys
+      copy:
+        src: /home/devops/.ssh/
+        dest: /home/cloud-user/.ssh
+        owner: cloud-user
+        mode: 0400
+      loop: 
+        - "{{ guid }}key.pem"
+        - "{{ guid }}key.pub"
+
     - name: Insert guid in .bashrc
       lineinfile:
         path: /home/cloud-user/.bashrc
