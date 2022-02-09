@@ -20,3 +20,9 @@
         insertafter: 'EOF'
         line: "export GUID={{ guid }}"
         state: present
+    
+    - name: Install packages
+      dnf:
+        name: "{{ rhel8_packages }}"
+        state: latest
+      
