@@ -4,17 +4,17 @@
   become: true
   gather_facts: true
   tasks:
-    - name: Remove directory if it exists
+    - name: Create openstack directory
       file:
         path: "/etc/openstack"
         state: directory
 
-    - name: Copy inventory file
+    - name: Copy clouds.yml
       copy:
         src: /etc/openstack/clouds.yaml
         dest: /etc/openstack/clouds.yaml
 
-    - name: Copy inventory file
+    - name: Insert guid in .bashrc
       lineinfile:
         path: /home/cloud-user/.bashrc
         insertafter: 'EOF'
