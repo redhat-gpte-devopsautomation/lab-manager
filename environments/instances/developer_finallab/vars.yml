@@ -59,3 +59,4 @@ rhel8_packages:
   - python3-devel
   - python3-libselinux
   - openssl-devel
+  - vim
