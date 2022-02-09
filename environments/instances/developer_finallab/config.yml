@@ -1,0 +1,22 @@
+---
+- name: Install single node tower for final lab
+  hosts: finallabs
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Remove directory if it exists
+      file:
+        path: "/etc/openstack"
+        state: directory
+
+    - name: Copy inventory file
+      copy:
+        src: /etc/openstack/clouds.yaml
+        dest: /etc/openstack/clouds.yaml
+
+    - name: Copy inventory file
+      lineinfile:
+        path: /home/cloud-user/.bashrc
+        insertafter: 'EOF'
+        line: "export GUID={{ guid }}"
+        state: present
