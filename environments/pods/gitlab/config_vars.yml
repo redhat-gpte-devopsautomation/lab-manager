@@ -39,4 +39,7 @@ gitlab_details:
     - name: molecule-project
       repository: https://github.com/redhat-gpte-devopsautomation/aa-molecule-project.git
       visibility: public
+    - name: mycollections
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-mycollections.git
+      visibility: public
     
