@@ -42,4 +42,7 @@ gitlab_details:
     - name: mycollections
       repository: https://github.com/redhat-gpte-devopsautomation/aa-mycollections.git
       visibility: public
-    
+    - name: automation-app-project
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-automation-hub.git
+      visibility: public
+        
