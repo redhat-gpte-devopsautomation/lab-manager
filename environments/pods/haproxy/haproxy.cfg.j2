@@ -73,9 +73,25 @@ frontend bastion
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend frontend-49210 if { dst_port 49210 }
 {% endif %}
+
 {% if groups['loadbalancers'] is defined %}
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend frontend-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['loadbalancers'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend frontend-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['acs'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend ac-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['hubs'] is defined %}
+    bind *:49211 ssl crt /etc/ssl/certs/cert.pem
+    use_backend hub-49211 if { dst_port 49211 }
 {% endif %}
 
 ##### Backends #######
@@ -104,7 +120,6 @@ backend control-49210
  {% endfor %}
 {% endif %}
 
-
 {% if groups['automationhubs'] is defined %}
 backend ah-49211
     balance source
@@ -113,7 +128,6 @@ backend ah-49211
  {% endfor %}
 {% endif %}
 
-
 {% if groups['towers'] is defined %}
 backend tower-49210
     balance source
@@ -121,7 +135,6 @@ backend tower-49210
     server tower{{ loop.index }} {{ host }}:443 check ssl verify none
  {% endfor %}
 {% endif %}
-
 
 {% if groups['towerhubs'] is defined %}
 backend towerhub-49211
@@ -150,3 +163,18 @@ backend frontend-49210
     server  frontend {{ groups['loadbalancers'][0] }}:80 check
 {% endif %}
 
+{% if groups['acs'] is defined %}
+backend ac-49210
+    balance source
+ {% for host in groups['acs'] %}
+    server acl{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+{% if groups['hubs'] is defined %}
+backend hub-49211
+    balance source
+ {% for host in groups['hubs'] %}
+    server hub{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
