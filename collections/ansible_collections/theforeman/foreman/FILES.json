@@ -1,0 +1,453 @@
+{
+ "files": [
+  {
+   "name": ".",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "LICENSE",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+   "format": 1
+  },
+  {
+   "name": "README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "17d98b13ecef06f94f0b4fa6cd6730febe88e935b893d0019412232b24a9abd4",
+   "format": 1
+  },
+  {
+   "name": "plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/foreman_helper.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3e8347c905d9d49703b17a94c9d4a830bfc7e62b6624d1ea36a9cf90e14c029",
+   "format": 1
+  },
+  {
+   "name": "plugins/callback",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/callback/foreman.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3781cb490e4dd7daada4ed91e5c31be39154e750ca36cf29f3a08d5a53882e4e",
+   "format": 1
+  },
+  {
+   "name": "plugins/filter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/filter/foreman.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6b64d9916c2c78255a6a03d0437aab1d36342455bb2fdf94dfa3f1cd1378e67b",
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/doc_fragments/foreman.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ea5178e90613ae598ede24afeeb0bbda4e0b960de91a6c6fbf7ac35b08f06a1b",
+   "format": 1
+  },
+  {
+   "name": "plugins/inventory",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/inventory/foreman.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a84033f24d8e8bd11a29511b844e8952e90067b7838a799dd69324b98bb072c6",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_smart_class_parameter.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "acbafeef9564aa0ba236fd49489e24a373c6b389e4599b40545f331de95de783",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_host_power.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "81bf3eecedaa1af821cc9e3ffe1144fd6572008754ff11115c01c91d2824d1a4",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_bookmark.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "04bf44befc95c9b3b9322f8d2a934793d0759c62040e062ba3576caeba51a4a5",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_search_facts.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fe66dc8589ea88f2a3c1c0c579df47ecf18255f6410b3d1a6f79a5598e4c4b58",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_host_collection.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b6b643e5cfe8aea601adb4b04f253f2a164eebdc3e7c8133b494fe0d2593efb3",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_config_group.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "58b9c565acd16c9edc3282e7893ddb1961989152098ab63eb100eb334b547eac",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_content_view_version.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4e95d9384b5e72e5c2c72b1cdc761c7434534e4cfe6747d0e988f9b25c609c68",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_scc_account.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9da48ae0681ff2536b0230c17391a2c030ddb80cb98aa6017d63777c96d90a44",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_environment.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "42e8830a4e7c7267b831deb967369bd348efce4d346a8d72b9236f9ec055acfa",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_product.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "584cb714ead6919e295511b2fce87980b98f8aaa7bd3f4a43802adb4809daa02",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_sync_plan.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "71a89543893979e213b8615d8a87b35501dba3d7aaeb51eb0a7b408e35d32b4a",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_sync.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "46ce210a32cb5d73424f77d72d1610b15c9348e02e49ae66cb35f763df4da1e1",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_subnet.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9a9090eda40e0eba610b8f0053e493d98b0280efbd72792364c1c480e69d8415",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_snapshot.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d0ec9cd374b9032ad11d8afb7053552a87a61e0bb45b6a1dd97ef86a9050bc91",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_installation_medium.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "eb928752161bf384bc358c4dec82953da8f671be1fbd0d38ff369ee3a918d676",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_content_credential.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cface952737d29bb1de2a7f64ed43ed998eeeb94c58ba162a39b3df38cbd7b85",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_organization.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7978fa0329b03537281d1f6511329fd15002b14eba7abb7436bc9d67463c437d",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_realm.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "825987d6561fc742c2717a97ec325615e28a9e3e3305b593cc0459eb8c1fb969",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_location.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4e3f0bc2a14818cad185280588cd0c212d21afb7f0061f857f777cc8247c4eac",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_auth_source_ldap.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5a40ab8afc5f07617289ba8dd0a9d48b3449bc96bc4b9cb086246d38362032ee",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_compute_attribute.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1b7e7de1937831d6e5cd7690db1cdacb5356d04a50ac2fc95098afefb6ec22fc",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_content_view.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0fa88248aae7b27462ba9af07bdd61e5ff891b61a969ce00a0a925593f6b51a0",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_repository.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d45ca74f38bebeb539280efffddcc22b6ed5a5368d79a8680b7685a6294de456",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_architecture.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4d399a07cf24aab6c4e2d08ba460a71c1e026bbae6439957d31f5dfac385c55e",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_model.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "180ce1ae8cc008e9ed8d33abbd839eb552a466c8b38bb0fb272b32ccff4f0460",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_upload.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fd11a603df8c54350e725db5a8f9691f305525431ec5bc18caeda0f1ca0ba427",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_scc_product.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3fb8dbe44233ee473eeba0198391fd6609c350ae0e4d9b66e43fc86de707f5b1",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_os_default_template.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c0da8f02da03530fb8c8e596e008c7f908f463c9559f21f8cb427da684758ef2",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_role.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "017ec5321bb3fcb191d67c5e7e5cc30dbb89812a7353baf4720a04fd16f2c2b7",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_repository_set.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ea5655ae9041709ef9990338646886a7370b2afdf5e4b5dfa229a9b8f03a28f8",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_host.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "df169450e6262218e526c7881f183d7cb3d4495d330cb963bdda5fdc5c80ec7e",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_domain.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bcd6f129e9da24fd3a3dce8000f4ecb7021fdf9cf2974a1967117d4ef8c97e01",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_hostgroup.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b4ce6c49f29c226076ca76718d6a9f75888d2a0214df014b1d4f1c43acfa2d72",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_external_usergroup.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a001a43c645c654d294e5c990890cec1e7636f4deb7ed197eb2cb901f3f79634",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_setting.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6b5795c979620cdbd4d8f48a86a7563aac6cd23f43386c01d174b702a4948cdb",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_lifecycle_environment.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2fc61c2a858a7dae7bea8c56d1b9f2f707f56b51926758ad6fec6bca710d19fd",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_compute_profile.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1dfb0f4527339d4541a2659dd59810c0f05a2f767ce7b1376e53b36f175283ee",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_provisioning_template.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c32af2518e28e4becac8b8af9c0dd45af4e95e7f9f41d7058b3308af08eb49f8",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_operatingsystem.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d1abde36f74ded4587b0d83d15bc3dc3f0f6cd63663d4fd56d05da89b9ce4732",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_usergroup.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3f9a826914602a1d0988265f55e1b42bd26000680dc639f3051ce270750a9563",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_global_parameter.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ae5130e4e33b1e4db46f4609f54ec3d3c5d60c3628a0124d9c5aa37bb4dde3a2",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_job_template.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6ab2730d90bdccc2171be97cba30477fbdbed979aa6ef45416802de65fdff957",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_ptable.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "689e08bfe21c02ec05a2ea7bdb1114ea23a04f0f88ac5deb228cff92adc587cb",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/redhat_manifest.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "113316732dbe7ae76a87b6dba1c38ebe580eeb028860c78bc04a2ec2ae303412",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_compute_resource.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f91ef85340568168dce7b4fe7347be421b4216f6c11ac4e506e17b1945bb69a9",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/foreman_user.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0f7ad57ba34cbad6b697ad63e0730cd108508d698f39a8d73deaf953415794a8",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_content_view_filter.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f401d4edc8ef3fa009d0577d0792ea5bf4689fad0f5c09eab988fc962db15b38",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_activation_key.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5447c0e7bff97ab360f76ddd43de5170245732e98a8282e65a9c8b79d6263bbb",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/katello_manifest.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "080811d4a7d4eb30f7002982faab8041ecec99e525d215d531a0abccd06a076b",
+   "format": 1
+  }
+ ],
+ "format": 1
+}

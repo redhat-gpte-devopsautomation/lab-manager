@@ -1,0 +1,8 @@
+---
+sections:
+  - title: Guides
+    toctree:
+      - filter_guide
+      - user_guide
+      - contributor_guide
+      - localenv_developer_guide

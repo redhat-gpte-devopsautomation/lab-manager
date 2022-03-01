@@ -1,0 +1,8 @@
+---
+vault_version: "1.9.3"
+vault_checksum: "sha256:16059f245fb4df2800fe6ba320ea66aba9c2615348e37bcfd42754591a528639"
+vault_install_prerequisites: ['unzip']
+vault_user: "vault"
+vault_group: "vault"
+vault_config_path: "/etc/vault.hcl"
+vault_mnt_directory: "/mnt/vault/data"

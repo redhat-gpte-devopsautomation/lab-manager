@@ -1,0 +1,11 @@
+---
+- name: Convert clouds.yaml to json
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Create clouds.json file
+      copy:
+        content: "{{ lookup('file', '/etc/openstack/clouds.yaml') | from_yaml | to_nice_json }}"
+        dest: /srv/lab-manager/environments/instances/integrations/clouds.json

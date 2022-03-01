@@ -1,0 +1,39 @@
+---
+- name: Convert clouds.yaml to json
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Create clouds.json file
+      copy:
+        content: "{{ lookup('file', '/etc/openstack/clouds.yaml') | from_yaml | to_nice_json }}"
+        dest: /srv/lab-manager/environments/instances/integrations/clouds.json
+
+- name: Setup Hashicorp vault for environment
+  hosts: vaults
+  become: false
+  gather_facts: false
+  vars:
+    vault_addr: "http://vault.example.com:8200"
+    vault_token: "{{ lookup('file', '/srv/lab-manager/environments/instances/integrations/rootKey/rootkey') }}"
+    kv_path: "kv1"
+    clouds_json_path: "/home/cloud-user/clouds.json"
+  tasks:
+    - name: Create clouds.json file locally
+      copy:
+        src: /srv/lab-manager/environments/instances/integrations/clouds.json
+        dest: "{{ clouds_json_path }}"
+
+    - name: Login to Vault
+      shell: |
+        vault login -address={{ vault_addr }} token={{ vault_token }}
+    
+    - name: Enable kv secrets engine
+      shell: |
+        vault secrets enable -address={{ vault_addr }} -version=1 -path={{ kv_path }} -description="K/V v1 secrets" kv
+
+    - name: 
+      shell: |
+        vault write -address={{ vault_addr }} {{ kv_path }}/data/osp_credentials @{{ clouds_json_path }}
+

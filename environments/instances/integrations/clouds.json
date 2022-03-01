@@ -1,0 +1,17 @@
+{
+    "clouds": {
+        "17c2-project": {
+            "auth": {
+                "auth_url": "https://api.orange.sc01.infra.opentlc.com:13000//v3",
+                "password": "XNodpO7xisyk",
+                "project_id": "fb92d4b6580f4c3baf602b3661254947",
+                "project_name": "17c2-project",
+                "user_domain_name": "Default",
+                "username": "17c2-user"
+            },
+            "identity_api_version": 3,
+            "interface": "public",
+            "region_name": "regionOne"
+        }
+    }
+}

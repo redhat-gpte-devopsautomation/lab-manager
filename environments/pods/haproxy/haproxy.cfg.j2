@@ -74,6 +74,11 @@ frontend bastion
     use_backend frontend-49210 if { dst_port 49210 }
 {% endif %}
 
+{% if groups['vaults'] is defined %}
+    bind *:49218 ssl crt /etc/ssl/certs/cert.pem
+    use_backend vault-49218 if { dst_port 49218 }
+{% endif %}
+
 
 ##### Backends #######
 
@@ -142,4 +147,11 @@ backend frontend-49210
     server  frontend {{ groups['frontends'][0] }}:80 check
 {% endif %}
 
+{% if groups['vaults'] is defined %}
+backend vault-49218
+    balance source
+ {% for host in groups['vaults'] %}
+    server vault{{ loop.index }} {{ host }}:8200 check
+ {% endfor %}
+{% endif %}
 
