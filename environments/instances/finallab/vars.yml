@@ -5,7 +5,7 @@ project_tag: "{{ env_name }}-{{ guid }}"
 
 # lab_name: finallab
 provider_network: external
-instance_network: tower
+instance_network: default
 # all_ssh_authorized_keys: "{{ opentlc_admin_pub_keys + [user_pub_key|d()] }}"
 all_ssh_authorized_keys: testkeys
 default_metadata:
@@ -19,22 +19,47 @@ osp_default_rootfs_size: 50
 __instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor 
 
 # Default Image
-__image: rhel-8.3
-tower_instance_count: 1
+__image: rhel-8.4
+ac_instance_count: 1
+ah_instance_count: 1
 # Environment Instances
 instances:  
-  - name: towerfl
-    count: "{{ tower_instance_count | default(3) }}"
+  - name: ac
+    count: "{{ ac_instance_count | default(3) }}"
     public_dns: false
     dns_loadbalancer: false
     floating_ip: false
-    image: "{{ tower_instance_image | default(__image) }}"
+    image: "{{ ac_instance_image | default(__image) }}"
     flavor:
-      osp: "{{ tower_instance_type | default(__instance_type) }}"
+      osp: "{{ ac_instance_type | default(__instance_type) }}"
     network: "{{ instance_network | default('default') }}"
     tags:
       - key: "AnsibleGroup"
-        value: "towerfl"
+        value: "acs"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+  - name: hub
+    count: "{{ ah_instance_count | default(3) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ ah_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ ah_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "hubs"
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
@@ -48,5 +73,3 @@ instances:
       - WebSG
       - HostSG
 
-tower_setup_dir_path: /tmp
-tower_version: 3.8.3-1
