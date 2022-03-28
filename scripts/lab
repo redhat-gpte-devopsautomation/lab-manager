@@ -233,6 +233,8 @@ course_exec_grade() {
       -e lab_name=${lab_name} \
       -e purpose=grade \
       -e @${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/vars.yml
+
+      cat /tmp/grading_dir/grading_report.txt
     else
       echo "Lab ${lab_name} doesn't exist"
       exit 2
