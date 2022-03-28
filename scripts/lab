@@ -226,8 +226,10 @@ course_exec_grade() {
     # echo "Start grade for course - ${course_name}"
     if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
       # echo "Grading Lab - ${lab_name}"
+      echo "\n######################################################"
       echo "Grade log: /tmp/grading_dir/grading_logs.txt"
       echo "Grade Reports: /tmp/grading_dir/grading_report.txt"
+      echo "######################################################\n"
       ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
       ${common_environment_vars} \
       -e provisioner=grades \
