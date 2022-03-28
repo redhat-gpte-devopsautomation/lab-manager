@@ -207,7 +207,9 @@ course_exec_cleanup() {
 count_grade_args() {
   if [ ${#@} -lt 3 ];
     then 
-      usage "Less arguments were passed"
+      # usage "Less arguments were passed"
+      echo "Less than 3 arguments were provided"
+      echo "-c course_name  lab"
       exit 2
   fi
 }
