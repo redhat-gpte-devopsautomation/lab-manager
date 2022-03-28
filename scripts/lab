@@ -230,6 +230,7 @@ course_exec_grade() {
       -e provisioner=${grade} \
       -e env_name=${course_name} \
       -e lab_name=${lab_name} \
+      -e purpose=grade \
       ${common_environment_vars}
     else
       echo "Lab ${lab_name} doesn't exist"
