@@ -1,13 +1,11 @@
 ---
 - name: Generate student grade report
   include_role:
-    name: ftl_run_grade_report_generation
+    name: grade_report_generation
 
 - name: Show student grade
   include_role:
-    name: ftl_run_show_student_grade
+    name: show_student_grade
 
-- name: Update LMS
-  include_role:
-    name: ftl_run_grade_update_lrs
+
 ...
