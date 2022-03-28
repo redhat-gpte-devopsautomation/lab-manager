@@ -4,5 +4,5 @@
 
 
 - name: Show report
-  command: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
+  shell: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
 
