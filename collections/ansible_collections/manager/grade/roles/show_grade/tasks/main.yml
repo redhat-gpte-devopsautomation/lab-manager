@@ -2,13 +2,12 @@
   set_fact:
     grade_report_file_path: "{{ grader_working_dir}}/{{ grader_student_report_file }}"
 
-- name: Get Result 
-  set_fact:
-    grade_report: "{{ lookup('file', grade_report_file_path) }}"
+- name: Show report
+  shell: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
+  register: output
 
 - name: Show report back to student
   debug:
-    msg: "{{ grade_report }}"
+    msg: "{{ output }}"
 
-- name: Show report
-  shell: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
+
