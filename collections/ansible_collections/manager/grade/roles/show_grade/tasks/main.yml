@@ -8,6 +8,6 @@
 
 - name: Show report back to student
   debug:
-    msg: "{{ output }}"
+    msg: "{{ output.stdout }}"
 
 
