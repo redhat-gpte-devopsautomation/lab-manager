@@ -227,7 +227,7 @@ course_exec_grade() {
     if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
       echo "Grading Lab - ${lab_name}"
       ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
-      -e provisioner=${grade} \
+      -e provisioner=grade \
       -e env_name=${course_name} \
       -e lab_name=${lab_name} \
       -e purpose=grade \
