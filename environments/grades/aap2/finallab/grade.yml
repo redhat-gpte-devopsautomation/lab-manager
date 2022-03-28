@@ -1,0 +1,26 @@
+---
+- name: Run grader
+  hosts: bastions
+  gather_facts: false
+  become: false
+  tasks:
+
+        
+##### Result for Gitlab webhook #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: gitlab_webhook_urls | d('') | length > 1
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when: gitlab_webhook_urls | d('') | length  <= 1
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Check if gitlab project repo has 2 webhooks"
+
+...
