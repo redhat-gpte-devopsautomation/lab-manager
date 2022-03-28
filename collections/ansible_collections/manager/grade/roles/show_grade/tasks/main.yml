@@ -8,7 +8,7 @@
 
 - name: Show report back to student
   debug:
-    msg: grade_report
+    msg: "{{ grade_report }}"
 
 - name: Show report
   shell: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
