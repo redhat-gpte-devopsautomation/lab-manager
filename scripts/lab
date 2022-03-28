@@ -226,7 +226,11 @@ course_exec_grade() {
     echo "Start grade for course - ${course_name}"
     if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
       echo "Grading Lab - ${lab_name}"
-      ansible-playbook ${GRADE_PATH}/${course_name}/${lab_name}/grade.yml ${common_environment_vars}
+      ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
+      -e provisioner=${grade} \
+      -e env_name=${course_name} \
+      - lab_name=${lab_name} \
+      ${common_environment_vars}
     else
       echo "Lab ${lab_name} doesn't exist"
       exit 2
