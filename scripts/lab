@@ -39,6 +39,7 @@ usage() {
   echo -e "Usage-1: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ]"
   echo -e "Usage-2: $CMD_NAME (prep|cleanup)  -c course_name"
   echo -e "Usage-2: $CMD_NAME refresh -i satellite"
+  echo -e "Usage-2: $CMD_NAME grade -c course_name -l lab_name"
   echo -e "\e[0m \n"
   exit 2
 }
@@ -207,37 +208,40 @@ course_exec_cleanup() {
 count_grade_args() {
   if [ ${#@} -lt 3 ];
     then 
-      # usage "Less arguments were passed"
-      echo "Less than 3 arguments were provided"
-      echo "-c course_name  lab"
+      usage "Less arguments were passed"
       exit 2
   fi
 }
 course_exec_grade() {
-  while  getopts "hc:" arg; do
+  while  getopts "hc:l:" arg; do
     case ${arg} in
-      c)
-        echo "I can run"
-        # ansible-playbook ${PREP_PLAYBOOK} \
-        # -e env_name=${OPTARG} \
-        # -e env_destroy=true \
-        # ${common_environment_vars}
-        ;;
-      h) usage
-        ;;
-      *) usage "Invalid option"
-        ;;
+      c) course_name=${OPTARG};;
+      l) lab_name=${OPTARG};;
+      h) usage;;
+      *) usage "Invalid option";;
     esac
   done
+  GRADE_PATH="${LAB_MGR_DIR}/environments/grades"
+  if [ -d "${GRADE_PATH}/${course_name}" ]; then
+    echo "Start grade for ${course_name}"
+    if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
+      echo "Grading ${lab_name}"
+      ansible-playbook ${GRADE_PATH}/${course_name}/${lab_name}/grade.yml ${common_environment_vars}
+    else
+      echo "Course ${course_name} doesn't exist"
+      exit 2
+    fi
+  else  
+    echo "Course ${course_name} doesn't exist"
+    exit 2
+  fi
 }
 
 case ${1} in
   grade)
     count_grade_args ${@:2}
-    env_exec_deploy ${@:2}
+    course_exec_grade ${@:2}
     ;;  
-
-
   deploy) 
     count_args ${@:2}
     env_exec_deploy ${@:2}
