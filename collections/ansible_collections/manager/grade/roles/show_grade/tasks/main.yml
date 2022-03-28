@@ -1,8 +1,10 @@
+- name: Get Result 
+  set_fact:
+    grade_report: "{{ lookup('file', grader_working_dir/grader_student_report_file) }}"
+
 - name: Show report back to student
   debug:
-    msg: cat file? Maybe do it later? Via calling script
-
+    msg: grade_report
 
 - name: Show report
   shell: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
-
