@@ -1,3 +1,8 @@
 - name: Show report back to student
   debug:
     msg: cat file? Maybe do it later? Via calling script
+
+
+- name: Show report
+  command: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
+
