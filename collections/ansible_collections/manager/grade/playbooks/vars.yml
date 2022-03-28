@@ -14,6 +14,6 @@ opentlc_student_grader_log:       /tmp/opentlc_grader.log
 
 opentlc_ansible_log:              /tmp/opentlc_ansible.log
 
-course_id: "{{ course_name }}"
+course_id: "{{ env_name }}"
 lab_id: "{{ lab_name }}"
 student_id: "{{ email }}"
