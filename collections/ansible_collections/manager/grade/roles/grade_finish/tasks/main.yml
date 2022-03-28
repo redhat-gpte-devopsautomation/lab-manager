@@ -5,7 +5,7 @@
 
 - name: Show student grade
   include_role:
-    name: show_student_grade
+    name: show_grade
 
 
 ...
