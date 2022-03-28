@@ -3,6 +3,8 @@
   hosts: localhost
   gather_facts: false
   become: false
+  pre_tasks:
+    - include_vars: vars.yml
   roles:
     - name: grade_init
       when: purpose == "grade"
