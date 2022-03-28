@@ -16,5 +16,5 @@
   become: false
   roles:
     - name: grade_finish
-      when: purpose == "grade_lab"
+      when: purpose == "grade"
 ...
