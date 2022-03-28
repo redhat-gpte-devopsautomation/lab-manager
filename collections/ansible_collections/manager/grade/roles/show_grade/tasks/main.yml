@@ -1,6 +1,10 @@
+- name: Grade report path
+  set_fact:
+    grade_report_file_path: "{{ grader_working_dir}}/{{ grader_student_report_file }}"
+
 - name: Get Result 
   set_fact:
-    grade_report: "{{ lookup('file', grader_working_dir/grader_student_report_file) }}"
+    grade_report: "{{ lookup('file', grade_report_file_path) }}"
 
 - name: Show report back to student
   debug:
