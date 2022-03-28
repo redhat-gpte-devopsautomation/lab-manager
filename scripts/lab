@@ -222,7 +222,7 @@ course_exec_grade() {
         # -e env_name=${OPTARG} \
         # -e env_destroy=true \
         # ${common_environment_vars}
-        # ;;
+        ;;
       h) usage
         ;;
       *) usage "Invalid option"
