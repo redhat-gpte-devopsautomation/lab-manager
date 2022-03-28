@@ -1,13 +1,4 @@
-- name: Grade report path
-  set_fact:
-    grade_report_file_path: "{{ grader_working_dir}}/{{ grader_student_report_file }}"
-
-- name: Show report
-  shell: cat {{ grader_working_dir}}/{{ grader_student_report_file }}
-  register: output
-
 - name: Show report back to student
   debug:
-    msg: "{{ output.stdout_lines }}"
-
+    msg: cat file? Maybe do it later? Via calling script
 
