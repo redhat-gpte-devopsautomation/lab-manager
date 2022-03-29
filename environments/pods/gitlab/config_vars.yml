@@ -53,7 +53,7 @@ gitlab_details:
       visibility: public                
     - name: mitziapp
       repository: https://github.com/redhat-gpte-devopsautomation/aa-finallab-app-deployer.git
-      visibility: public 
+      visibility: public
 
 
         
