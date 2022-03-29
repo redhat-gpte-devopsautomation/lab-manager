@@ -45,4 +45,16 @@ gitlab_details:
     - name: automation-app-project
       repository: https://github.com/redhat-gpte-devopsautomation/aa-automation-hub.git
       visibility: public
+    - name: mitzidotcom
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-finallab-collection.git
+      visibility: public
+    - name: mitziinfra
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-finallab-infra.git
+      visibility: public                
+    - name: mitziapp
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-finallab-app-deployer.git
+      visibility: public 
+
+
         
+
