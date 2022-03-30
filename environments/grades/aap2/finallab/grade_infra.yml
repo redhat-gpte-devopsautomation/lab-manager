@@ -37,10 +37,13 @@
         task_description_message: "Checking Container Registry Credentials"
 
 ##### Result for Cloud Credentials #####
-  
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
     - name: "Success - set fact"
       set_fact:
-        success: true | d(false)
+        success: true
       when: infra.cloud_cred in item.name
       loop: "{{ r_credentials.json.results }}"
 
@@ -51,9 +54,13 @@
         task_description_message: "Checking Cloud Credentials"
 
 ##### Result for Machine Credential #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
     - name: "Success - set fact"
       set_fact:
-        success: true | d(false)
+        success: true
       when: infra.machine_cred in item.name
       loop: "{{ r_credentials.json.results }}"
 
