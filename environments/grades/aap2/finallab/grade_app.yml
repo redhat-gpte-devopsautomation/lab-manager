@@ -21,6 +21,20 @@
       vars:
         task_description_message: "Checking (App) Project"
 
+
+#### List App Inventory ####
+    - name: List Inventory
+      uri:
+        url: https://{{ ac.url }}/api/v2/inventories/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_inventories
+
 ##### Result for Infra Job template #####
     - name: "No Success - set fact"
       set_fact:
@@ -29,14 +43,14 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.job_template ==  item.name
-      loop: "{{ r_jobtemplates.json.results }}"
+      when: application.inventory ==  item.name
+      loop: "{{ r_inventories.json.results }}"
 
     - name: Import logging role
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App) Job Template"
+        task_description_message: "Checking (App) Inventory"
 
 #### Checking Application deployment
     - name: Checking Application deployment
