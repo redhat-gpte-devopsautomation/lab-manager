@@ -4,14 +4,43 @@
   gather_facts: false
   become: false
   tasks:
+#### Checking Automation Controller Installation
+    - name: Checking Automation Controller
+      uri:
+        url: https://ac.example.com/api/v2/ping/
+        method: GET
+        return_content: yes
+        user: admin
+        password: redhat
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+      register: r_uri
+      ignore_errors: yes
 
-  ## EE mitzidotcom Private Automation Hub
-    - command: podman pull hub.example.com/ee-mitzidotcom:8.0.0 --tls-verify=false
+##### Result for Automation Controller #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_uri.status == 200 
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when: r_uri.status != 200 
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Automation Controller Installation"
+#### EE mitzidotcom Private Automation Hub
+    - name: Checking EE image
+      command: podman pull hub.example.com/ee-mitzidotcom:8.0.0 --tls-verify=false
       register: r_image
       ignore_errors: yes
 
     - debug: var=r_image
-
 ##### Result for Gitlab webhook #####
     - name: "Success - set fact"
       set_fact:
@@ -28,5 +57,7 @@
         name: manager.grade.logging_grade_to_log
       vars:
         task_description_message: "Checking ee_mitzidotcom:1.0.0 on Auatomation Hub"
+
+
 
 ...
