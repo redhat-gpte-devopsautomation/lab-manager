@@ -37,6 +37,39 @@
         name: manager.grade.logging_grade_to_log
       vars:
         task_description_message: "Checking Automation Controller Installation"
+
+
+#### Checking Private Automation Hub Installation
+    - name: Checking Private Automation Hub
+      uri:
+        url: https://{{ hub.url }}/api/v2/ping/
+        method: GET
+        return_content: yes
+        user: "{{ hub.user }}"
+        password: "{{ hub.password }}"
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+      register: r_hub_uri
+      ignore_errors: yes
+
+##### Result for Private Automation Hub #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_hub_uri.status == 200 
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when: r_hub_uri.status != 200 
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Private Automation Hub Installation"
+
 #### EE mitzidotcom Private Automation Hub
     - name: Checking EE image
       command: podman pull "{{ hub.url }}/{{ hub.image }}" --tls-verify=false
