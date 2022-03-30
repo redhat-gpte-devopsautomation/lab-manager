@@ -236,7 +236,7 @@ course_exec_grade() {
       -e env_name=${course_name} \
       -e lab_name=${lab_name} \
       -e purpose=grade \
-      -e @${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/vars.yml >& /tmp/${course_name}/${lab_name}_logs.txt
+      -e @${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/vars.yml >& /tmp/${lab_name}_logs.txt
 
       cat /tmp/${course_name}/${lab_name}_report.txt
     else
