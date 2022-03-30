@@ -1,0 +1,12 @@
+---
+
+ac:
+  user: admin
+  password: redhat
+  url: ac.example.com
+
+hub:
+  user: admin
+  password: redhat
+  url: hub.example.com
+  image: ee-mitzidotcom:8.0.0

@@ -4,14 +4,17 @@
   gather_facts: false
   become: false
   tasks:
+    - name: Include grade vars
+      include_vars: vars.yml
+
 #### Checking Automation Controller Installation
     - name: Checking Automation Controller
       uri:
-        url: https://ac.example.com/api/v2/ping/
+        url: https://{{ ac.url }}/api/v2/ping/
         method: GET
         return_content: yes
-        user: admin
-        password: redhat
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
         force_basic_auth: yes
         validate_certs: false
         body_format: json
@@ -36,11 +39,10 @@
         task_description_message: "Checking Automation Controller Installation"
 #### EE mitzidotcom Private Automation Hub
     - name: Checking EE image
-      command: podman pull hub.example.com/ee-mitzidotcom:8.0.0 --tls-verify=false
+      command: podman pull "{{ hub.url }}/{{ hub.image }} --tls-verify=false
       register: r_image
       ignore_errors: yes
 
-    - debug: var=r_image
 ##### Result for Gitlab webhook #####
     - name: "Success - set fact"
       set_fact:
