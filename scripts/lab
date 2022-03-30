@@ -227,8 +227,8 @@ course_exec_grade() {
     if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
       # echo "Grading Lab - ${lab_name}"
       echo -e "\n######################################################"
-      echo "Grade log: /tmp/grading_dir/grading_logs.txt"
-      echo "Grade Reports: /tmp/grading_dir/grading_report.txt"
+      echo "Grade log: /tmp/${course_name}/${lab_name}_logs.txt"
+      echo "Grade Report: /tmp/${course_name}/${lab_name}_report.txt"
       echo -e "######################################################\n"
       ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
       ${common_environment_vars} \
@@ -236,9 +236,9 @@ course_exec_grade() {
       -e env_name=${course_name} \
       -e lab_name=${lab_name} \
       -e purpose=grade \
-      -e @${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/vars.yml >& /tmp/grading_dir/grading_logs.txt
+      -e @${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/vars.yml >& /tmp/${course_name}/${lab_name}_logs.txt
 
-      cat /tmp/grading_dir/grading_report.txt
+      cat /tmp/${course_name}/${lab_name}_report.txt
     else
       echo "Lab ${lab_name} doesn't exist"
       exit 2
