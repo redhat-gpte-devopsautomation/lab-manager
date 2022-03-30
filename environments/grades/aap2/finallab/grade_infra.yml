@@ -202,7 +202,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Node frontend"
+        task_description_message: "Checking (Infra) Node frontend"
 
 - hosts: app1
   gather_facts: false
@@ -224,7 +224,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Node app1"
+        task_description_message: "Checking (Infra) Node app1"
 
 - hosts: app2
   gather_facts: false
@@ -246,7 +246,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Node app2"
+        task_description_message: "Checking (Infra) Node app2"
 
 - hosts: appdb
   gather_facts: false
@@ -268,4 +268,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Node appdb"
+        task_description_message: "Checking (Infra) Node appdb"
