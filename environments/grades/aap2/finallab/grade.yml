@@ -42,7 +42,7 @@
 #### Checking Private Automation Hub Installation
     - name: Checking Private Automation Hub
       uri:
-        url: https://{{ hub.url }}/api/v2/ping/
+        url: https://{{ hub.url }}
         method: GET
         return_content: yes
         user: "{{ hub.user }}"
