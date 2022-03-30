@@ -71,6 +71,67 @@
       vars:
         task_description_message: "Checking (Infra) Machine Credential"
 
+#### List Execution Environment ####
+    - name: List Job templates
+      uri:
+        url: https://{{ ac.url }}/api/v2/execution_environments/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_ee
+
+##### Result for Execution Environment #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: infra.ee ==  item.name
+      loop: "{{ r_ee.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (Infra) Execution Environment"
+
+
+#### List Projects ####
+    - name: List Job templates
+      uri:
+        url: https://{{ ac.url }}/api/v2/projects/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_projects
+
+##### Result for Infra Projects #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: infra.project ==  item.name
+      loop: "{{ r_projects.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (Infra) Project"
+
 #### List job templates ####
     - name: List Job templates
       uri:

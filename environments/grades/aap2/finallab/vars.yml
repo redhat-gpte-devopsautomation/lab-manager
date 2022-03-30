@@ -16,8 +16,8 @@ infra:
   container_cred: mitzidotcom_registry_cred
   cloud_cred: mitzi_cloud_credential
   machine_cred: mitzi_ssh_key
-  project: mitziinfra
   ee: ee-mitzidotcom
+  project: mitziinfra
   job_template: "MitziDotcom Infra Provision"
 
 application:
