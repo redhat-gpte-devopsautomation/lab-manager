@@ -6,6 +6,7 @@
     home: "{{ lookup('env','HOME') }}"
     internal_domain: "{{ lookup('env','INTERNAL_DOMAIN') }}"
   tasks:
+### List Credentials #####
     - name: List Credentials
       uri:
         url: https://{{ ac.url }}/api/v2/credentials/
@@ -34,7 +35,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Container Registry Credentials"
+        task_description_message: "Checking (Infra) Container Registry Credentials"
 
 ##### Result for Cloud Credentials #####
     - name: "No Success - set fact"
@@ -51,7 +52,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Cloud Credentials"
+        task_description_message: "Checking (Infra) Cloud Credentials"
 
 ##### Result for Machine Credential #####
     - name: "No Success - set fact"
@@ -68,10 +69,39 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Machine Credential"
+        task_description_message: "Checking (Infra) Machine Credential"
 
+#### List job templates ####
+    - name: List Job templates
+      uri:
+        url: https://{{ ac.url }}/api/v2/job_templates/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_jobtemplates
 
+##### Result for Infra Job template #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
 
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: infra.job_template ==  item.name
+      loop: "{{ r_jobtemplates.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (Infra) Job Template"
+
+#### In-memory inventory ####
     - meta: refresh_inventory
 
     - name: Collection instance info
