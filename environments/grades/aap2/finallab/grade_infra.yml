@@ -1,0 +1,48 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    guid: "{{ lookup('env','GUID') }}"
+    home: "{{ lookup('env','HOME') }}"
+    internal_domain: "{{ lookup('env','INTERNAL_DOMAIN') }}"
+  tasks:
+    - meta: refresh_inventory
+
+    - name: Collection instance info
+      os_server_info:
+        cloud: "{{ guid }}-project"
+      register: instances
+
+    - name: Build In-Memory inventory
+      add_host:
+        host: "{{ item.name }}"
+        group:
+          - "{{ item.metadata.AnsibleGroup }}"
+          - osp_instances
+        ansible_host: "{{ item.private_v4 }}"
+        ansible_user: cloud-user
+        ansible_ssh_private_key_file: "/home/devops/.ssh/{{ guid }}key.pem"
+      when: item.metadata.type | default('') == "osp_instances"
+      loop: "{{ instances.openstack_servers }}"
+
+- hosts: app1
+  gather_facts: false
+  tasks:
+    - ping:
+      register: r_ping_app1
+##### Result for Private Automation Hub #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_ping_app1.ping == pong
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when: r_ping_app1.ping != pong
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Node app1"

@@ -93,6 +93,7 @@
       vars:
         task_description_message: "Checking ee_mitzidotcom:1.0.0 on Auatomation Hub"
 
-
+- name: Import infra grade
+  import_playbook: grade_infra.yml
 
 ...
