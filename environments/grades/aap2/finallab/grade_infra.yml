@@ -25,12 +25,34 @@
       when: item.metadata.type | default('') == "osp_instances"
       loop: "{{ instances.openstack_servers }}"
 
+- hosts: frontend
+  gather_facts: false
+  tasks:
+    - ping:
+      register: r_ping_frontend
+##### Result for frontend #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_ping_frontend.ping == "pong"
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when: r_ping_frontend.ping != "pong"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Node frontend"
+
 - hosts: app1
   gather_facts: false
   tasks:
     - ping:
       register: r_ping_app1
-##### Result for Private Automation Hub #####
+##### Result for  app1 #####
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -46,3 +68,47 @@
         name: manager.grade.logging_grade_to_log
       vars:
         task_description_message: "Checking Node app1"
+
+- hosts: app2
+  gather_facts: false
+  tasks:
+    - ping:
+      register: r_ping_app2
+##### Result for app2 #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_ping_app2.ping == "pong"
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when: r_ping_app2.ping != "pong"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Node app2"
+
+- hosts: appdb
+  gather_facts: false
+  tasks:
+    - ping:
+      register: r_ping_appdb
+##### Result for appdb #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_ping_appdb.ping == "pong"
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when: r_ping_appdb.ping != "pong"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Node appdb"
