@@ -96,4 +96,6 @@
 - name: Import infra grade
   import_playbook: grade_infra.yml
 
+- name: Import app grade
+  import_playbook: grade_app.yml
 ...
