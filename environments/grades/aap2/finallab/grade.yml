@@ -36,7 +36,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (AC) Automation Controller Installation"
+        task_description_message: "Checking (AC)    Automation Controller Installation"
 
 
 #### Checking Private Automation Hub Installation
@@ -68,7 +68,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (AH) Private Automation Hub Installation"
+        task_description_message: "Checking (AH)    Private Automation Hub Installation"
 
 #### EE mitzidotcom Private Automation Hub
     - name: Checking EE image
@@ -91,7 +91,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (AH) ee_mitzidotcom:1.0.0 on Auatomation Hub"
+        task_description_message: "Checking (AH)    ee_mitzidotcom:1.0.0 on Auatomation Hub"
 
 - name: Import infra grade
   import_playbook: grade_infra.yml
