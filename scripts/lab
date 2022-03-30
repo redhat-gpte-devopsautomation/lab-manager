@@ -227,8 +227,8 @@ course_exec_grade() {
     if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
       # echo "Grading Lab - ${lab_name}"
       echo -e "\n######################################################"
-      echo "Grade log: /tmp/${course_name}/${lab_name}_logs.txt"
-      echo "Grade Report: /tmp/${lab_name}_report.txt"
+      echo "Grade log: /tmp/${lab_name}_logs.txt"
+      echo "Grade Report: /tmp/${course_name}/${lab_name}_report.txt"
       echo -e "######################################################\n"
       ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
       ${common_environment_vars} \
