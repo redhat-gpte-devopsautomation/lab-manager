@@ -23,4 +23,5 @@ infra:
 application:
   project: mitziapp
   inventory: "MitziDotcom Cloud Inventory"
+  inventory_source: "OSP Dynamic Inventory"
   job_template: "MitziDotcom App Deployment"

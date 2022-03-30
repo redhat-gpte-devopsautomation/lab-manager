@@ -4,7 +4,7 @@
   gather_facts: false
   become: false
   tasks:
-##### Result for Infra Projects #####
+##### Result for App Projects #####
     - name: "No Success - set fact"
       set_fact:
         success: false
@@ -21,7 +21,6 @@
       vars:
         task_description_message: "Checking (App) Project"
 
-
 #### List App Inventory ####
     - name: List Inventory
       uri:
@@ -35,7 +34,7 @@
         status_code: 200
       register: r_inventories
 
-##### Result for Infra Job template #####
+##### Result for App Invetory #####
     - name: "No Success - set fact"
       set_fact:
         success: false
@@ -51,6 +50,54 @@
         name: manager.grade.logging_grade_to_log
       vars:
         task_description_message: "Checking (App) Inventory"
+
+
+#### List App Inventory Sources ####
+    - name: List inventory_sources
+      uri:
+        url: https://{{ ac.url }}/api/v2/inventory_sources/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_inventory_sources
+
+##### Result for App Inventory Sources #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.inventory_source ==  item.name
+      loop: "{{ r_inventory_sources.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App) Inventory Source"
+
+##### Result for App Job Template #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.job_template ==  item.name
+      loop: "{{ r_jobtemplates.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App) Job Templatet"
 
 #### Checking Application deployment
     - name: Checking Application deployment
