@@ -82,6 +82,44 @@
       vars:
         task_description_message: "Checking (App)   Inventory Source"
 
+
+#### List App Static Inventory Groups ####
+    - name: List Inventory Groups
+      uri:
+        url: https://{{ ac.url }}/api/v2/groups/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_groups
+
+##### Result for App Inventory Sources #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.static_groups.0 ==  item.name
+      loop: "{{ r_groups.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App)   Inventory static group {{application.static_groups.0}}"
+
+
+
+
+
+
+
+
 ##### Result for App Job Template #####
     - name: "No Success - set fact"
       set_fact:

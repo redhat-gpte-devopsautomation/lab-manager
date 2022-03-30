@@ -25,3 +25,7 @@ application:
   inventory: "MitziDotcom Cloud Inventory"
   inventory_source: "OSP Dynamic Inventory"
   job_template: "MitziDotcom App Deployment"
+  static_groups:
+    - loadbalancers
+    - backend_servers
+    - database_servers
