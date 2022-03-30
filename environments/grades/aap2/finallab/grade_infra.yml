@@ -20,9 +20,13 @@
       ignore_errors: true
 
 ##### Result for Container registry #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      
     - name: "Success - set fact"
       set_fact:
-        success: true | d(false)
+        success: true
       when: infra.container_cred in item.name
       loop: "{{ r_credentials.json.results }}"
 
@@ -33,6 +37,7 @@
         task_description_message: "Checking Container Registry Credentials"
 
 ##### Result for Cloud Credentials #####
+  
     - name: "Success - set fact"
       set_fact:
         success: true | d(false)
