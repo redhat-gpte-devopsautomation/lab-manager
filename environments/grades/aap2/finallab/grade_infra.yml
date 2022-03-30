@@ -34,12 +34,12 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_app1.ping == pong
+      when: r_ping_app1.ping == "pong"
 
     - name: "No Success - set fact"
       set_fact:
         success: false
-      when: r_ping_app1.ping != pong
+      when: r_ping_app1.ping != "pong"
 
     - name: Import logging role
       import_role:
