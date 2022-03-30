@@ -13,3 +13,14 @@ hub:
 
 infra:
   ssh_key: "/home/devops/.ssh/{{ guid }}key.pem"
+  container_cred: mitzidotcom_registry_cred
+  cloud_cred: mitzi_cloud_credential
+  machine_cred: mitzi_ssh_key
+  project: mitziinfra
+  ee: ee-mitzidotcom
+  job_template: "MitziDotcom Infra Provision"
+
+application:
+  project: mitziapp
+  inventory: "MitziDotcom Cloud Inventory"
+  job_template: "MitziDotcom App Deployment"

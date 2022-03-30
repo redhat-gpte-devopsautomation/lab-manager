@@ -6,6 +6,60 @@
     home: "{{ lookup('env','HOME') }}"
     internal_domain: "{{ lookup('env','INTERNAL_DOMAIN') }}"
   tasks:
+    - name: List Credentials
+      uri:
+        url: https://{{ ac.url }}/api/v2/credentials/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_credentials
+      ignore_errors: true
+
+##### Result for Container registry #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true | d(false)
+      when: infra.container_cred in item.name
+      loop: "{{ r_credentials.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Container Registry Credentials"
+
+##### Result for Cloud Credentials #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true | d(false)
+      when: infra.cloud_cred in item.name
+      loop: "{{ r_credentials.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Cloud Credentials"
+
+##### Result for Machine Credential #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true | d(false)
+      when: infra.machine_cred in item.name
+      loop: "{{ r_credentials.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Machine Credential"
+
+
+
     - meta: refresh_inventory
 
     - name: Collection instance info
