@@ -21,7 +21,7 @@
           - osp_instances
         ansible_host: "{{ item.private_v4 }}"
         ansible_user: cloud-user
-        ansible_ssh_private_key_file: "/home/devops/.ssh/{{ guid }}key.pem"
+        ansible_ssh_private_key_file: "{{ infra.ssh_key }}"
       when: item.metadata.type | default('') == "osp_instances"
       loop: "{{ instances.openstack_servers }}"
 
@@ -112,3 +112,43 @@
         name: manager.grade.logging_grade_to_log
       vars:
         task_description_message: "Checking Node appdb"
+
+- name: Run grader
+  hosts: localhost
+  gather_facts: false
+  become: false
+  tasks:
+#### Checking Application deployment
+    - name: Checking Application deployment
+      uri:
+        url: http://{{ hostvars.frontend.ansible_host  }}/?name=root
+        method: GET
+        return_content: yes
+      register: r_app_uri
+      ignore_errors: yes
+
+    - debug: var=r_app_uri
+      when:
+        - '"root redhat /bin/bash /root" in r_app_uri.content'
+        - r_app_uri.status == 200
+
+##### Result for Application deployment #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when:
+        - '"root redhat /bin/bash /root" in r_app_uri.content'
+        - r_app_uri.status == 200
+
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+      when:
+        - '"root redhat /bin/bash /root" in r_app_uri.content'
+        - r_app_uri.status == 200
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking Application Deployment"

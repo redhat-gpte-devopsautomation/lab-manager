@@ -10,3 +10,6 @@ hub:
   password: redhat
   url: hub.example.com
   image: ee-mitzidotcom:8.0.0
+
+infra:
+  ssh_key: "/home/devops/.ssh/{{ guid }}key.pem"
