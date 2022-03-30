@@ -19,7 +19,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App) Project"
+        task_description_message: "Checking (App)   Project"
 
 #### List App Inventory ####
     - name: List Inventory
@@ -49,7 +49,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App) Inventory"
+        task_description_message: "Checking (App)   Inventory"
 
 
 #### List App Inventory Sources ####
@@ -80,7 +80,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App) Inventory Source"
+        task_description_message: "Checking (App)   Inventory Source"
 
 ##### Result for App Job Template #####
     - name: "No Success - set fact"
@@ -97,7 +97,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App) Job Templatet"
+        task_description_message: "Checking (App)   Job Templatet"
 
 #### Checking Application deployment
     - name: Checking Application deployment
@@ -132,4 +132,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App) Application Deployment"
+        task_description_message: "Checking (App)   Application Deployment"

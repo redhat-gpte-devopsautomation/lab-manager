@@ -246,7 +246,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) app2 provisioning"
+        task_description_message: "Checking (Infra)   app2 provisioning"
 
 - hosts: appdb
   gather_facts: false
@@ -268,4 +268,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) appdb provisioning"
+        task_description_message: "Checking (Infra)   appdb provisioning"
