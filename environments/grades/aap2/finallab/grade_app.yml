@@ -4,6 +4,40 @@
   gather_facts: false
   become: false
   tasks:
+##### Result for Infra Projects #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.project ==  item.name
+      loop: "{{ r_projects.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App) Project"
+
+##### Result for Infra Job template #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.job_template ==  item.name
+      loop: "{{ r_jobtemplates.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App) Job Template"
+
 #### Checking Application deployment
     - name: Checking Application deployment
       uri:
@@ -37,4 +71,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking Application Deployment"
+        task_description_message: "Checking (App) Application Deployment"
