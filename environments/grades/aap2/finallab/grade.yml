@@ -39,7 +39,7 @@
         task_description_message: "Checking Automation Controller Installation"
 #### EE mitzidotcom Private Automation Hub
     - name: Checking EE image
-      command: podman pull "{{ hub.url }}/{{ hub.image }} --tls-verify=false
+      command: podman pull "{{ hub.url }}/{{ hub.image }}" --tls-verify=false
       register: r_image
       ignore_errors: yes
 
