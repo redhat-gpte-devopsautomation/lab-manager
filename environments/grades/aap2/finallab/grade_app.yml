@@ -96,7 +96,7 @@
         status_code: 200
       register: r_groups
 
-##### Result for App Inventory Sources #####
+##### Result for App Inventory Static group 0 #####
     - name: "No Success - set fact"
       set_fact:
         success: false
@@ -111,11 +111,41 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Inventory static group {{application.static_groups.0}}"
+        task_description_message: "Checking (App)   Inventory static group {{ application.static_groups.0 }}"
 
+##### Result for App Inventory Static group 1 #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
 
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.static_groups.1 ==  item.name
+      loop: "{{ r_groups.json.results }}"
 
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App)   Inventory static group {{ application.static_groups.1 }}"
 
+##### Result for App Inventory Static group 2 #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.static_groups.2 ==  item.name
+      loop: "{{ r_groups.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App)   Inventory static group {{ application.static_groups.2 }}"
 
 
 
