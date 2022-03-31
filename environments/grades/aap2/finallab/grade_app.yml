@@ -147,12 +147,6 @@
       vars:
         task_description_message: "Checking (App)   Inventory Static Group {{ application.inventory_groups.2.name }}"
 
-#### Result App Children Group 0 #####
-    - debug:
-        msg: "{{ item.json.results.0.name }}"
-      loop: "{{ r_children_groups.results }}"
-      when: application.inventory_groups.0.child == item.json.results.0.name
-
 #### Test App Children groups #####
     - set_fact:
         get_inventory_groups: "{{ get_inventory_groups | d([]) + [{ 
@@ -175,6 +169,28 @@
         status_code: 200
       register: r_children_groups
       loop: "{{ get_inventory_groups }}"
+
+#### Result App Children Group 0 #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: application.inventory_groups.0.child == item.json.results.0.name
+      loop: "{{ r_children_groups.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}"
+
+
+
+
+
 
 ##### Result for App Job Template #####
     - name: "No Success - set fact"
