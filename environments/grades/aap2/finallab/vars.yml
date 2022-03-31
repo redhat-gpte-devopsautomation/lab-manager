@@ -1,13 +1,14 @@
 ---
+common_admin_password: redhat
 
 ac:
   user: admin
-  password: redhat
+  password: "{{ common_admin_password }}"
   url: ac.example.com
 
 hub:
   user: admin
-  password: redhat
+  password: "{{ common_admin_password }}"
   url: hub.example.com
   image: ee-mitzidotcom:8.0.0
 
@@ -25,7 +26,10 @@ application:
   inventory: "MitziDotcom Cloud Inventory"
   inventory_source: "OSP Dynamic Inventory"
   job_template: "MitziDotcom App Deployment"
-  static_groups:
-    - loadbalancers
-    - backend_servers
-    - database_servers
+  inventory_groups:
+    - name: loadbalancers
+      child: meta-AnsibleGroup_loadbalancers
+    - name: backend_servers
+      child: meta-AnsibleGroup_backend_servers
+    - name: database_servers
+      child: meta-AnsibleGroup_database_servers
