@@ -187,39 +187,39 @@
       vars:
         task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}"
 
-#### Result App Children Group 1 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
+# #### Result App Children Group 1 #####
+#     - name: "No Success - set fact"
+#       set_fact:
+#         success: false
 
-    - name: "Success - set fact"
-      set_fact:
-        success: true
-      when: application.inventory_groups.1.child == item.json.results.1.name
-      loop: "{{ r_children_groups.results }}"
+#     - name: "Success - set fact"
+#       set_fact:
+#         success: true
+#       when: application.inventory_groups.1.child == item.json.results.1.name
+#       loop: "{{ r_children_groups.results }}"
 
-    - name: Import logging role
-      import_role:
-        name: manager.grade.logging_grade_to_log
-      vars:
-        task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}"
+#     - name: Import logging role
+#       import_role:
+#         name: manager.grade.logging_grade_to_log
+#       vars:
+#         task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}"
 
-#### Result App Children Group 2 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
+# #### Result App Children Group 2 #####
+#     - name: "No Success - set fact"
+#       set_fact:
+#         success: false
 
-    - name: "Success - set fact"
-      set_fact:
-        success: true
-      when: application.inventory_groups.2.child == item.json.results.2.name
-      loop: "{{ r_children_groups.results }}"
+#     - name: "Success - set fact"
+#       set_fact:
+#         success: true
+#       when: application.inventory_groups.2.child == item.json.results.2.name
+#       loop: "{{ r_children_groups.results }}"
 
-    - name: Import logging role
-      import_role:
-        name: manager.grade.logging_grade_to_log
-      vars:
-        task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}"
+#     - name: Import logging role
+#       import_role:
+#         name: manager.grade.logging_grade_to_log
+#       vars:
+#         task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}"
 
 ##### Result for App Job Template #####
     - name: "No Success - set fact"
