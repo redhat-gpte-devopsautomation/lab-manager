@@ -35,7 +35,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Container Registry Credentials"
+        task_description_message: "Checking (Infra) Container Registry Credentials [{{ infra.container_cred }}]"
 
 ##### Result for Cloud Credentials #####
     - name: "No Success - set fact"
@@ -52,7 +52,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Cloud Credentials"
+        task_description_message: "Checking (Infra) Cloud Credentials [{{ infra.cloud_cred }}]"
 
 ##### Result for Machine Credential #####
     - name: "No Success - set fact"
@@ -69,7 +69,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Machine Credential"
+        task_description_message: "Checking (Infra) Machine Credential [{{ infra.machine_cred }}]"
 
 #### List Execution Environment ####
     - name: List Job templates
@@ -99,7 +99,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Execution Environment"
+        task_description_message: "Checking (Infra) Execution Environment [{{ infra.ee }}]"
 
 
 #### List Projects ####
@@ -130,7 +130,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Project"
+        task_description_message: "Checking (Infra) Project [{{ infra.project }}]"
 
 #### List job templates ####
     - name: List Job templates
@@ -160,7 +160,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Job Template"
+        task_description_message: "Checking (Infra) Job Template [{{ infra.job_template }}]"
 
 #### In-memory inventory ####
     - meta: refresh_inventory
@@ -202,7 +202,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) frontend provisioning"
+        task_description_message: "Checking (Infra) Node Pprovisioning [frontend]"
 
 - hosts: app1
   gather_facts: false
@@ -224,7 +224,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) app1 provisioning"
+        task_description_message: "Checking (Infra) Node Provisioning [app1]"
 
 - hosts: app2
   gather_facts: false
@@ -246,7 +246,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) app2 provisioning"
+        task_description_message: "Checking (Infra) Node Provisioning [app2]"
 
 - hosts: appdb
   gather_facts: false
@@ -268,4 +268,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) appdb provisioning"
+        task_description_message: "Checking (Infra) Node Provisioning [appdb]"
