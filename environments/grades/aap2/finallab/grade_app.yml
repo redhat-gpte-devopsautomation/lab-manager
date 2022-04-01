@@ -195,7 +195,7 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.1.child == item.json.results.1.name
+      when: application.inventory_groups.1.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
     - name: Import logging role
@@ -212,7 +212,7 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.2.child == item.json.results.2.name
+      when: application.inventory_groups.2.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
     - name: Import logging role
