@@ -19,7 +19,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Project"
+        task_description_message: "Checking (App)   Project {{ application.project }}"
 
 #### List App Inventory ####
     - name: List Inventory
@@ -49,7 +49,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Inventory"
+        task_description_message: "Checking (App)   Inventory {{ application.inventory }}"
 
 
 #### List App Inventory Sources ####
@@ -80,7 +80,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Inventory Source"
+        task_description_message: "Checking (App)   Inventory Source {{ application.inventory_source }}"
 
 
 #### List App Static Inventory Groups ####
@@ -236,7 +236,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Job Templatet"
+        task_description_message: "Checking (App)   Job Templatet {{ application.job_template }}"
 
 #### Checking Application deployment
     - name: Checking Application deployment
@@ -271,4 +271,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Application Deployment"
+        task_description_message: "Checking (App)   Userinfo Application Deployment"
