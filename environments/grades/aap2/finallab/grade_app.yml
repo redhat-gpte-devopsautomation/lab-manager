@@ -185,7 +185,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}"
+        task_description_message: "Checking (App)   Inventory Child Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
 
 #### Result App Children Group 1 #####
     - name: "No Success - set fact"
@@ -202,7 +202,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}"
+        task_description_message: "Checking (App)   Inventory Child Group  [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
 
 #### Result App Children Group 2 #####
     - name: "No Success - set fact"
@@ -219,7 +219,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Inventory Child Group {{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}"
+        task_description_message: "Checking (App)   Inventory Child Group [ {{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }} ]"
 
 ##### Result for App Job Template #####
     - name: "No Success - set fact"
@@ -236,7 +236,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Job Templatet [{{ application.job_template }}]"
+        task_description_message: "Checking (App)   Job Templatet [ {{ application.job_template }} ]"
 
 #### Checking Application deployment
     - name: Checking Application deployment
@@ -271,4 +271,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Application Deployment [Userinfo]"
+        task_description_message: "Checking (App)   Application Deployment [ Userinfo application ]"
