@@ -236,7 +236,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Job Templatet {{ application.job_template }}"
+        task_description_message: "Checking (App)   Job Templatet [{{ application.job_template }}]"
 
 #### Checking Application deployment
     - name: Checking Application deployment
@@ -271,4 +271,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (App)   Userinfo Application Deployment"
+        task_description_message: "Checking (App)   Application Deployment [Userinfo]"
