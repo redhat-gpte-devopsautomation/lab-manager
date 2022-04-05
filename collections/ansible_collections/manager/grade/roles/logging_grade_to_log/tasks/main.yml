@@ -1,9 +1,9 @@
 ---
 - name: Logging lab section PASS or FAIL to student grader report
   block:
-    - name: Unset success value
+    - name: Set Sr No
       set_fact:
-        sr_no: "{{ sr_no | d(00) | int + 01 }}"
+        sr_no: "{{ sr_no | d(0) | int + 1 }}"
 
     - when: success | default(false) | bool
       name: Create Pass logging message
