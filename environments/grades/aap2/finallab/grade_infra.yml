@@ -178,16 +178,20 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Ping {{groups.loadbalancers.0}}
+    - name: Ping frontend
       command: ping -c1 {{ hostvars.frontend.ansible_host }}
       ignore_errors: true
       register: r_ping_frontend
+
+    - debug: var=r_ping_frontend
   
       ##### Result for frontend #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_frontend.rc == 0
+      when: 
+        - r_ping_frontend.rc is defined
+        - r_ping_frontend.rc == 0
 
     - name: Import logging role
       import_role:
@@ -196,8 +200,8 @@
         task_description_message: "Checking (Infra) Node Provisioning [frontend]"
 
     #### For APP1
-    - name: Ping {{groups.backend_servers.0}}
-      command: ping -c1 {{ hostvars[groups.backend_servers.0].ansible_host }}
+    - name: Ping app1
+      command: ping -c1 {{ hostvars.app1.ansible_host }}
       ignore_errors: true
       register: r_ping_app1
     - debug: var=r_ping_app1
@@ -206,17 +210,19 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_app1.rc == 0
+      when: 
+        - r_ping_app1.rc is defined
+        - r_ping_app1.rc == 0
 
     - name: Import logging role
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Node Provisioning [groups.backend_servers.0]"
+        task_description_message: "Checking (Infra) Node Provisioning [app1]"
 
     #### For APP2
-    - name: Ping {{groups.backend_servers.1}}
-      command: ping -c1 {{ hostvars[groups.backend_servers.1].ansible_host }}
+    - name: Ping App2
+      command: ping -c1 {{ hostvars.app2.ansible_host }}
       ignore_errors: true
       register: r_ping_app2
 
@@ -230,7 +236,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Node Provisioning [groups.backend_servers.1]"
+        task_description_message: "Checking (Infra) Node Provisioning [app2]"
 
 
 
