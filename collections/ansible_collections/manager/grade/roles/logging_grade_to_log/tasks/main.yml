@@ -19,5 +19,11 @@
         insertafter: EOF
         path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
         line: "{{ '%-6s %-30s %-s' | format(grader_log_prefix, inventory_hostname, student_log_message) }}"
+
+    - name: Unset success value
+      set_fact:
+        success:
   delegate_to: localhost
+
+    
 ...
