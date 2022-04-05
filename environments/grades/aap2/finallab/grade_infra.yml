@@ -202,6 +202,7 @@
       wait_for: 
         host: "{{ hostvars.app1.ansible_host }}"
         port: 22
+      ignore_errors: true
       register: r_app1
 
     - debug: var=r_app1
