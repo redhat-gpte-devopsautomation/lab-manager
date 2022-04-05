@@ -194,7 +194,7 @@
       set_fact:
         success: true
       when: 
-        - r_frontend is defined
+        - not r_frontend.skkipped |bool 
         - not r_frontend.failed | bool
  
     - name: Import logging role
@@ -219,7 +219,7 @@
       set_fact:
         success: true
       when:
-        - r_app1 is defined
+        - not r_app1.skkipped | bool 
         - not r_app1.failed | bool
 
     - name: Import logging role
@@ -245,7 +245,7 @@
       set_fact:
         success: true
       when: 
-        - r_app2 is defined
+        - not r_app2.skkipped | bool
         - not r_app2.failed | bool
 
     - name: Import logging role
@@ -259,7 +259,9 @@
       when: hostvars.app2 is defined
       block:
         - name: Check Appdb
-          command: ping -c1 {{ hostvars.appdb.ansible_host }}
+          wait_for: 
+            host: "{{ hostvars.appdb.ansible_host }}"
+            port: 22
           register: r_appdb
 
     - debug: var=r_appdb
@@ -268,7 +270,7 @@
       set_fact:
         success: true
       when: 
-        - r_appdb.rc is defined
+        - not r_appdb.skipped |bool
         - not r_appdb.failed | bool
 
     - name: Import logging role
