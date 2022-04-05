@@ -166,7 +166,7 @@
 
     - debug: var=r_children_groups.results
 #### Result App Children Group 0 #####
-    - name: "Success - set fact"
+    - name: "Success - App Children Group 0"
       set_fact:
         success: true
       when: application.inventory_groups.0.child == item.json.results.0.name | default('')
@@ -179,7 +179,7 @@
         task_description_message: "Checking (App)   Inventory Child Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
 
 #### Result App Children Group 1 #####
-    - name: "Success - set fact"
+    - name: "Success - App Children Group 1"
       set_fact:
         success: true
       when: application.inventory_groups.1.child == item.json.results.0.name | default('')
@@ -191,8 +191,8 @@
       vars:
         task_description_message: "Checking (App)   Inventory Child Group  [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
 
-#### Result App Children Group 2 #####
-    - name: "Success - set fact"
+    #### Result App Children Group 2 #####
+    - name: "Success - App Children Group 2"
       set_fact:
         success: true
       when: application.inventory_groups.2.child == item.json.results.0.name | default('')
