@@ -47,7 +47,9 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: infra.cloud_cred == item.name
+      when:
+        - r_credentials.json.results is defined 
+        - infra.cloud_cred == item.name
       loop: "{{ r_credentials.json.results }}"
 
     - name: Import logging role
@@ -64,7 +66,9 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: infra.machine_cred == item.name
+      when: 
+        - r_credentials.json.results is defined
+        - infra.machine_cred == item.name
       loop: "{{ r_credentials.json.results }}"
 
     - name: Import logging role
