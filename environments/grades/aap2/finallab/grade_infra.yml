@@ -179,16 +179,14 @@
   gather_facts: false
   tasks:
     ##### For frontend #####
-    - name: Block for frontend
+    - name: Check frontend
+      wait_for: 
+        host: "{{ hostvars.frontend.ansible_host }}"
+        port: 22
+        timeout: 5
       when: hostvars.frontend is defined
-      block:
-        - name: Check frontend
-          wait_for: 
-            host: "{{ hostvars.frontend.ansible_host }}"
-            port: 22
-            timeout: 5
-          ignore_errors: yes
-          register: r_frontend
+      ignore_errors: yes
+      register: r_frontend
 
     - debug: var=r_frontend
     
@@ -205,16 +203,14 @@
         task_description_message: "Checking (Infra) Node Provisioning [frontend]"
 
     ##### For App1 #####
-    - name: Block for APP1
-      when: hostvars.app1 is defined
-      block:
-        - name: Check App1
-          wait_for: 
-            host: "{{ hostvars.app1.ansible_host }}"
-            port: 22
-            timeout: 5
-          ignore_errors: true
-          register: r_app1
+    - name: Check App1
+      wait_for: 
+        host: "{{ hostvars.app1.ansible_host }}"
+        port: 22
+        timeout: 5
+      # when: hostvars.app1 is defined
+      ignore_errors: true
+      register: r_app1
 
     - debug: var=r_app1
 
@@ -232,16 +228,14 @@
 
 
     ##### For App2 #####
-    - name: Block for App2
+    - name: Ping App2
+      wait_for: 
+        host: "{{ hostvars.app2.ansible_host }}"
+        port: 22
+        timeout: 5
       when: hostvars.app2 is defined
-      block:
-        - name: Ping App2
-          wait_for: 
-            host: "{{ hostvars.app2.ansible_host }}"
-            port: 22
-            timeout: 5
-          ignore_errors: true
-          register: r_app2
+      ignore_errors: true
+      register: r_app2
 
     - debug: var=r_app2
 
