@@ -186,6 +186,8 @@
           wait_for: 
             host: "{{ hostvars.frontend.ansible_host }}"
             port: 22
+            timeout: 5
+          ignore_errors: yes
           register: r_frontend
 
     - debug: var=r_frontend
@@ -210,6 +212,8 @@
           wait_for: 
             host: "{{ hostvars.app1.ansible_host }}"
             port: 22
+            timeout: 5
+          ignore_errors: true
           register: r_app1
 
     - debug: var=r_app1
@@ -245,8 +249,7 @@
       set_fact:
         success: true
       when: 
-        - not r_app2.skkipped | bool
-        - not r_app2.failed | bool
+        - not r_app2.failed |default(true) | bool
 
     - name: Import logging role
       import_role:
@@ -262,6 +265,8 @@
           wait_for: 
             host: "{{ hostvars.appdb.ansible_host }}"
             port: 22
+            timeout: 5
+          ignore_errors: true
           register: r_appdb
 
     - debug: var=r_appdb
@@ -270,8 +275,7 @@
       set_fact:
         success: true
       when: 
-        - not r_appdb.skipped |bool
-        - not r_appdb.failed | bool
+        - not r_appdb.failed | default(true) | bool
 
     - name: Import logging role
       import_role:
