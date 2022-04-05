@@ -176,6 +176,7 @@
 
 - hosts: frontend
   gather_facts: false
+  ignore_errors: true
   tasks:
     - ping:
       register: r_ping_frontend
@@ -193,6 +194,7 @@
 
 - hosts: app1
   gather_facts: false
+  ignore_errors: true
   tasks:
     - ping:
       register: r_ping_app1
@@ -210,6 +212,7 @@
 
 - hosts: app2
   gather_facts: false
+  ignore_errors: true
   tasks:
     - ping:
       register: r_ping_app2
@@ -227,6 +230,7 @@
 
 - hosts: appdb
   gather_facts: false
+  ignore_errors: true
   tasks:
     - ping:
       register: r_ping_appdb
