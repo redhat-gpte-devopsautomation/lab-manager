@@ -231,6 +231,7 @@
         method: GET
         return_content: yes
       register: r_app_uri
+      when: hostvars.frontend is defined
       ignore_errors: yes
 
     - debug: var=r_app_uri
