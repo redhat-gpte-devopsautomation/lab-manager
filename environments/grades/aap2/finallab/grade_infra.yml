@@ -182,7 +182,7 @@
       wait_for: 
         host: "{{ hostvars.frontend.ansible_host }}"
         port: 22
-      ignore_errors: true
+      # ignore_errors: true
       register: r_ping_frontend
 
     - debug: var=r_ping_frontend
