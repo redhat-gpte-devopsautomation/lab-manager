@@ -7,7 +7,7 @@
         grader_log_prefix: "PASS:"
         student_log_message: "{{ task_description_message }}"
 
-    - when: not success | bool
+    - when: not success | default(false) | bool
       name: Create Fail logging message
       set_fact:
         grader_log_prefix: "FAIL:"
