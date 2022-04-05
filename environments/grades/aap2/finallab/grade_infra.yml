@@ -178,18 +178,24 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Ping frontend
-      wait_for: 
-        host: "{{ hostvars.frontend.ansible_host }}"
-        port: 22
-      # ignore_errors: true
-      register: r_frontend
+    ##### For frontend #####
+    - name: Block for frontend
+      when: hostvars.frontend is defined
+      block:
+        - name: Check frontend
+          wait_for: 
+            host: "{{ hostvars.frontend.ansible_host }}"
+            port: 22
+          register: r_frontend
 
-      ##### Result for frontend #####
+    - debug: var=r_frontend
+    
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: not r_frontend.failed | bool
+      when: 
+        - r_frontend is defined
+        - not r_frontend.failed | bool
  
     - name: Import logging role
       import_role:
@@ -197,21 +203,23 @@
       vars:
         task_description_message: "Checking (Infra) Node Provisioning [frontend]"
 
-    #### For APP1
-    - name: Ping app1
-      wait_for: 
-        host: "{{ hostvars.app1.ansible_host }}"
-        port: 22
-      ignore_errors: true
-      register: r_app1
+    ##### For App1 #####
+    - naem: Block for APP1
+      when: hostvars.app1 is defined
+      block:
+        - name: Check App1
+          wait_for: 
+            host: "{{ hostvars.app1.ansible_host }}"
+            port: 22
+          register: r_app1
 
     - debug: var=r_app1
 
-      ##### Result for Backend Servers #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: 
+      when:
+        - r_app1 is defined
         - not r_app1.failed | bool
 
     - name: Import logging role
@@ -220,20 +228,25 @@
       vars:
         task_description_message: "Checking (Infra) Node Provisioning [app1]"
 
-    #### For APP2
-    - name: Ping App2
-      wait_for: 
-        host: "{{ hostvars.app2.ansible_host }}"
-        port: 22
-      register: r_app2
+
+    ##### For App1 #####
+    - naem: Block for APP2
+      when: hostvars.app2 is defined
+      block:
+        - name: Ping App2
+          wait_for: 
+            host: "{{ hostvars.app2.ansible_host }}"
+            port: 22
+          register: r_app2
 
     - debug: var=r_app2
 
-      ##### Result for Backend Servers #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_app2.failed | bool
+      when: 
+        - r_app2 is defined
+        - not r_app2.failed | bool
 
     - name: Import logging role
       import_role:
