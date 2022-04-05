@@ -164,12 +164,13 @@
       loop: "{{ get_inventory_groups }}"
       ignore_errors: true
 
+    - debug: var=r_children_groups.results.json
 #### Result App Children Group 0 #####
     - name: "Success - set fact"
       set_fact:
         success: true
       when: 
-        - r_children_groups.results.0 is defined
+        - r_children_groups.results.json is defined
         - application.inventory_groups.0.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
