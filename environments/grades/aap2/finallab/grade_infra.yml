@@ -178,10 +178,11 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Ping {{groups.frontends.0}}
-      command: ping -c1 {{ groups.frontends.0}}
+    - name: Ping {{groups.loadbalancers.0}}
+      command: ping -c1 {{ groups.loadbalancers.0}}
       register: r_ping_frontend
   
+    - debug: var=r_ping_frontend
       ##### Result for frontend #####
     - name: "Success - set fact"
       set_fact:
