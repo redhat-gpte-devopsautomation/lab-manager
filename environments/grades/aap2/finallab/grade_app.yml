@@ -5,7 +5,7 @@
   become: false
   tasks:
 ##### Result for App Projects #####
-    - name: "Success - set fact"
+    - name: "Success - App Projects"
       set_fact:
         success: true
       when: 
@@ -34,7 +34,7 @@
       ignore_errors: true
 
 ##### Result for App Invetory #####
-    - name: "Success - set fact"
+    - name: "Success - App Invetory"
       set_fact:
         success: true
       when: 
@@ -64,7 +64,7 @@
       ignore_errors: true
 
 ##### Result for App Inventory Sources #####
-    - name: "Success - set fact"
+    - name: "Success - App Inventory Sources"
       set_fact:
         success: true
       when: 
@@ -94,7 +94,7 @@
       ignore_errors: true
 
 ##### Result for App Inventory Static group 0 #####
-    - name: "Success - set fact"
+    - name: "Success - App Inventory Static group 0"
       set_fact:
         success: true
       when: 
@@ -109,7 +109,7 @@
         task_description_message: "Checking (App)   Inventory Static Group [{{ application.inventory_groups.0.name }}]"
 
 ##### Result for App Inventory Static group 1 #####
-    - name: "Success - set fact"
+    - name: "Success - App Inventory Static group 1"
       set_fact:
         success: true
       when: 
@@ -124,7 +124,7 @@
         task_description_message: "Checking (App)   Inventory Static Group [{{ application.inventory_groups.1.name }}]"
 
 ##### Result for App Inventory Static group 2 #####
-    - name: "Success - set fact"
+    - name: "Success - App Inventory Static group 2"
       set_fact:
         success: true
       when: 
@@ -205,7 +205,7 @@
         task_description_message: "Checking (App)   Inventory Child Group [{{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}]"
 
 ##### Result for App Job Template #####
-    - name: "Success - set fact"
+    - name: "Success - App Job Template"
       set_fact:
         success: true
       when: 
