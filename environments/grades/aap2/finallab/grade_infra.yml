@@ -226,15 +226,14 @@
     - ping:
       register: r_ping_app1
 ##### Result for  app1 #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
     - name: "Success - set fact"
       set_fact:
         success: true
       when: r_ping_app1.ping == "pong"
-
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      when: r_ping_app1.ping != "pong"
 
     - name: Import logging role
       import_role:
@@ -248,15 +247,14 @@
     - ping:
       register: r_ping_app2
 ##### Result for app2 #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
     - name: "Success - set fact"
       set_fact:
         success: true
       when: r_ping_app2.ping == "pong"
-
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      when: r_ping_app2.ping != "pong"
 
     - name: Import logging role
       import_role:
@@ -270,15 +268,14 @@
     - ping:
       register: r_ping_appdb
 ##### Result for appdb #####
+    - name: "No Success - set fact"
+      set_fact:
+        success: false
+
     - name: "Success - set fact"
       set_fact:
         success: true
       when: r_ping_appdb.ping == "pong"
-
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      when: r_ping_appdb.ping != "pong"
 
     - name: Import logging role
       import_role:
