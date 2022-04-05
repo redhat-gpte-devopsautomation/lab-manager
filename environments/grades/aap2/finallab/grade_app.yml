@@ -164,7 +164,6 @@
       loop: "{{ get_inventory_groups }}"
       ignore_errors: true
 
-    - debug: var=r_children_groups.results
 #### Result App Children Group 0 #####
     - name: "Success - App Children Group 0"
       set_fact:
