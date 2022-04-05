@@ -176,15 +176,17 @@
 
 - hosts: frontend
   gather_facts: false
-  ignore_errors: true
   tasks:
     - ping:
       register: r_ping_frontend
+      ignore_errors: true
 ##### Result for frontend #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_frontend.ping == "pong"
+      when: 
+        - r_ping_frontend.ping is defined
+        - r_ping_frontend.ping == "pong"
 
     - name: Import logging role
       import_role:
@@ -194,15 +196,17 @@
 
 - hosts: app1
   gather_facts: false
-  ignore_errors: true
   tasks:
     - ping:
       register: r_ping_app1
+      ignore_errors: true
 ##### Result for  app1 #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_app1.ping == "pong"
+      when:
+        - r_ping_app1.ping  is defined
+        - r_ping_app1.ping == "pong"
 
     - name: Import logging role
       import_role:
@@ -212,15 +216,17 @@
 
 - hosts: app2
   gather_facts: false
-  ignore_errors: true
   tasks:
     - ping:
       register: r_ping_app2
+      ignore_errors: true
 ##### Result for app2 #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_app2.ping == "pong"
+      when: 
+        - r_ping_app2.ping is defined
+        - r_ping_app2.ping == "pong"
 
     - name: Import logging role
       import_role:
@@ -238,7 +244,9 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_appdb.ping == "pong"
+      when: 
+        - r_ping_appdb.ping is defined
+        - r_ping_appdb.ping == "pong"
 
     - name: Import logging role
       import_role:
