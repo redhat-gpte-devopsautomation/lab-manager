@@ -28,7 +28,9 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: infra.container_cred == item.name
+      when: 
+        - r_credentials.json.results is defined
+        - infra.container_cred == item.name
       loop: "{{ r_credentials.json.results }}"
 
     - name: Import logging role

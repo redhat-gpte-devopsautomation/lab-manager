@@ -6,6 +6,15 @@
 # License: GPLv3
 # Version: 2.0
 
+## Checking user devops ####
+CURRENT_USER=$(whoami)
+if [ ${CURRENT_USER} != "devops" ];then
+        echo -e  "\e[31m"
+        echo "Login as devops to run lab command"
+        echo -e "\e[0m \n"
+        exit 127
+fi
+
 ####### this is temporary code ##############
 if [ ! -f /srv/vmanager/bin/activate ]; then
   sudo -- bash -c '
