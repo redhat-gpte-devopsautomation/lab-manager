@@ -244,6 +244,7 @@
       set_fact:
         success: true
       when:
+        - r_app_uri is defined
         - r_app_uri.status == 200
         - '"root redhat /bin/bash /root" in r_app_uri.content'
 
