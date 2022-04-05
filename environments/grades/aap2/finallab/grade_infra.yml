@@ -235,6 +235,7 @@
           wait_for: 
             host: "{{ hostvars.app2.ansible_host }}"
             port: 22
+            timeout: 5
           register: r_app2
 
     - debug: var=r_app2
