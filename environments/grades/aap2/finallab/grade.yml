@@ -58,10 +58,10 @@
         success: true
       when: r_hub_uri.status == 200 
 
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      when: r_hub_uri.status != 200 
+    # - name: "No Success - set fact"
+    #   set_fact:
+    #     success: false
+    #   when: r_hub_uri.status != 200 
 
     - name: Import logging role
       import_role:
@@ -81,10 +81,10 @@
         success: true
       when: r_image.rc == 0 
 
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      when: r_image.rc != 0 
+    # - name: "No Success - set fact"
+    #   set_fact:
+    #     success: false
+    #   when: r_image.rc != 0 
 
     - name: Import logging role
       import_role:

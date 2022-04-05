@@ -20,11 +20,7 @@
       register: r_credentials
       ignore_errors: true
 
-##### Result for Container registry #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      
+##### Result for Container registry #####     
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -40,10 +36,6 @@
         task_description_message: "Checking (Infra) Container Registry Credentials [{{ infra.container_cred }}]"
 
 ##### Result for Cloud Credentials #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -59,10 +51,6 @@
         task_description_message: "Checking (Infra) Cloud Credentials [{{ infra.cloud_cred }}]"
 
 ##### Result for Machine Credential #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -92,10 +80,6 @@
       ignore_errors: true
 
 ##### Result for Execution Environment #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -126,10 +110,6 @@
       ignore_errors: true
 
 ##### Result for Infra Projects #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -160,10 +140,6 @@
 
 
 ##### Result for Infra Job template #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -209,11 +185,6 @@
         success: true
       when: r_ping_frontend.ping == "pong"
 
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      when: r_ping_frontend.ping != "pong"
-
     - name: Import logging role
       import_role:
         name: manager.grade.logging_grade_to_log
@@ -226,10 +197,6 @@
     - ping:
       register: r_ping_app1
 ##### Result for  app1 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -247,10 +214,6 @@
     - ping:
       register: r_ping_app2
 ##### Result for app2 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
@@ -268,10 +231,6 @@
     - ping:
       register: r_ping_appdb
 ##### Result for appdb #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true

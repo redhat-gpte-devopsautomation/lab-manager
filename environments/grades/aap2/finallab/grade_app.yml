@@ -5,14 +5,12 @@
   become: false
   tasks:
 ##### Result for App Projects #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.project ==  item.name
+      when: 
+        - r_projects.json.results is defined
+        - application.project ==  item.name
       loop: "{{ r_projects.json.results }}"
 
     - name: Import logging role
@@ -33,16 +31,15 @@
         body_format: json
         status_code: 200
       register: r_inventories
+      ignore_errors: true
 
 ##### Result for App Invetory #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory ==  item.name
+      when: 
+        - r_inventories.json.results is defined 
+        - application.inventory ==  item.name
       loop: "{{ r_inventories.json.results }}"
 
     - name: Import logging role
@@ -64,16 +61,15 @@
         body_format: json
         status_code: 200
       register: r_inventory_sources
+      ignore_errors: true
 
 ##### Result for App Inventory Sources #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_source ==  item.name
+      when: 
+        - r_inventory_sources.json.results is defined
+        - application.inventory_source ==  item.name
       loop: "{{ r_inventory_sources.json.results }}"
 
     - name: Import logging role
@@ -95,16 +91,15 @@
         body_format: json
         status_code: 200
       register: r_groups
+      ignore_errors: true
 
 ##### Result for App Inventory Static group 0 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.0.name ==  item.name
+      when: 
+        - r_groups.json.results is defined
+        - application.inventory_groups.0.name ==  item.name
       loop: "{{ r_groups.json.results }}"
 
     - name: Import logging role
@@ -114,14 +109,12 @@
         task_description_message: "Checking (App)   Inventory Static Group [{{ application.inventory_groups.0.name }}]"
 
 ##### Result for App Inventory Static group 1 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.1.name ==  item.name
+      when: 
+        - r_groups.json.results is defined
+        - application.inventory_groups.1.name ==  item.name
       loop: "{{ r_groups.json.results }}"
 
     - name: Import logging role
@@ -131,14 +124,12 @@
         task_description_message: "Checking (App)   Inventory Static Group [{{ application.inventory_groups.1.name }}]"
 
 ##### Result for App Inventory Static group 2 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.2.name ==  item.name
+      when: 
+        - r_groups.json.results is defined
+        - application.inventory_groups.2.name ==  item.name
       loop: "{{ r_groups.json.results }}"
 
     - name: Import logging role
@@ -169,16 +160,15 @@
         status_code: 200
       register: r_children_groups
       loop: "{{ get_inventory_groups }}"
+      ignore_errors: true
 
 #### Result App Children Group 0 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.0.child == item.json.results.0.name
+      when: 
+        - r_children_groups.results is defined
+        - application.inventory_groups.0.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
     - name: Import logging role
@@ -188,14 +178,12 @@
         task_description_message: "Checking (App)   Inventory Child Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
 
 #### Result App Children Group 1 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.1.child == item.json.results.0.name
+      when: 
+        - r_children_groups.results is defined
+        - application.inventory_groups.1.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
     - name: Import logging role
@@ -205,14 +193,12 @@
         task_description_message: "Checking (App)   Inventory Child Group  [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
 
 #### Result App Children Group 2 #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.inventory_groups.2.child == item.json.results.0.name
+      when: 
+        - r_children_groups.results is defined
+        - application.inventory_groups.2.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
     - name: Import logging role
@@ -222,14 +208,12 @@
         task_description_message: "Checking (App)   Inventory Child Group [{{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}]"
 
 ##### Result for App Job Template #####
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: application.job_template ==  item.name
+      when: 
+        - r_jobtemplates.json.results is defined
+        - application.job_template ==  item.name
       loop: "{{ r_jobtemplates.json.results }}"
 
     - name: Import logging role
@@ -257,15 +241,8 @@
       set_fact:
         success: true
       when:
-        - '"root redhat /bin/bash /root" in r_app_uri.content'
         - r_app_uri.status == 200
-
-    - name: "No Success - set fact"
-      set_fact:
-        success: false
-      when:
-        - '"root redhat /bin/bash /root" not in r_app_uri.content'
-        - r_app_uri.status != 200
+        - '"root redhat /bin/bash /root" in r_app_uri.content'
 
     - name: Import logging role
       import_role:
