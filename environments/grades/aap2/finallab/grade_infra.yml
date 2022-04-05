@@ -183,7 +183,6 @@
       ignore_errors: true
       register: r_ping_frontend
   
-    - debug: var=r_ping_frontend
       ##### Result for frontend #####
     - name: "Success - set fact"
       set_fact:
@@ -200,13 +199,14 @@
     - name: Ping {{groups.backend_servers.0}}
       command: ping -c1 {{ hostvars[groups.backend_servers.0]ansible_host }}
       ignore_errors: true
-      register: r_ping_frontend
+      register: r_ping_app1
+    - debug: var=r_ping_app1
 
       ##### Result for Backend Servers #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_frontend.rc == 0
+      when: r_ping_app1.rc == 0
 
     - name: Import logging role
       import_role:
@@ -218,13 +218,13 @@
     - name: Ping {{groups.backend_servers.1}}
       command: ping -c1 {{ hostvars[groups.backend_servers.1]ansible_host }}
       ignore_errors: true
-      register: r_ping_frontend
+      register: r_ping_app2
 
       ##### Result for Backend Servers #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: r_ping_frontend.rc == 0
+      when: r_ping_app2.rc == 0
 
     - name: Import logging role
       import_role:
