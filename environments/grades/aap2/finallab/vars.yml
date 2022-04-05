@@ -10,7 +10,7 @@ hub:
   user: admin
   password: "{{ common_admin_password }}"
   url: hub.example.com
-  image: ee-mitzidotcom:8.0.0
+  image: ee-mitzidotcom:1.0.0
 
 infra:
   ssh_key: "/home/devops/.ssh/{{ guid }}key.pem"
