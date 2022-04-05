@@ -169,7 +169,7 @@
       set_fact:
         success: true
       when: 
-        - r_children_groups.results is defined
+        - r_children_groups.results.0 is defined
         - application.inventory_groups.0.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
@@ -184,7 +184,7 @@
       set_fact:
         success: true
       when: 
-        - r_children_groups.results is defined
+        - r_children_groups.results.0 is defined
         - application.inventory_groups.1.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
@@ -199,7 +199,7 @@
       set_fact:
         success: true
       when: 
-        - r_children_groups.results is defined
+        - r_children_groups.results.0 is defined
         - application.inventory_groups.2.child == item.json.results.0.name
       loop: "{{ r_children_groups.results }}"
 
