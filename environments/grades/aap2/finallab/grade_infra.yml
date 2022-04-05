@@ -183,18 +183,14 @@
         host: "{{ hostvars.frontend.ansible_host }}"
         port: 22
       # ignore_errors: true
-      register: r_ping_frontend
+      register: r_frontend
 
-    - debug: var=r_ping_frontend
-  
       ##### Result for frontend #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: 
-        - r_ping_frontend.rc is defined
-        - r_ping_frontend.rc == 0
-
+      when: not r_frontend.failed | bool
+ 
     - name: Import logging role
       import_role:
         name: manager.grade.logging_grade_to_log
@@ -203,19 +199,19 @@
 
     #### For APP1
     - name: Ping app1
-      command: ping -c1 {{ hostvars.app1.ansible_host }}
-      ignore_errors: true
-      register: r_ping_app1
+      wait_for: 
+        host: "{{ hostvars.app1.ansible_host }}"
+        port: 22
+      register: r_app1
 
-    - debug: var=r_ping_app1
+    - debug: var=r_app1
 
       ##### Result for Backend Servers #####
     - name: "Success - set fact"
       set_fact:
         success: true
       when: 
-        - r_ping_app1.rc is defined
-        - r_ping_app1.rc == 0
+        - not r_app1.failed | bool
 
     - name: Import logging role
       import_role:
@@ -225,19 +221,18 @@
 
     #### For APP2
     - name: Ping App2
-      command: ping -c1 {{ hostvars.app2.ansible_host }}
-      ignore_errors: true
-      register: r_ping_app2
+      wait_for: 
+        host: "{{ hostvars.app2.ansible_host }}"
+        port: 22
+      register: r_app2
 
-    - debug: var=r_ping_app2
+    - debug: var=r_app2
 
       ##### Result for Backend Servers #####
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: 
-        - r_ping_app2.rc is defined
-        - r_ping_app2.rc == 0
+      when: r_app2.failed | bool
 
     - name: Import logging role
       import_role:
