@@ -239,8 +239,7 @@
       set_fact:
         success: true
       when:
-        - not r_app_uri.skipped | bool
-        - r_app_uri.status == 200
+        - r_app_uri.status | default(201) == 200
         - '"root redhat /bin/bash /root" in r_app_uri.content'
 
     - name: logging - Application deployment
