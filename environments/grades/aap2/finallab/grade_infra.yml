@@ -179,7 +179,9 @@
   gather_facts: false
   tasks:
     - name: Ping frontend
-      command: ping -c1 {{ hostvars.frontend.ansible_host }}
+      wait_for: 
+        host: "{{ hostvars.frontend.ansible_host }}"
+        port: 22
       ignore_errors: true
       register: r_ping_frontend
 
