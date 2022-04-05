@@ -234,10 +234,10 @@
       when: hostvars.frontend is defined
       ignore_errors: yes
 
-    - debug: var=r_app_uri
-      when:
-        - '"root redhat /bin/bash /root" in r_app_uri.content'
-        - r_app_uri.status == 200
+    # - debug: var=r_app_uri
+    #   when:
+    #     - '"root redhat /bin/bash /root" in r_app_uri.content'
+    #     - r_app_uri.status == 200
 
 ##### Result for Application deployment #####
     - name: "Success - set fact"
