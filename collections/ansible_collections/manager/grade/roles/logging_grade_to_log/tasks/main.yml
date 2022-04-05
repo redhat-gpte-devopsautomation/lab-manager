@@ -4,13 +4,13 @@
     - when: success | default(false) | bool
       name: Create Pass logging message
       set_fact:
-        grader_log_prefix: "PASS:"
+        grader_log_prefix: "{{ sr_no | d(1) }}  PASS:"
         student_log_message: "{{ task_description_message }}"
 
     - when: not success | default(false) | bool
       name: Create Fail logging message
       set_fact:
-        grader_log_prefix: "FAIL:"
+        grader_log_prefix: "{{ sr_no | d(1) }} FAIL:"
         student_log_message: "{{ task_description_message }} {{ student_error_message | default('') }}"
 
     - name: Appends lab check result message to grader log lineinfile
@@ -23,6 +23,7 @@
     - name: Unset success value
       set_fact:
         success:
+        sr_no: "{{ sr_no | int + 1 }}"
   delegate_to: localhost
 
     

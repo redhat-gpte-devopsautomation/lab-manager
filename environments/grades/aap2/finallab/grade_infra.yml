@@ -180,6 +180,7 @@
   tasks:
     - name: Ping {{groups.loadbalancers.0}}
       command: ping -c1 {{ groups.loadbalancers.0}}
+      ignore_errors: true
       register: r_ping_frontend
   
     - debug: var=r_ping_frontend
