@@ -204,7 +204,7 @@
         task_description_message: "Checking (Infra) Node Provisioning [frontend]"
 
     ##### For App1 #####
-    - naem: Block for APP1
+    - name: Block for APP1
       when: hostvars.app1 is defined
       block:
         - name: Check App1
@@ -229,8 +229,8 @@
         task_description_message: "Checking (Infra) Node Provisioning [app1]"
 
 
-    ##### For App1 #####
-    - naem: Block for APP2
+    ##### For App2 #####
+    - name: Block for App2
       when: hostvars.app2 is defined
       block:
         - name: Ping App2
@@ -254,21 +254,22 @@
       vars:
         task_description_message: "Checking (Infra) Node Provisioning [app2]"
 
-    #### For Appdb
-    - name: Ping Appdb
-      command: ping -c1 {{ hostvars.appdb.ansible_host }}
-      ignore_errors: true
-      register: r_ping_appdb
+    #### For Appdb ######
+    - name: Block for Appdb
+      when: hostvars.app2 is defined
+      block:
+        - name: Check Appdb
+          command: ping -c1 {{ hostvars.appdb.ansible_host }}
+          register: r_appdb
 
-    - debug: var=r_ping_appdb
+    - debug: var=r_appdb
 
-      ##### Result for Backend Servers #####
     - name: "Success - set fact"
       set_fact:
         success: true
       when: 
-        - r_ping_appdb.rc is defined
-        - r_ping_appdb.rc == 0
+        - r_appdb.rc is defined
+        - not r_appdb.failed | bool
 
     - name: Import logging role
       import_role:
