@@ -89,6 +89,7 @@
         body_format: json
         status_code: 200
       register: r_ee
+      ignore_errors: true
 
 ##### Result for Execution Environment #####
     - name: "No Success - set fact"
@@ -98,7 +99,9 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: infra.ee ==  item.name
+      when: 
+        - r_ee.json.results is defined
+        - infra.ee ==  item.name
       loop: "{{ r_ee.json.results }}"
 
     - name: Import logging role
@@ -120,6 +123,7 @@
         body_format: json
         status_code: 200
       register: r_projects
+      ignore_errors: true
 
 ##### Result for Infra Projects #####
     - name: "No Success - set fact"
@@ -129,7 +133,9 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: infra.project ==  item.name
+      when: 
+        - r_projects.json.results is defined
+        - infra.project ==  item.name
       loop: "{{ r_projects.json.results }}"
 
     - name: Import logging role
@@ -150,6 +156,8 @@
         body_format: json
         status_code: 200
       register: r_jobtemplates
+      ignore_errors: true
+
 
 ##### Result for Infra Job template #####
     - name: "No Success - set fact"
@@ -159,7 +167,9 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: infra.job_template ==  item.name
+      when: 
+        - r_jobtemplates.json.results is defined
+        - infra.job_template ==  item.name
       loop: "{{ r_jobtemplates.json.results }}"
 
     - name: Import logging role
