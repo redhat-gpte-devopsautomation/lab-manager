@@ -236,6 +236,7 @@
             host: "{{ hostvars.app2.ansible_host }}"
             port: 22
             timeout: 5
+          ignore_errors: true
           register: r_app2
 
     - debug: var=r_app2
