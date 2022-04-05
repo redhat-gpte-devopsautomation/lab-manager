@@ -1,5 +1,5 @@
 ---
-common_admin_password: redhat
+common_admin_password: "r3dh4t1!"
 
 ac:
   user: admin
