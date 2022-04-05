@@ -1,7 +1,7 @@
 ---
 - name: Logging lab section PASS or FAIL to student grader report
   block:
-    - when: success | bool
+    - when: success | default(false) | bool
       name: Create Pass logging message
       set_fact:
         grader_log_prefix: "PASS:"
