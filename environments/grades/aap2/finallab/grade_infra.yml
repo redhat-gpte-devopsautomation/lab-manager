@@ -175,9 +175,6 @@
       loop: "{{ instances.openstack_servers }}"
 
 
-- hosts: localhost
-  gather_facts: false
-  tasks:
     ##### For frontend #####
     - name: Check frontend
       wait_for: 
@@ -188,7 +185,7 @@
       ignore_errors: yes
       register: r_frontend
 
-    - debug: var=r_frontend
+    # - debug: var=r_frontend
     
     - name: "Success - set fact"
       set_fact:
@@ -208,11 +205,11 @@
         host: "{{ hostvars.app1.ansible_host }}"
         port: 22
         timeout: 5
-      # when: hostvars.app1 is defined
+      when: hostvars.app1 is defined
       ignore_errors: true
       register: r_app1
 
-    - debug: var=r_app1
+    # - debug: var=r_app1
 
     - name: "Success - set fact"
       set_fact:
@@ -237,7 +234,7 @@
       ignore_errors: true
       register: r_app2
 
-    - debug: var=r_app2
+    # - debug: var=r_app2
 
     - name: "Success - set fact"
       set_fact:
@@ -263,7 +260,7 @@
           ignore_errors: true
           register: r_appdb
 
-    - debug: var=r_appdb
+    # - debug: var=r_appdb
 
     - name: "Success - set fact"
       set_fact:
@@ -276,91 +273,3 @@
         name: manager.grade.logging_grade_to_log
       vars:
         task_description_message: "Checking (Infra) Node Provisioning [appdb]"
-
-
-
-# - hosts: frontend
-#   gather_facts: false
-#   tasks:
-#     - block:
-#         - ping:
-#           register: r_ping_frontend
-#       always:
-#           ##### Result for frontend #####
-#         - name: "Success - set fact"
-#           set_fact:
-#             success: true
-#           when: 
-#             - r_ping_frontend.ping is defined
-#             - r_ping_frontend.ping == "pong"
-
-#         - name: Import logging role
-#           import_role:
-#             name: manager.grade.logging_grade_to_log
-#           vars:
-#             task_description_message: "Checking (Infra) Node Pprovisioning [frontend]"
-
-# - hosts: app1
-#   gather_facts: false
-#   tasks:
-#     - block:
-#         - ping:
-#           register: r_ping_app1
-#           ignore_errors: true
-#       always:
-#         ##### Result for  app1 #####
-#         - name: "Success - set fact"
-#           set_fact:
-#             success: true
-#           when:
-#             - r_ping_app1.ping  is defined
-#             - r_ping_app1.ping == "pong"
-
-#         - name: Import logging role
-#           import_role:
-#             name: manager.grade.logging_grade_to_log
-#           vars:
-#             task_description_message: "Checking (Infra) Node Provisioning [app1]"
-
-# - hosts: app2
-#   gather_facts: false
-#   tasks:
-#     - block:
-#         - ping:
-#           register: r_ping_app2
-
-#       always:
-#         ##### Result for app2 #####
-#         - name: "Success - set fact"
-#           set_fact:
-#             success: true
-#           when: 
-#             - r_ping_app2.ping is defined
-#             - r_ping_app2.ping == "pong"
-
-#         - name: Import logging role
-#           import_role:
-#             name: manager.grade.logging_grade_to_log
-#           vars:
-#             task_description_message: "Checking (Infra) Node Provisioning [app2]"
-
-# - hosts: appdb
-#   gather_facts: false
-#   tasks:
-#     - block:
-#         - ping:
-#           register: r_ping_appdb
-#         ##### Result for appdb #####
-#       always:
-#         - name: "Success - set fact"
-#           set_fact:
-#             success: true
-#           when: 
-#             - r_ping_appdb.ping is defined
-#             - r_ping_appdb.ping == "pong"
-
-#         - name: Import logging role
-#           import_role:
-#             name: manager.grade.logging_grade_to_log
-#           vars:
-#             task_description_message: "Checking (Infra) Node Provisioning [appdb]"
