@@ -194,8 +194,7 @@
       set_fact:
         success: true
       when: 
-        - not r_frontend.skkipped |bool 
-        - not r_frontend.failed | bool
+        - not r_frontend.failed | default(true) | bool
  
     - name: Import logging role
       import_role:
@@ -219,8 +218,7 @@
       set_fact:
         success: true
       when:
-        - not r_app1.skkipped | bool 
-        - not r_app1.failed | bool
+        - not r_app1.failed | default(true)  | bool
 
     - name: Import logging role
       import_role:
