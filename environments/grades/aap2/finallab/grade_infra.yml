@@ -179,7 +179,7 @@
   gather_facts: false
   tasks:
     - name: Ping {{groups.loadbalancers.0}}
-      command: ping -c1 {{ groups.loadbalancers.0}}
+      command: ping -c1 {{ hostvars.frontend.ansible_host }}
       ignore_errors: true
       register: r_ping_frontend
   
@@ -188,44 +188,74 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: 
-        - r_ping_frontend.ping is defined
-        - r_ping_frontend.ping == "pong"
+      when: r_ping_frontend.rc == 0
 
     - name: Import logging role
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Node Pprovisioning [frontend]"
+        task_description_message: "Checking (Infra) Node Provisioning [frontend]"
+
+    #### For APP1
+    - name: Ping {{groups.backend_servers.0}}
+      command: ping -c1 {{ hostvars[groups.backend_servers.0]ansible_host }}
+      ignore_errors: true
+      register: r_ping_frontend
+
+      ##### Result for Backend Servers #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_ping_frontend.rc == 0
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (Infra) Node Provisioning [groups.backend_servers.0]"
+
+    #### For APP2
+    - name: Ping {{groups.backend_servers.1}}
+      command: ping -c1 {{ hostvars[groups.backend_servers.1]ansible_host }}
+      ignore_errors: true
+      register: r_ping_frontend
+
+      ##### Result for Backend Servers #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: r_ping_frontend.rc == 0
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "Checking (Infra) Node Provisioning [groups.backend_servers.1]"
 
 
 
 
 
+# - hosts: frontend
+#   gather_facts: false
+#   tasks:
+#     - block:
+#         - ping:
+#           register: r_ping_frontend
+#       always:
+#           ##### Result for frontend #####
+#         - name: "Success - set fact"
+#           set_fact:
+#             success: true
+#           when: 
+#             - r_ping_frontend.ping is defined
+#             - r_ping_frontend.ping == "pong"
 
-
-
-
-- hosts: frontend
-  gather_facts: false
-  tasks:
-    - block:
-        - ping:
-          register: r_ping_frontend
-      always:
-          ##### Result for frontend #####
-        - name: "Success - set fact"
-          set_fact:
-            success: true
-          when: 
-            - r_ping_frontend.ping is defined
-            - r_ping_frontend.ping == "pong"
-
-        - name: Import logging role
-          import_role:
-            name: manager.grade.logging_grade_to_log
-          vars:
-            task_description_message: "Checking (Infra) Node Pprovisioning [frontend]"
+#         - name: Import logging role
+#           import_role:
+#             name: manager.grade.logging_grade_to_log
+#           vars:
+#             task_description_message: "Checking (Infra) Node Pprovisioning [frontend]"
 
 - hosts: app1
   gather_facts: false
