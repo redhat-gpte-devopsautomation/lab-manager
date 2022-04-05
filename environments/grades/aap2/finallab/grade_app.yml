@@ -169,9 +169,7 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: 
-        - r_children_groups.results.json is defined
-        - application.inventory_groups.0.child == item.json.results.0.name
+      when: application.inventory_groups.0.child == item.json.results.0.name | default('')
       loop: "{{ r_children_groups.results }}"
 
     - name: Import logging role
@@ -184,9 +182,7 @@
     - name: "Success - set fact"
       set_fact:
         success: true
-      when: 
-        - r_children_groups.results.0 is defined
-        - application.inventory_groups.1.child == item.json.results.0.name
+      when: application.inventory_groups.1.child == item.json.results.0.name | default('')
       loop: "{{ r_children_groups.results }}"
 
     - name: Import logging role
