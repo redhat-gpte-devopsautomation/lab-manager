@@ -8,7 +8,7 @@
         path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
         line: |
           "----------------------------------------------------------------------------------"
-          "{{ '%2s%1s %-8s %-15s %-s' | format('SR No. | ', ' Status | ', ' Host | ', ' Grade Description') }}"
+          "{{ '%2s %-8s %-15s %-s' | format('SR No. | ', ' Status | ', ' Host | ', ' Grade Description') }}"
           "----------------------------------------------------------------------------------"
         when: sr_no is not defined
 
