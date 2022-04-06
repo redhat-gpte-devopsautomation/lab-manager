@@ -33,7 +33,6 @@
         create: yes
         insertafter: EOF
         path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
-        # line: "{{ '%-2s %-2s %-8s %-15s %-s' | format(sr_no, grader_log_prefix, inventory_hostname, student_log_message) }}"
         line: "{{ '%4s  %-10s %-17.17s %-s' | format(sr_no, grader_log_prefix, inventory_hostname, student_log_message) }}"
 
     - name: Unset success value
