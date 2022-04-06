@@ -238,7 +238,7 @@ course_exec_grade() {
       printf "\n%s\n" "--------------------------------------------------------------------------------------"
       printf "%-15s %1s %-s\n" "Grade Log" "|" "/tmp/${lab_name}_logs.txt"
       printf "%-15s %1s %-s\n" "Grade Report" "|" "/tmp/${course_name}/${lab_name}_report.txt"
-      printf "%s\n" "--------------------------------------------------------------------------------------"
+      printf "%s\n\n" "--------------------------------------------------------------------------------------"
       ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
       ${common_environment_vars} \
       -e provisioner=grades \
