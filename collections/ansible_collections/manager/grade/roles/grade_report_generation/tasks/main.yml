@@ -46,7 +46,6 @@
     dest:         "{{ grader_working_dir }}/{{ grader_student_report_file }}"
     insertafter:  EOF
     line: |
-
       ======================================================================================
       {{ report_status_message }} {{ student_errors }} Errors
       ======================================================================================
