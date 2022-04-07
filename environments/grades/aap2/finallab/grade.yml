@@ -25,10 +25,13 @@
     # - name: "No Success - set fact"
     #   set_fact:
     #     success: false
+    #     error_message:
 
     - name: "Success - set fact"
       set_fact:
         success: true
+        # task_description_message: "(AC)    Automation Controller Installation"
+        success_message: "Installation done"
       when: r_uri.status == 200 
 
     - name: Import logging role
