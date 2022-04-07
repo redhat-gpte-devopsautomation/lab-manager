@@ -14,6 +14,8 @@
 
     - name: Set Sr No
       set_fact:
+        success_message:
+        error_message:
         sr_no: "{{ sr_no | d(0) | int + 1 }}"
 
     - when: success | default(false) | bool
@@ -38,7 +40,7 @@
         # line: "{{ '%3s   %-10s %-17.17s %-50.50s' | format(sr_no, grader_log_prefix, inventory_hostname, student_log_message) }}"
         line: |
           {{ '%3s   %-10s %-17.17s %-50.50s' | format(sr_no, grader_log_prefix, inventory_hostname, task_description_message) }}
-          {{ '%40s%-50s' | format('', student_log_message) }}
+          {{ '%36s%-50s' | format('', student_log_message) }}
 
     - name: Unset success value
       set_fact:
