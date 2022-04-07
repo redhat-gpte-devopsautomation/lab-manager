@@ -17,7 +17,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Project [{{ application.project }}]"
+        task_description_message: "(App) Project [{{ application.project }}]"
 
 #### List App Inventory ####
     - name: List Inventory
@@ -46,7 +46,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory [{{ application.inventory }}]"
+        task_description_message: "(App) Inventory [{{ application.inventory }}]"
 
 
 #### List App Inventory Sources ####
@@ -76,7 +76,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory Source [{{ application.inventory_source }}]"
+        task_description_message: "(App) Inventory Source [{{ application.inventory_source }}]"
 
 
 #### List App Static Inventory Groups ####
@@ -106,7 +106,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory Static Group [{{ application.inventory_groups.0.name }}]"
+        task_description_message: "(App) Inventory Static Group [{{ application.inventory_groups.0.name }}]"
 
 ##### Result for App Inventory Static group 1 #####
     - name: "Success - App Inventory Static group 1"
@@ -121,7 +121,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory Static Group [{{ application.inventory_groups.1.name }}]"
+        task_description_message: "(App) Inventory Static Group [{{ application.inventory_groups.1.name }}]"
 
 ##### Result for App Inventory Static group 2 #####
     - name: "Success - App Inventory Static group 2"
@@ -136,7 +136,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory Static Group [{{ application.inventory_groups.2.name }}]"
+        task_description_message: "(App) Inventory Static Group [{{ application.inventory_groups.2.name }}]"
 
 #### Test App Children groups #####
     - set_fact:
@@ -175,7 +175,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
+        task_description_message: "(App) Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
 
 #### Result App Children Group 1 #####
     - name: "Success - App Children Group 1"
@@ -188,7 +188,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Group  [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
+        task_description_message: "(App) Group [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
 
     #### Result App Children Group 2 #####
     - name: "Success - App Children Group 2"
@@ -201,7 +201,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Group [{{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}]"
+        task_description_message: "(App) Group [{{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}]"
 
 ##### Result for App Job Template #####
     - name: "Success - App Job Template"
@@ -216,7 +216,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Job Templatet [{{ application.job_template }}]"
+        task_description_message: "(App) Job Templatet [{{ application.job_template }}]"
 
 #### Checking Application deployment
     - name: Checking Application deployment
