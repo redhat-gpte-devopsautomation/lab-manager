@@ -240,4 +240,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Application Deployment [Userinfo application]"
+        task_description_message: "(App) Application Deployment [Userinfo application]"
