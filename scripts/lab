@@ -235,10 +235,6 @@ course_exec_grade() {
     # echo "Start grade for course - ${course_name}"
     if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
       echo -e "Grading ${lab_name} ....\n"
-      # printf "\n%s\n" "--------------------------------------------------------------------------------------"
-      # printf "%-15s %-5s %-s\n" "Grade Log" "|" "/tmp/${lab_name}_logs.txt"
-      # printf "%-15s %-5s %-s\n" "Grade Report" "|" "/tmp/${course_name}/${lab_name}_report.txt"
-      # printf "%s\n\n" "--------------------------------------------------------------------------------------"
       ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
       ${common_environment_vars} \
       -e provisioner=grades \
@@ -247,7 +243,10 @@ course_exec_grade() {
       -e purpose=grade \
       -e @${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/vars.yml >& /tmp/${lab_name}_logs.txt
 
-      cat /tmp/${course_name}/${lab_name}_report.txt | sed -e 's#PASS#\x1B[32m&\x1B[0m#' -e 's#FAIL#\x1B[31m&\x1B[0m#'
+      cat /tmp/${course_name}/${lab_name}_report.txt | sed -e 's# PASS #\x1B[32m&\x1B[0m#' \
+                                                           -e 's# FAIL #\x1B[31m&\x1B[0m#' \
+                                                           -e 's#^FAILED.*#\x1B[31m&\x1B[0m#' \
+                                                           -e 's#^SUCCESS.*#\x1B[32m&\x1B[0m#'
     else
       echo "Lab ${lab_name} doesn't exist"
       exit 2
