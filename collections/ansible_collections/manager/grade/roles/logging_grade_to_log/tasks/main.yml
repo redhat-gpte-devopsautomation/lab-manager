@@ -14,8 +14,6 @@
 
     - name: Set Sr No
       set_fact:
-        success_message:
-        error_message:
         sr_no: "{{ sr_no | d(0) | int + 1 }}"
 
     - when: success | default(false) | bool
@@ -45,6 +43,8 @@
     - name: Unset success value
       set_fact:
         success:
+        success_message:
+        error_message:
   delegate_to: localhost
 
     
