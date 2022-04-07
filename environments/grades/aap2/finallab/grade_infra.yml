@@ -33,7 +33,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(Infra) Container Registry Credentials [{{ infra.container_cred }}]"
+        task_description_message: "(Infra) Container Credentials [{{ infra.container_cred }}]"
 
 ##### Result for Cloud Credentials #####
     - name: "Success - set fact"

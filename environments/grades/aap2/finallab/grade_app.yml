@@ -175,7 +175,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory Child Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
+        task_description_message: "(App)   Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
 
 #### Result App Children Group 1 #####
     - name: "Success - App Children Group 1"
@@ -188,7 +188,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory Child Group  [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
+        task_description_message: "(App)   Group  [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
 
     #### Result App Children Group 2 #####
     - name: "Success - App Children Group 2"
@@ -201,7 +201,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "(App)   Inventory Child Group [{{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}]"
+        task_description_message: "(App)   Group [{{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}]"
 
 ##### Result for App Job Template #####
     - name: "Success - App Job Template"
