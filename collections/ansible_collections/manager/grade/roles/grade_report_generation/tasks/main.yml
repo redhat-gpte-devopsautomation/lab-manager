@@ -2,7 +2,7 @@
 - name: Searching file for FAIL
   lineinfile:
     path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
-    regex: "^[ FAIL ].*"
+    regex: "\[ FAIL \].*"
     state: absent
   check_mode: true
   register: r_lab_pass
