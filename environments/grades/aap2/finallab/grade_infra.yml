@@ -33,7 +33,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Container Registry Credentials [{{ infra.container_cred }}]"
+        task_description_message: "(Infra) Container Registry Credentials [{{ infra.container_cred }}]"
 
 ##### Result for Cloud Credentials #####
     - name: "Success - set fact"
@@ -48,7 +48,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Cloud Credentials [{{ infra.cloud_cred }}]"
+        task_description_message: "(Infra) Cloud Credentials [{{ infra.cloud_cred }}]"
 
 ##### Result for Machine Credential #####
     - name: "Success - set fact"
@@ -63,7 +63,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Machine Credential [{{ infra.machine_cred }}]"
+        task_description_message: "(Infra) Machine Credential [{{ infra.machine_cred }}]"
 
 #### List Execution Environment ####
     - name: List Job templates
@@ -92,7 +92,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Execution Environment [{{ infra.ee }}]"
+        task_description_message: "(Infra) Execution Environment [{{ infra.ee }}]"
 
 
 #### List Projects ####
@@ -122,7 +122,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Project [{{ infra.project }}]"
+        task_description_message: "(Infra) Project [{{ infra.project }}]"
 
 #### List job templates ####
     - name: List Job templates
@@ -152,7 +152,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Job Template [{{ infra.job_template }}]"
+        task_description_message: "(Infra) Job Template [{{ infra.job_template }}]"
 
 #### In-memory inventory ####
     - meta: refresh_inventory
@@ -197,7 +197,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Node Provisioning [frontend]"
+        task_description_message: "(Infra) Node Provisioning [frontend]"
 
     ##### For App1 #####
     - name: Check App1
@@ -221,7 +221,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Node Provisioning [app1]"
+        task_description_message: "(Infra) Node Provisioning [app1]"
 
 
     ##### For App2 #####
@@ -246,7 +246,7 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Node Provisioning [app2]"
+        task_description_message: "(Infra) Node Provisioning [app2]"
 
     #### For Appdb ######
     - name: Block for Appdb
@@ -272,4 +272,4 @@
       import_role:
         name: manager.grade.logging_grade_to_log
       vars:
-        task_description_message: "Checking (Infra) Node Provisioning [appdb]"
+        task_description_message: "(Infra) Node Provisioning [appdb]"
