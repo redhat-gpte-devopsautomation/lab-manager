@@ -35,7 +35,7 @@
         create: yes
         insertafter: EOF
         path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
-        line: "{{ '%3s   %-10s %-17.17s %-s' | format(sr_no, grader_log_prefix, inventory_hostname, student_log_message) }}"
+        line: "{{ '%2s  %-10s %-17.17s %-s' | format(sr_no, grader_log_prefix, inventory_hostname, student_log_message) }}"
         # line: |
         #   {% if student_log_message is defined %}
         #   {{ '%3s   %-10s %-17.17s %-50.50s' | format(sr_no, grader_log_prefix, inventory_hostname, task_description_message) }}
