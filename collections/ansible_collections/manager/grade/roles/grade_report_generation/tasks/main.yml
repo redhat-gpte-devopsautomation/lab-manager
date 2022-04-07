@@ -30,8 +30,10 @@
 - name: Sign student report
   lineinfile:
     path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
-    line: "{{ st.stat.checksum }}  {{ grader_student_report_file }}"
-
+    line: |
+      --------------------------------------------------------------------------------------
+      {{ st.stat.checksum }} | {{ grader_student_report_file }}
+      
 - name: Output lab status and error count
   debug:
     msg:
@@ -44,6 +46,7 @@
     dest:         "{{ grader_working_dir }}/{{ grader_student_report_file }}"
     insertafter:  EOF
     line: |
+
       ======================================================================================
       {{ report_status_message }} {{ student_errors }} Errors
       ======================================================================================
