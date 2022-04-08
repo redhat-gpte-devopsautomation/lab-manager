@@ -58,12 +58,12 @@
     - name: Insert lines
       lineinfile:
         path: /etc/httpd/conf.d/ipa-rewrite.conf 
-        regexp: EOF
+        regex: EOF
         line: |
           RewriteEngine on
           RewriteRule ^/$ /ipa/ui [L,NC,R=301]
           RewriteRule ^/ipa/ui/js/freeipa/plugins.js$    /ipa/wsgi/plugins.py [PT]  
-        notify: Ensure IdM is running at boot
+      notify: Ensure IdM is running at boot
 
   handlers:
     - name: Ensure IdM is running at boot
