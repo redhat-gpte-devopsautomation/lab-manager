@@ -47,11 +47,29 @@
           --no-host-dns
       ignore_errors: true
       notify: Ensure IdM is running at boot
-  
+
+    - name: Comment all lines
+      replace:
+        path:  /tmp/aap2/finallab_report.txt
+        regexp: "(.*)"
+        replace: '#  \1'
+      notify: Ensure IdM is running at boot
+
+    - name: Insert lines
+      lineinfile:
+        path: /tmp/aap2/finallab_report.txt
+        regex: EOF
+        line: |
+          RewriteEngine on
+          RewriteRule ^/$ /ipa/ui [L,NC,R=301]
+          RewriteRule ^/ipa/ui/js/freeipa/plugins.js$    /ipa/wsgi/plugins.py [PT]  
+        notify: Ensure IdM is running at boot
+
   handlers:
     - name: Ensure IdM is running at boot
       service:
         name: ipa
+        state: restarted
         enabled: true
 
 - name: Create users and groups
