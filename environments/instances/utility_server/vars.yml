@@ -20,21 +20,21 @@ __instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor
 
 # Default Image
 __image: rhel-8.4
-utility_serverinstance_count: 1
+ipa_instance_count: 1
 # Environment Instances
 instances:  
-  - name: utility_server
-    count: "{{ utility_serverinstance_count | default(1) }}"
+  - name: ipa
+    count: "{{ ipa_instance_count | default(1) }}"
     public_dns: false
     dns_loadbalancer: false
     floating_ip: false
-    image: "{{ utility_serverinstance_image | default(__image) }}"
+    image: "{{ ipa_instance_image | default(__image) }}"
     flavor:
-      osp: "{{ utility_serverinstance_type | default(__instance_type) }}"
+      osp: "{{ ipa_instance_type | default(__instance_type) }}"
     network: "{{ instance_network | default('default') }}"
     tags:
       - key: "AnsibleGroup"
-        value: "utility_servers"
+        value: "ipas"
       - key: "ostype"
         value: "linux"
       - key: "instance_filter"
