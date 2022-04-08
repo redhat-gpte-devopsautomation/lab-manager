@@ -44,6 +44,12 @@ frontend bastion
     bind *:49205 ssl crt /etc/ssl/certs/cert.pem
     use_backend registry-49205 if { dst_port 49205 }
 
+{% if groups['utility_servers'] is defined %}
+    bind *:49206 ssl crt /etc/ssl/certs/cert.pem
+    use_backend ipa-49206 if { dst_port 49206 }
+{% endif %}
+
+
 {% if groups['towers'] is defined %}
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend tower-49210 if { dst_port 49210 }
@@ -111,6 +117,14 @@ backend vscode-49204
 backend registry-49205
     balance source
     server registry {{ groups['bastions'][0] }}:5000 check ssl verify none
+
+{% if groups['utility_servers'] is defined %}
+backend ipa-49206
+    balance source
+ {% for host in groups['utility_servers'] %}
+    server ipal{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
 
 {% if groups['automationcontrollers'] is defined %}
 backend control-49210

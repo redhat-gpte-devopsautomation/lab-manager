@@ -23,7 +23,7 @@ __image: rhel-8.4
 utility_serverinstance_count: 1
 # Environment Instances
 instances:  
-  - name: ac
+  - name: utility_server
     count: "{{ utility_serverinstance_count | default(1) }}"
     public_dns: false
     dns_loadbalancer: false
