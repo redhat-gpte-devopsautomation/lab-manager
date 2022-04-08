@@ -58,7 +58,7 @@
     - name: Insert lines
       lineinfile:
         path: /etc/httpd/conf.d/ipa-rewrite.conf 
-        regex: EOF
+        regexp: EOF
         line: |
           RewriteEngine on
           RewriteRule ^/$ /ipa/ui [L,NC,R=301]
