@@ -3,6 +3,9 @@
   hosts: ipas
   become: true
   tasks:
+    - name: Include variables
+      include_vars: vars.yml
+
     - name: Install required packages
       package:
         name: "{{ idm_rpms }}"
