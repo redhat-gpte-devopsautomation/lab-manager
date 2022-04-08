@@ -44,7 +44,7 @@ frontend bastion
     bind *:49205 ssl crt /etc/ssl/certs/cert.pem
     use_backend registry-49205 if { dst_port 49205 }
 
-{% if groups['utility_servers'] is defined %}
+{% if groups['ipas'] is defined %}
     bind *:49206 ssl crt /etc/ssl/certs/cert.pem
     use_backend ipa-49206 if { dst_port 49206 }
 {% endif %}
@@ -118,13 +118,16 @@ backend registry-49205
     balance source
     server registry {{ groups['bastions'][0] }}:5000 check ssl verify none
 
-{% if groups['utility_servers'] is defined %}
+{% if groups['ipas'] is defined %}
 backend ipa-49206
     balance source
- {% for host in groups['utility_servers'] %}
-    server ipal{{ loop.index }} {{ host }}:443 check ssl verify none
- {% endfor %}
+    http-request redirect location /ipa/ui if { path_reg ^/$ }
+    http-request set-header Referer https://{{ groups.ipas.0 }}/ipa/
+    acl hdr_set_cookie_dom res.hdr(Set-cookie) -m sub Domain= bastion.{{ guid }}.dynamic.opentlc.com
+    rspirep ^(Set-Cookie:.*)\ Domain={{ groups.ipas.0 }}(.*) \1\ Domain=bastion.{{ guid }}.dynamic.opentlc.com\2
+    server ipa {{ groups.ipas.0 }}:443 check ssl verify none
 {% endif %}
+
 
 {% if groups['automationcontrollers'] is defined %}
 backend control-49210
@@ -192,3 +195,5 @@ backend hub-49211
     server hub{{ loop.index }} {{ host }}:443 check ssl verify none
  {% endfor %}
 {% endif %}
+
+
