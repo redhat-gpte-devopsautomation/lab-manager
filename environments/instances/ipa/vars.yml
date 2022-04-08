@@ -48,3 +48,37 @@ instances:
       - WebSG
       - HostSG
  
+### Freeipa variables 
+idm_principal: admin
+idm_dns_name: "{{ inventory_hostname }}"
+idm_domain: example.com
+idm_realm: "{{ idm_domain }}"
+idm_dm_password: r3dh4t1!
+idm_admin_password: "{{ idm_dm_password }}"
+idm_rpms:
+  - '@idm:DL1'
+  - ipa-server
+  - firewalld
+firewall_services:
+  - ntp
+  - http
+  - https
+  - ldap
+  - ldaps
+  - kerberos
+  - kpasswd
+
+idm_users:
+  - user: bob
+    password: redhat
+    group: integrators
+  - user: susan
+    password: redhat
+    group: integrators
+  - user: brad
+    password: redhat
+    group: integrators
+  - user: karla
+    password: redhat
+    group: integrators
+  
