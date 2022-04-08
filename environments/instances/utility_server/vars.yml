@@ -1,0 +1,50 @@
+env_name: "{{ env_name }}"
+guid: "{{ guid }}"
+email: "{{ email }}"
+project_tag: "{{ env_name }}-{{ guid }}"
+
+# lab_name: finallab
+provider_network: external
+instance_network: default
+# all_ssh_authorized_keys: "{{ opentlc_admin_pub_keys + [user_pub_key|d()] }}"
+all_ssh_authorized_keys: testkeys
+default_metadata:
+  owner: "{{ email | default('unknownuser') }}"
+  Project: "{{ project_tag }}"
+  guid: "{{ guid }}"
+  env_name: "{{ env_name }}"
+
+osp_default_rootfs_size: 50
+# Default instance type
+__instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor 
+
+# Default Image
+__image: rhel-8.4
+utility_serverinstance_count: 1
+# Environment Instances
+instances:  
+  - name: ac
+    count: "{{ utility_serverinstance_count | default(1) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ utility_serverinstance_image | default(__image) }}"
+    flavor:
+      osp: "{{ utility_serverinstance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "utility_servers"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+ 
