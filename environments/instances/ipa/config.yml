@@ -69,6 +69,7 @@
         ipa_host: "{{ groups.ipas.0 }}"
         ipa_user: "{{ idm_principal }}"
         ipa_pass: "{{ idm_dm_password }}"
+      loop: "{{ idm_users }}"
 
     - name: Create IPA groups
       ipa_group:
