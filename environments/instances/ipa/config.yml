@@ -50,14 +50,14 @@
 
     - name: Comment all lines
       replace:
-        path:  /tmp/aap2/finallab_report.txt
+        path: /etc/httpd/conf.d/ipa-rewrite.conf 
         regexp: "(.*)"
         replace: '#  \1'
       notify: Ensure IdM is running at boot
 
     - name: Insert lines
       lineinfile:
-        path: /tmp/aap2/finallab_report.txt
+        path: /etc/httpd/conf.d/ipa-rewrite.conf 
         regex: EOF
         line: |
           RewriteEngine on
