@@ -1,0 +1,7 @@
+---
+- name: Install FreeIPA server
+  hosts: metrics
+  become: true
+  tasks:
+    - name: Include variables
+      include_vars: vars.yml
