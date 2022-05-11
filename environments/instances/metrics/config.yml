@@ -1,7 +1,3 @@
 ---
-- name: Install FreeIPA server
-  hosts: metrics
-  become: true
-  tasks:
-    - name: Include variables
-      include_vars: vars.yml
+- import_playbook: prometheus.yml
+- import_playbook: grafana.yml
