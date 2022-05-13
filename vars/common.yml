@@ -1,0 +1,21 @@
+---
+
+guid: "{{ access_details.guid }}"
+email: "{{ access_details.email }}"
+subdomain: "{{ access_details.subdomain }}"
+internal_domain: example.com
+user_private_key_file: /home/devops/.ssh/{{ guid }}key.pem
+user_public_key_file: /home/devops/.ssh/{{ guid }}key.pub
+satellite_url: satellite.example.com
+satellite_user_name: "{{ access_details.satellite_user }}"
+satellite_user_password: "{{ access_details.satellite_password }}"
+satellite_org: prod
+satellite_activationkey: gpte-labs-rhel8
+tower_version: 3.8.3-1
+rhel_repos:
+  - ansible-2.9-for-rhel-8-x86_64-rpms
+  - openstack-16-tools-for-rhel-8-x86_64-rpms
+  - prod_EPEL_8_epe_8
+  - rhel-8-for-x86_64-appstream-rpms
+  - rhel-8-for-x86_64-baseos-rpms
+  - satellite-tools-6.8-for-rhel-8-x86_64-rpms

@@ -14,9 +14,9 @@
         state: present
         activationkey: "{{ satellite_activationkey }}"
         org_id: "{{ satellite_org }}"
-        auto_attach: true
     
     - name: Enable repositories
       rhsm_repository:
-        name: '*'
+        name: "{{ item }}"
         state: enabled
+      loop: "{{ rhel_repos }}"
