@@ -1,0 +1,12 @@
+---
+- name: Refreshing satellite manifest
+  hosts: satellites
+  gather_facts: false
+  become: true
+  tasks:     
+
+    - name: Refresh manifest
+      command: >-
+        /bin/hammer subscription refresh-manifest --organization=prod
+      async: 300
+      poll: 10

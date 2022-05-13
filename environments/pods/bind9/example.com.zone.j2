@@ -1,0 +1,12 @@
+$TTL 86400
+@ IN SOA {{ groups['bastions'][0] }}. root.{{ groups['bastions'][0] }}. (
+              3           ;Serial
+              3600        ;Refresh
+              1800        ;Retry
+              604800      ;Expire
+              86400       ;Minimum TTL
+)
+@  IN  NS {{ groups['bastions'][0] }}.
+{% for entry in groups.all %} 
+{{ entry | regex_replace('(\\..*)?$', '') }}	IN A 	{{ hostvars[entry]['ansible_host'] }}
+{% endfor %}

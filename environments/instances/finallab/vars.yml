@@ -1,0 +1,75 @@
+env_name: "{{ env_name }}"
+guid: "{{ guid }}"
+email: "{{ email }}"
+project_tag: "{{ env_name }}-{{ guid }}"
+
+# lab_name: finallab
+provider_network: external
+instance_network: default
+# all_ssh_authorized_keys: "{{ opentlc_admin_pub_keys + [user_pub_key|d()] }}"
+all_ssh_authorized_keys: testkeys
+default_metadata:
+  owner: "{{ email | default('unknownuser') }}"
+  Project: "{{ project_tag }}"
+  guid: "{{ guid }}"
+  env_name: "{{ env_name }}"
+
+osp_default_rootfs_size: 50
+# Default instance type
+__instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor 
+
+# Default Image
+__image: rhel-8.4
+ac_instance_count: 1
+ah_instance_count: 1
+# Environment Instances
+instances:  
+  - name: ac
+    count: "{{ ac_instance_count | default(3) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ ac_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ ac_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "acs"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+  - name: hub
+    count: "{{ ah_instance_count | default(3) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ ah_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ ah_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "hubs"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+

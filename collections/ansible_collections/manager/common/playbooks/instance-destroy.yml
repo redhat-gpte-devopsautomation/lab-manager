@@ -1,0 +1,18 @@
+---
+
+- name: Import destroy playbook from environment
+  vars:
+    find_destroy:
+      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/destroy.yml"
+      - ./none.yml
+  import_playbook: "{{ lookup('first_found', find_destroy) }}"
+
+
+- name: Destroy stack
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  roles:
+    - role: manager.osp.osp_infra_destroy
+    - role: manager.osp.osp_inventory
+

@@ -1,0 +1,36 @@
+---
+- name: Delete ansible hosts
+  become: true
+  when: inventory_update | default(true) | bool
+  file:
+    path: /etc/ansible/hosts
+    state: absent
+
+- meta: refresh_inventory
+
+- name: gather facts
+  os_server_info:
+    cloud: "{{ guid }}-project"
+  register: osp_instances
+
+- name: Create in-memory inventory
+  add_host:
+    name: "{{ __instance.name }}.example.com"
+    group: "{{ __instance.metadata.AnsibleGroup }}"
+    ansible_host: "{{ __instance.private_v4 }}" 
+    ansible_ssh_private_key_file: "{{ user_private_key_file }}"
+    ansible_user: cloud-user
+  loop: "{{ osp_instances.openstack_servers }}"
+  loop_control:
+    loop_var: __instance
+
+- name: Ansible inventory update
+  when: inventory_update | default(true) | bool
+  block:
+    - name: Copy ansible hosts
+      become: true
+      template:
+        src: hosts.j2
+        dest: /etc/ansible/hosts
+        mode: 0644
+

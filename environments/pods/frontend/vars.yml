@@ -1,0 +1,28 @@
+---
+pods:
+  - name: dnsmasq
+    dockerfile: True
+    image: registry.access.redhat.com/ubi8/ubi-init:8.3
+    docker:
+      run:
+        - yum install -y dnsmasq
+        - systemctl enable dnsmasq
+      expose: 53/udp 53/tcp
+      cmd: /sbin/init
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      templates:
+        - src: dnsmasq.conf.j2
+          dest: /etc/        
+    systemd:
+      # Space separated list of wants
+      wants_services: network.target
+      # Space separated list of after services
+      after_services: network-online.target
+      state: started
+      enabled: true
+
+
+

@@ -1,0 +1,33 @@
+---
+pods:
+  - name: haproxy
+    dockerfile: True
+    image: registry.access.redhat.com/ubi8/ubi-init:8.3
+    docker:
+      run:
+        - yum install -y haproxy
+        - systemctl enable haproxy
+      expose: "49201-49220:49201-49220"
+      cmd: /sbin/init
+    ports:
+      - "49201-49220:49201-49220"
+    volumes:
+      # Voluume source (src) will created in
+      # /opt/podman/volumes/{{ name }}-volume/{{ src }}
+      # dest is mount location in container
+      templates:
+        - src: haproxy.cfg.j2
+          dest: /etc/haproxy/
+      directories:
+        - src: /etc/ssl/certs
+          dest: /etc/ssl/certs
+    systemd:
+      # Space separated list of wants
+      wants_services: network.target bind9-pod.service gitlab-pod.service
+      # Space separated list of after services
+      after_services: network-online.target bind9-pod.service gitlab-pod.service
+      state: started
+      enabled: true
+
+# Pod's Letsencypt ssl certificate directory
+ssl_cert_dirs: /etc/ssl/certs/

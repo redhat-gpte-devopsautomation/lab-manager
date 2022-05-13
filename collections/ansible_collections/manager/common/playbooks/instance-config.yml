@@ -1,0 +1,36 @@
+---
+- name: Configuration Started
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "Configuration started"
+
+- name: Configure stack
+  hosts: all:!controls:!bastions:!satellites
+  gather_facts: false
+  roles:
+    - role: manager.common.common_vars
+
+    - role: manager.common.network_settings
+      when: default_networking | default(true) | bool
+
+    - role: manager.common.host_subscription
+      when: default_subscription | default(true) | bool
+
+
+- name: Import config playbook from environment
+  vars:
+    find_config:
+      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/config.yml"
+      - ./none.yml
+  import_playbook: "{{ lookup('first_found', find_config) }}"
+
+- name: Configuration finished
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "Configuration finished"

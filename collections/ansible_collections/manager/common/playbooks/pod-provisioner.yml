@@ -1,0 +1,9 @@
+---
+
+- name: Creating pods
+  hosts: localhost
+  connection: localhost
+  become: true
+  tasks:
+    - include_role:
+        name: manager.local_pod.provisioner

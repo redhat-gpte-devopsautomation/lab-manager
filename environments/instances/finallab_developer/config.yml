@@ -1,0 +1,40 @@
+---
+- name: Install single node tower for final lab
+  hosts: finallabs
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Create openstack directory
+      file:
+        path: "/etc/openstack"
+        state: directory
+
+    - name: Copy clouds.yml
+      copy:
+        src: /etc/openstack/clouds.yaml
+        dest: /etc/openstack/clouds.yaml
+
+    - name: Copy ssh keys
+      copy:
+        src: /home/devops/.ssh/
+        dest: /home/cloud-user/.ssh
+        owner: cloud-user
+        mode: 0400
+      loop: 
+        - "{{ guid }}key.pem"
+        - "{{ guid }}key.pub"
+
+    - name: Insert guid in .bashrc
+      lineinfile:
+        path: /home/cloud-user/.bashrc
+        insertafter: 'EOF'
+        line: |
+          export GUID={{ guid }}
+          export INTERNAL_DOMAIN={{ internal_domain }}
+        state: present
+    
+    - name: Install packages
+      dnf:
+        name: "{{ rhel8_packages }}"
+        state: latest
+      

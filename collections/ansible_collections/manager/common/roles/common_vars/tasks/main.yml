@@ -1,0 +1,4 @@
+---
+
+- name: Include environment variables
+  include_vars: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/vars.yml"

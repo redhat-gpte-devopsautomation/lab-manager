@@ -1,0 +1,20 @@
+---
+- name: Initialize grading report data structures
+  hosts: localhost
+  gather_facts: false
+  become: false
+  roles:
+    - name: grade_init
+      when: purpose == "grade"
+
+- name: "Import and run the {{ purpose }} playbooks"
+  import_playbook: "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/{{ lab_name }}/{{ purpose }}.yml"
+
+- name: Run Grade finish role - generate reports and updates
+  hosts: localhost
+  gather_facts: false
+  become: false
+  roles:
+    - name: grade_finish
+      when: purpose == "grade"
+...

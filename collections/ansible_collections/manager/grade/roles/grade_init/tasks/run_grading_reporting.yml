@@ -1,0 +1,10 @@
+---
+- name: Generate student grade report
+  import_role:
+    name: grade_report_generation
+
+- name: Show student grade
+  import_role:
+    name: show_student_grade
+
+...

@@ -1,0 +1,19 @@
+course_id: "{{ env_name }}"
+lab_id: "{{ lab_name }}"
+student_id: "{{ email }}"
+
+grader_working_dir:               "/tmp/{{ env_name }}"
+grader_student_report_file:       "{{ lab_name }}_report.txt"
+
+opentlc_grading_file:             /tmp/{{ lab_name }}_report.txt
+opentlc_grading_file_previous:    /tmp/{{ lab_name }}_report-previous
+
+# Error log of students failures
+
+opentlc_student_error_file:       /tmp/opentlc_error.log
+opentlc_student_success_file:     /tmp/opentlc_success.log
+opentlc_student_grader_log:       /tmp/opentlc_grader.log
+
+# Last ansible output from grading run
+
+opentlc_ansible_log:              /tmp/opentlc_ansible.log

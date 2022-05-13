@@ -1,0 +1,60 @@
+---
+# Gitlab Pod variables for configuration
+gitlab_pod_name: gitlab
+gitlab_host_url: "{{ groups['bastions'][0] }}:5050"
+gitlab_initial_token: RedHat@123
+gitlab_details:
+  user:
+    name: devops
+    password: r3dh4t1!
+    email: devops@example.com
+  projects:
+    - name: three-tier-app-contents
+      description: For Module 02 and Lab 02_03 Ansible Execution
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-three-tier-app-contents.git
+      visibility: public
+    - name: three-tier-app-roles
+      description: For Module 03 and Lab 03_03 Ansible Roles
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-three-tier-app-roles.git
+      visibility: public
+    - name: jinja-heat-template
+      description: For Module 03 and Lab 03_02 Jinja Template
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-jinja-heat-template.git
+      visibility: public    
+    - name: modular-three-tier-app
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-modular-three-tier-app.git
+      visibility: public
+    - name: multi-tier-app
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-multi-tier-app.git
+      visibility: public
+    - name: osp-infra-provisioner
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-osp-infra-provisioner.git
+      visibility: public
+    - name: osp-build-cloud
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-build-cloud-labs.git
+      visibility: public
+    - name: postgresql
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-postgresql.git
+      visibility: public
+    - name: molecule-project
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-molecule-project.git
+      visibility: public
+    - name: mycollections
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-mycollections.git
+      visibility: public
+    - name: automation-app-project
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-automation-hub.git
+      visibility: public
+    - name: mitzidotcom
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-finallab-collection.git
+      visibility: public
+    - name: mitziinfra
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-finallab-infra.git
+      visibility: public                
+    - name: mitziapp
+      repository: https://github.com/redhat-gpte-devopsautomation/aa-finallab-app-deployer.git
+      visibility: public
+
+
+        
+

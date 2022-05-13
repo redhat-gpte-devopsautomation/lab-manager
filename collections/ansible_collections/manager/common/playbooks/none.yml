@@ -1,0 +1,7 @@
+---
+
+- name: Does nothing
+  hosts: localhost
+  tasks:
+    - debug: 
+        msg: "No addtional playbooks found"

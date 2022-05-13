@@ -1,0 +1,18 @@
+{# Jinja Dockerfile #}
+
+{% for pod in pods %}
+FROM {{ pod.image }} AS {{ pod.name }}
+
+{% for run in pod.docker.run %}
+RUN {{ run }}
+{% endfor %}
+
+{% if pod.docker.expose is defined %}
+EXPOSE {{ pod.docker.expose }}
+{% endif %}
+
+{% if pod.docker.cmd is defined %}
+CMD [ "{{ pod.docker.cmd }}" ]
+{% endif %}
+
+{% endfor %}

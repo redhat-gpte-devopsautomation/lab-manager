@@ -1,0 +1,9 @@
+---
+
+course_requirements:
+  pods:
+    - gitlab
+    - bind9
+    - haproxy
+  #instances:
+  #  - ac

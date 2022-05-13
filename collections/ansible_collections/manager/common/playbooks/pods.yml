@@ -1,0 +1,36 @@
+---
+- name: Provision stack
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  roles:
+    - role: manager.osp.osp_inventory 
+
+- name: Provision Pods
+  vars:
+    find_config:
+      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/provisioner.yml"
+      - "./pod-provisioner.yml"
+  import_playbook: "{{ lookup('first_found', find_config) }}"
+  when:
+    - 'not env_destroy | default(false) | bool' 
+    - 'not only_config |default(false) |bool'
+
+- name: Destroy Pods
+  vars:
+    find_destroy:
+      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/destroy.yml"
+      - "./pod-destroy.yml"
+  import_playbook: "{{ lookup('first_found', find_destroy) }}"
+  when:
+    - 'env_destroy | default(false) | bool'
+    
+- name: Pod Reconfigure / workload
+  vars:
+    find_update:
+      - "{{ lab_mgr_dir }}/environments/{{ provisioner }}/{{ env_name }}/config.yml"
+      - "./pod_config_none.yml"
+  import_playbook: "{{ lookup('first_found', find_update) }}"
+  when:
+    - 'not env_destroy | default(false) | bool'
+    - 'only_config |default(false) |bool'

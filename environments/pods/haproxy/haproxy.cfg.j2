@@ -1,0 +1,180 @@
+global
+    log /dev/log  local0
+    log /dev/log  local1 notice
+    stats socket /var/lib/haproxy/stats level admin
+    chroot /var/lib/haproxy
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log global
+    mode  http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+
+listen  stats
+    bind *:49201 ssl crt /etc/ssl/certs/cert.pem
+    stats enable
+    stats auth admin:r3dh4t1!
+    stats uri /
+    stats hide-version
+    stats refresh 30s
+    stats show-node
+
+#### bastion frontend #########
+frontend bastion
+    option http-server-close
+    option forwardfor
+    http-request add-header X-Forwarded-Proto https
+    http-request add-header X-Forwarded-Port 443
+
+    bind *:49202 ssl crt /etc/ssl/certs/cert.pem
+    use_backend satellite-49202 if { dst_port 49202 }
+
+    bind *:49203 ssl crt /etc/ssl/certs/cert.pem
+    use_backend gitlab-49203 if { dst_port 49203 }
+
+    bind *:49204 ssl crt /etc/ssl/certs/cert.pem
+    use_backend vscode-49204 if { dst_port 49204 }
+
+    bind *:49205 ssl crt /etc/ssl/certs/cert.pem
+    use_backend registry-49205 if { dst_port 49205 }
+
+{% if groups['towers'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend tower-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['towerhubs'] is defined %}
+    bind *:49211 ssl crt /etc/ssl/certs/cert.pem
+    use_backend towerhub-49211 if { dst_port 49211 }
+{% endif %}
+
+{% if groups['automationcontrollers'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend control-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['automationhubs'] is defined %}
+    bind *:49211 ssl crt /etc/ssl/certs/cert.pem
+    use_backend ah-49211 if { dst_port 49211 }
+{% endif %}
+
+{% if groups['towerfl'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend towerfl-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['frontends'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend frontend-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['loadbalancers'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend frontend-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['loadbalancers'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend frontend-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['acs'] is defined %}
+    bind *:49210 ssl crt /etc/ssl/certs/cert.pem
+    use_backend ac-49210 if { dst_port 49210 }
+{% endif %}
+
+{% if groups['hubs'] is defined %}
+    bind *:49211 ssl crt /etc/ssl/certs/cert.pem
+    use_backend hub-49211 if { dst_port 49211 }
+{% endif %}
+
+##### Backends #######
+
+backend satellite-49202
+    balance source
+    server satellite satellite.example.com:443 check ssl verify none
+
+backend gitlab-49203
+    balance source
+    server gitlab {{ groups['bastions'][0] }}:5050 check
+
+backend vscode-49204
+    balance source
+    server vscode-server {{ groups['bastions'][0] }}:8080 check
+
+backend registry-49205
+    balance source
+    server registry {{ groups['bastions'][0] }}:5000 check ssl verify none
+
+{% if groups['automationcontrollers'] is defined %}
+backend control-49210
+    balance source
+ {% for host in groups['automationcontrollers'] %}
+    server control{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+{% if groups['automationhubs'] is defined %}
+backend ah-49211
+    balance source
+ {% for host in groups['automationhubs'] %}
+    server ah{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+{% if groups['towers'] is defined %}
+backend tower-49210
+    balance source
+ {% for host in groups['towers'] %}
+    server tower{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+{% if groups['towerhubs'] is defined %}
+backend towerhub-49211
+    balance source
+ {% for host in groups['towerhubs'] %}
+    server towerhub{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+{% if groups['towerfl'] is defined %}
+backend towerfl-49210
+    balance source
+ {% for host in groups['towerfl'] %}
+    server tower{{ loop.index }} {{ host }}:80 check
+ {% endfor %}
+{% endif %}
+
+{% if groups['frontends'] is defined %}
+backend frontend-49210
+    balance roundrobin
+    server  frontend {{ groups['frontends'][0] }}:80 check
+{% endif %}
+{% if groups['loadbalancers'] is defined %}
+backend frontend-49210
+    balance roundrobin
+    server  frontend {{ groups['loadbalancers'][0] }}:80 check
+{% endif %}
+
+{% if groups['acs'] is defined %}
+backend ac-49210
+    balance source
+ {% for host in groups['acs'] %}
+    server acl{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}
+
+{% if groups['hubs'] is defined %}
+backend hub-49211
+    balance source
+ {% for host in groups['hubs'] %}
+    server hub{{ loop.index }} {{ host }}:443 check ssl verify none
+ {% endfor %}
+{% endif %}

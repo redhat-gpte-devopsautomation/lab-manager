@@ -1,0 +1,22 @@
+---
+pods:
+  - name: gitlab
+    dockerfile: False
+    image: docker.io/gitlab/gitlab-ee:14.7.0-ee.0
+    ports:
+      - '5050:5050'
+      - '2224:22'
+    volumes:
+      directories:
+        - src: /etc/gitlab
+          dest: /etc/gitlab
+        - src: /var/log/gitlab
+          dest: /var/log/gitlab
+        - src: /var/opt/gitlab
+          dest: /var/opt/gitlab
+    systemd:
+      wants_services: network.target
+      after_services: network-online.target
+      state: started
+      enabled: true
+

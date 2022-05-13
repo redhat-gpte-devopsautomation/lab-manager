@@ -1,13 +1,3 @@
-lab-manager
-=========
+= Lab-Manager Documents
 
-To deploy
-lab deploy <env name>
-
-To destroy
-
-lab destroy <env name>
-
-
-
-
+link:./docs/README.adoc[]

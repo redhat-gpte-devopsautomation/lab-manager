@@ -1,0 +1,243 @@
+---
+- name: Check application
+  hosts: localhost
+  gather_facts: false
+  become: false
+  tasks:
+##### Result for App Projects #####
+    - name: "Success - App Projects"
+      set_fact:
+        success: true
+      when: 
+        - r_projects.json.results is defined
+        - application.project ==  item.name
+      loop: "{{ r_projects.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Project [{{ application.project }}]"
+
+#### List App Inventory ####
+    - name: List Inventory
+      uri:
+        url: https://{{ ac.url }}/api/v2/inventories/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_inventories
+      ignore_errors: true
+
+##### Result for App Invetory #####
+    - name: "Success - App Invetory"
+      set_fact:
+        success: true
+      when: 
+        - r_inventories.json.results is defined 
+        - application.inventory ==  item.name
+      loop: "{{ r_inventories.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Inventory [{{ application.inventory }}]"
+
+
+#### List App Inventory Sources ####
+    - name: List inventory_sources
+      uri:
+        url: https://{{ ac.url }}/api/v2/inventory_sources/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_inventory_sources
+      ignore_errors: true
+
+##### Result for App Inventory Sources #####
+    - name: "Success - App Inventory Sources"
+      set_fact:
+        success: true
+      when: 
+        - r_inventory_sources.json.results is defined
+        - application.inventory_source ==  item.name
+      loop: "{{ r_inventory_sources.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Inventory Source [{{ application.inventory_source }}]"
+
+
+#### List App Static Inventory Groups ####
+    - name: List Inventory Groups
+      uri:
+        url: https://{{ ac.url }}/api/v2/groups/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_groups
+      ignore_errors: true
+
+##### Result for App Inventory Static group 0 #####
+    - name: "Success - App Inventory Static group 0"
+      set_fact:
+        success: true
+      when: 
+        - r_groups.json.results is defined
+        - application.inventory_groups.0.name ==  item.name
+      loop: "{{ r_groups.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Inventory Static Group [{{ application.inventory_groups.0.name }}]"
+
+##### Result for App Inventory Static group 1 #####
+    - name: "Success - App Inventory Static group 1"
+      set_fact:
+        success: true
+      when: 
+        - r_groups.json.results is defined
+        - application.inventory_groups.1.name ==  item.name
+      loop: "{{ r_groups.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Inventory Static Group [{{ application.inventory_groups.1.name }}]"
+
+##### Result for App Inventory Static group 2 #####
+    - name: "Success - App Inventory Static group 2"
+      set_fact:
+        success: true
+      when: 
+        - r_groups.json.results is defined
+        - application.inventory_groups.2.name ==  item.name
+      loop: "{{ r_groups.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Inventory Static Group [{{ application.inventory_groups.2.name }}]"
+
+#### Test App Children groups #####
+    - set_fact:
+        get_inventory_groups: "{{ get_inventory_groups | d([]) + [{ 
+            'id': item.1.id,
+            'name': item.1.name, 
+            'children': item.0.child
+            }] }}"
+      when: 
+        - r_groups.json.results is defined
+        - item.0.name == item.1.name
+      loop: "{{ application.inventory_groups|product(r_groups.json.results)|list }}"
+
+    - name: List Inventory Groups
+      uri:
+        url: https://{{ ac.url }}/api/v2/groups/{{ item.id }}/children/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_children_groups
+      loop: "{{ get_inventory_groups }}"
+      ignore_errors: true
+
+#### Result App Children Group 0 #####
+    - name: "Success - App Children Group 0"
+      set_fact:
+        success: true
+      when: application.inventory_groups.0.child == item.json.results.0.name | default('')
+      loop: "{{ r_children_groups.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Group [{{ application.inventory_groups.0.child }} in {{ application.inventory_groups.0.name }}]"
+
+#### Result App Children Group 1 #####
+    - name: "Success - App Children Group 1"
+      set_fact:
+        success: true
+      when: application.inventory_groups.1.child == item.json.results.0.name | default('')
+      loop: "{{ r_children_groups.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Group [{{ application.inventory_groups.1.child }} in {{ application.inventory_groups.1.name }}]"
+
+    #### Result App Children Group 2 #####
+    - name: "Success - App Children Group 2"
+      set_fact:
+        success: true
+      when: application.inventory_groups.2.child == item.json.results.0.name | default('')
+      loop: "{{ r_children_groups.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Group [{{ application.inventory_groups.2.child }} in {{ application.inventory_groups.2.name }}]"
+
+##### Result for App Job Template #####
+    - name: "Success - App Job Template"
+      set_fact:
+        success: true
+      when: 
+        - r_jobtemplates.json.results is defined
+        - application.job_template ==  item.name
+      loop: "{{ r_jobtemplates.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Job Templatet [{{ application.job_template }}]"
+
+#### Checking Application deployment
+    - name: Checking Application deployment
+      uri:
+        url: http://{{ hostvars.frontend.ansible_host  }}/?name=root
+        method: GET
+        return_content: yes
+      register: r_app_uri
+      when: hostvars.frontend is defined
+      ignore_errors: yes
+
+##### Result for Application deployment #####
+    - name: "Success - Application deployment"
+      set_fact:
+        success: true
+      when:
+        - r_app_uri.status | default(201) == 200
+        - '"root redhat /bin/bash /root" in r_app_uri.content'
+
+    - name: logging - Application deployment
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(App) Application Deployment [Userinfo application]"

@@ -1,0 +1,55 @@
+---
+- name: Logging lab section PASS or FAIL to student grader report
+  block:
+    - name: Create Header
+      lineinfile:
+        create: yes
+        insertafter: EOF
+        path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
+        line: |
+          --------------------------------------------------------------------------------------
+          {{ '%-2s %1s%-8s %1s%-10s %1s%-s' | format( 'SR', '| ', 'STATUS', '| ', 'HOST', '| ', 'GRADE DESCRIPTION') }}
+          --------------------------------------------------------------------------------------
+      when: sr_no is not defined
+
+    - name: Set Sr No
+      set_fact:
+        sr_no: "{{ sr_no | d(0) | int + 1 }}"
+
+    - when: success | default(false) | bool
+      name: Create Pass logging message
+      set_fact:
+        grader_log_prefix: "[ PASS ]"
+        student_log_message: "{{ task_description_message }}"
+        # student_log_message: "{{ success_message | default('') }}"
+
+    - when: not success | default(false) | bool
+      name: Create Fail logging message
+      set_fact:
+        grader_log_prefix: "[ FAIL ]"
+        student_log_message: "{{ task_description_message }} {{ student_error_message | default('') }}"
+        # student_log_message: "{{ error_message | default('') }}"
+
+    - name: Appends lab check result message to grader log lineinfile
+      lineinfile:
+        create: yes
+        insertafter: EOF
+        path: "{{ grader_working_dir }}/{{ grader_student_report_file }}"
+        line: "{{ '%2s  %-10s %-12.12s %-s' | format(sr_no, grader_log_prefix, inventory_hostname, student_log_message) }}"
+        # line: |
+        #   {% if student_log_message is defined %}
+        #   {{ '%3s   %-10s %-17.17s %-50.50s' | format(sr_no, grader_log_prefix, inventory_hostname, task_description_message) }}
+        #   {{ '%36s%-50s' | format('', student_log_message) }}
+        #   {% else %}
+        #   {{ '%3s   %-10s %-17.17s %-50.50s' | format(sr_no, grader_log_prefix, inventory_hostname, task_description_message) }}
+        #   {% endif %}
+
+    - name: Unset success value
+      set_fact:
+        success:
+        success_message:
+        error_message:
+  delegate_to: localhost
+
+    
+...

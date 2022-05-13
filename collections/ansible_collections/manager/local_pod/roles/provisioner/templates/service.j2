@@ -1,0 +1,32 @@
+{# Jinja2 Systemd service unit file #}
+[Unit]
+{% for pod in pods %}
+
+Description=Podman {{ pod.name }}-pod Service
+Documentation=man:podman-generate-systemd(1)
+
+{% if pod.systemd.wants_services is defined %}
+Wants={{ pod.systemd.wants_services }}
+{% else %}
+Wants=network.target
+{% endif %}
+
+{% if pod.systemd.after_services is defined %}
+After={{ pod.systemd.after_services }}
+{% else %}
+After=network-online.target
+{% endif %}
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+Restart=on-failure
+ExecStart=/usr/local/bin/podman-compose -f /opt/podman/pods/{{ pod.name }}-pod/podman-compose.yml up -d
+ExecStop=/usr/local/bin/podman-compose -f /opt/podman/pods/{{ pod.name }}-pod/podman-compose.yml down
+KillMode=none
+Type=forking
+TimeoutSec=900
+
+[Install]
+WantedBy=multi-user.target default.target
+
+{% endfor %}

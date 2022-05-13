@@ -1,0 +1,18 @@
+---
+- name: Set host FQDN
+  set_fact:
+    letsencrypt_node: "{{ groups['bastions'][0] | regex_replace('(\\..*)?$', '') }}.{{ guid }}.{{ subdomain }}"
+
+- name: Check if letsencrypt certificate exist
+  stat:
+    path: "/etc/letsencrypt/live/{{ letsencrypt_node }}"
+  register: cert_stat
+        
+- name: Generate letsencrypt certificate
+  when: not cert_stat.stat.exists | bool 
+  command: >-
+    certbot-3 certonly 
+    --standalone 
+    --email "{{ email }}"
+    --agree-tos  
+    -d "{{ letsencrypt_node }}" -n

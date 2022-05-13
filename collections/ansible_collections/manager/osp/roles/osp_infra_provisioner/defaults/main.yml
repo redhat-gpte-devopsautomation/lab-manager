@@ -1,0 +1,3 @@
+---
+user_private_key_file: /home/devops/.ssh/{{ guid }}key.pem
+user_public_key_file: /home/devops/.ssh/{{ guid }}key.pub

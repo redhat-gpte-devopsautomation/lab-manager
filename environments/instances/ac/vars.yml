@@ -1,0 +1,153 @@
+env_name: "{{ env_name }}"
+guid: "{{ guid }}"
+email: "{{ email }}"
+project_tag: "{{ env_name }}-{{ guid }}"
+
+# lab_name: tower
+provider_network: external
+instance_network: default
+# all_ssh_authorized_keys: "{{ opentlc_admin_pub_keys + [user_pub_key|d()] }}"
+all_ssh_authorized_keys: testkeys
+default_metadata:
+  owner: "{{ email | default('unknownuser') }}"
+  Project: "{{ project_tag }}"
+  guid: "{{ guid }}"
+  env_name: "{{ env_name }}"
+
+osp_default_rootfs_size: 50
+# Default instance type
+__instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor 
+managednode_instance_type: GLOBAL-CPU_2_Memory_4096_Disk_30_flavor
+
+# Default Image
+__image: rhel-8.4
+
+# Environment Instances
+instances:
+  - name: control
+    count: "{{ tower_instance_count | default(3) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ tower_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ tower_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "automationcontrollers"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+
+  - name: db
+    count: "{{ towerdb_instance_count | default(1) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ towerdb_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ towerdb_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "dbs"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+
+  - name: ah
+    count: "{{ towerhub_instance_count | default(1) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ towerhub_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ towerhub_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "automationhubs"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+  
+  - name: execution
+    count: "{{ execution_instance_count | default(2) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ execution_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ execution_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "executionnodes"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+
+  - name: managednode
+    count: "{{ managednode_instance_count | default(2) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ managednode_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ managednode_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "managednodes"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+
+
+      

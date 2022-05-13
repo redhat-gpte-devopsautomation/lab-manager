@@ -1,0 +1,30 @@
+---
+pods:
+  - name: registry
+    dockerfile: False
+    image: docker.io/library/registry:2.7.1
+    ports:
+      - '5000:5000'
+    volumes:
+      directories: 
+        #/opt/registry/data:/var/lib/registry:z
+        - src: /var/lib/registry
+          dest: /var/lib/registry
+        #/opt/registry/certs:/certs:z \
+        - src: /certs
+          dest: /certs
+      files:
+        #/opt/registry/auth:/auth:z 
+        - src: htpasswd
+          dest: /auth
+        
+    systemd:
+      # Space separated list of wants
+      wants_services: network.target bind9-pod.service gitlab-pod.service
+      # Space separated list of after services
+      after_services: network-online.target bind9-pod.service gitlab-pod.service
+      state: started
+      enabled: true
+
+# Pod's Letsencypt ssl certificate directory
+ssl_cert_dirs: /certs

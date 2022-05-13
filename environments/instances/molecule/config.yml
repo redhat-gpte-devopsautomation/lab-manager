@@ -1,0 +1,11 @@
+---
+
+- hosts: moleculenodes
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Configure motd
+      copy:
+        content: "Welcome to Molecule Lab"
+        dest: /etc/motd
+

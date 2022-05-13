@@ -1,0 +1,275 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    guid: "{{ lookup('env','GUID') }}"
+    home: "{{ lookup('env','HOME') }}"
+    internal_domain: "{{ lookup('env','INTERNAL_DOMAIN') }}"
+  tasks:
+### List Credentials #####
+    - name: List Credentials
+      uri:
+        url: https://{{ ac.url }}/api/v2/credentials/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_credentials
+      ignore_errors: true
+
+##### Result for Container registry #####     
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - r_credentials.json.results is defined
+        - infra.container_cred == item.name
+      loop: "{{ r_credentials.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Container Credentials [{{ infra.container_cred }}]"
+
+##### Result for Cloud Credentials #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when:
+        - r_credentials.json.results is defined 
+        - infra.cloud_cred == item.name
+      loop: "{{ r_credentials.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Cloud Credentials [{{ infra.cloud_cred }}]"
+
+##### Result for Machine Credential #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - r_credentials.json.results is defined
+        - infra.machine_cred == item.name
+      loop: "{{ r_credentials.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Machine Credential [{{ infra.machine_cred }}]"
+
+#### List Execution Environment ####
+    - name: List Job templates
+      uri:
+        url: https://{{ ac.url }}/api/v2/execution_environments/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_ee
+      ignore_errors: true
+
+##### Result for Execution Environment #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - r_ee.json.results is defined
+        - infra.ee ==  item.name
+      loop: "{{ r_ee.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Execution Environment [{{ infra.ee }}]"
+
+
+#### List Projects ####
+    - name: List Job templates
+      uri:
+        url: https://{{ ac.url }}/api/v2/projects/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_projects
+      ignore_errors: true
+
+##### Result for Infra Projects #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - r_projects.json.results is defined
+        - infra.project ==  item.name
+      loop: "{{ r_projects.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Project [{{ infra.project }}]"
+
+#### List job templates ####
+    - name: List Job templates
+      uri:
+        url: https://{{ ac.url }}/api/v2/job_templates/
+        user: "{{ ac.user }}"
+        password: "{{ ac.password }}"
+        method: GET
+        force_basic_auth: yes
+        validate_certs: false
+        body_format: json
+        status_code: 200
+      register: r_jobtemplates
+      ignore_errors: true
+
+
+##### Result for Infra Job template #####
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - r_jobtemplates.json.results is defined
+        - infra.job_template ==  item.name
+      loop: "{{ r_jobtemplates.json.results }}"
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Job Template [{{ infra.job_template }}]"
+
+#### In-memory inventory ####
+    - meta: refresh_inventory
+
+    - name: Collection instance info
+      os_server_info:
+        cloud: "{{ guid }}-project"
+      register: instances
+
+    - name: Build In-Memory inventory
+      add_host:
+        host: "{{ item.name }}"
+        group:
+          - "{{ item.metadata.AnsibleGroup }}"
+          - osp_instances
+        ansible_host: "{{ item.private_v4 }}"
+        ansible_user: cloud-user
+        ansible_ssh_private_key_file: "{{ infra.ssh_key }}"
+      when: item.metadata.type | default('') == "osp_instances"
+      loop: "{{ instances.openstack_servers }}"
+
+
+    ##### For frontend #####
+    - name: Check frontend
+      wait_for: 
+        host: "{{ hostvars.frontend.ansible_host }}"
+        port: 22
+        timeout: 5
+      when: hostvars.frontend is defined
+      ignore_errors: yes
+      register: r_frontend
+
+    # - debug: var=r_frontend
+    
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - not r_frontend.failed | default(true) | bool
+ 
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Node Provisioning [frontend]"
+
+    ##### For App1 #####
+    - name: Check App1
+      wait_for: 
+        host: "{{ hostvars.app1.ansible_host }}"
+        port: 22
+        timeout: 5
+      when: hostvars.app1 is defined
+      ignore_errors: true
+      register: r_app1
+
+    # - debug: var=r_app1
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when:
+        - not r_app1.failed | default(true)  | bool
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Node Provisioning [app1]"
+
+
+    ##### For App2 #####
+    - name: Ping App2
+      wait_for: 
+        host: "{{ hostvars.app2.ansible_host }}"
+        port: 22
+        timeout: 5
+      when: hostvars.app2 is defined
+      ignore_errors: true
+      register: r_app2
+
+    # - debug: var=r_app2
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - not r_app2.failed |default(true) | bool
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Node Provisioning [app2]"
+
+    #### For Appdb ######
+    - name: Block for Appdb
+      when: hostvars.app2 is defined
+      block:
+        - name: Check Appdb
+          wait_for: 
+            host: "{{ hostvars.appdb.ansible_host }}"
+            port: 22
+            timeout: 5
+          ignore_errors: true
+          register: r_appdb
+
+    # - debug: var=r_appdb
+
+    - name: "Success - set fact"
+      set_fact:
+        success: true
+      when: 
+        - not r_appdb.failed | default(true) | bool
+
+    - name: Import logging role
+      import_role:
+        name: manager.grade.logging_grade_to_log
+      vars:
+        task_description_message: "(Infra) Node Provisioning [appdb]"

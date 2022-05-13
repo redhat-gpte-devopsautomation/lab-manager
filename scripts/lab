@@ -4,116 +4,297 @@
 #   - Prakhar Srivastava, psrivast@redhat.com
 # Team: Ansible Automation - GPTE
 # License: GPLv3
+# Version: 2.0
 
-# Output Display function, it uses cowsay when installed
-COW_MSG(){
-  which cowsay &> /dev/null
-  if [ "$?" -eq 0 ];then
-	echo -e -n "\e[31m"
-	echo -e "$1" | cowsay -p 
-        echo -e -n "\e[0m"
-  else
-        echo -e "\e[31m-----------------------------"
-	echo -e "$1"
-        echo -e "-----------------------------\e[0m"
+## Checking user devops ####
+CURRENT_USER=$(whoami)
+if [ ${CURRENT_USER} != "devops" ];then
+        echo -e  "\e[31m"
+        echo "Login as devops to run lab command"
+        echo -e "\e[0m \n"
+        exit 127
+fi
+
+####### this is temporary code ##############
+if [ ! -f /srv/vmanager/bin/activate ]; then
+  sudo -- bash -c '
+  python3 -m venv /srv/vmanager;
+  source /srv/vmanager/bin/activate;
+  python3 -m pip install \
+        ansible==2.9.20 \
+        cryptography==3.2.1 \
+        openstacksdk==0.36.4 \
+        python-openstackclient==4.0.1 \
+        python-heatclient==2.4.0 \
+        selinux==0.2.1;
+  deactivate'
+  source /srv/vmanager/bin/activate
+else
+  source /srv/vmanager/bin/activate
+fi
+
+####### End of temp code #######
+
+# Main Playbook
+MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
+PREP_PLAYBOOK=${LAB_MGR_DIR}/course_prep.yml
+export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
+sudo cp ${LAB_MGR_DIR}/scripts/lab-manager-completion.bash /etc/bash_completion.d/
+
+usage() {
+  CMD_NAME=$(basename ${0})
+  echo -e  "\e[31m"
+  echo -e  "${1}"
+  echo -e "Usage-1: $CMD_NAME (deploy|destroy|reconfigure|reset) [ -i instance_name ] [ -p pod_name ]"
+  echo -e "Usage-2: $CMD_NAME (prep|cleanup)  -c course_name"
+  echo -e "Usage-2: $CMD_NAME refresh -i satellite"
+  echo -e "Usage-2: $CMD_NAME grade -c course_name -l lab_name"
+  echo -e "\e[0m \n"
+  exit 2
+}
+
+count_args() {
+  if [ ${#@} -lt 2 ];
+    then 
+      usage "Less arguments were passed"
+      exit 2
   fi
 }
 
-# Available environments for deploy
-DEPLOY_ENV_TYPES="multitier, threetier, tower, finallab, molecule, nodes, haproxy, tower_patch, gitlab"
-# Available environments for destroy
-DESTROY_ENV_TYPES="multitier, threetier, tower, finallab, molecule, nodes"
+common_environment_vars="
+-e guid=${GUID} \
+-e email=${OPENTLC_USER_EMAIL} \
+-e subdomain=${SUBDOMAIN} \
+-e lab_mgr_dir=${LAB_MGR_DIR} \
+-e cloud_provider=${CLOUD_PROVIDER} \
+-e internal_domain=${INTERNAL_DOMAIN} \
+-e collections_dir='./collections/ansible_collections/'
+"
 
-# Custom error messages used with COW_MSG function
-LAB_OPTION_ERROR_MSG="Error: Invalid Option\n
-Options: [deploy, destroy]\n
-Example: lab option argument"
+env_exec_deploy() {
+  while  getopts "hi:p:" arg; do
+    case ${arg} in
+      i)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances -e env_name=${OPTARG} \
+          ${common_environment_vars}
+          ;;
+      p)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods -e env_name=${OPTARG} \
+          ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
+env_exec_destroy() {
+  while  getopts "hi:p:" arg; do
+    case ${arg} in
+      i)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
 
-LAB_COW_MSG="Error: Invalid Option\n
-Options: [deploy, destroy]\n
-Example: lab option argument"
+        ;;
+      p)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
+          ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
 
-DEPLOY_ERROR_MSG="
-Error: Invalid Argument\n 
-Arguments: [${DEPLOY_ENV_TYPES}]\n
-Example: lab option argument"
+env_exec_reconfigure() {
+  while  getopts "hi:p:" arg; do
+    case ${arg} in
+      i)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances -e env_name=${OPTARG} -e only_config=true \
+          ${common_environment_vars}
+        ;;
+      p)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods -e env_name=${OPTARG} -e only_config=true \
+          ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
 
-DESTROY_ERROR_MSG="
-Error: Invalid Argument\n
-Arguments: [${DESTROY_ENV_TYPES}]\n
-Example: lab option argument"
+env_exec_reset() {
+  while  getopts "hi:p:" arg; do
+    case ${arg} in
+      i)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
 
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=instances -e env_name=${OPTARG} \
+          ${common_environment_vars}
+        ;;
+      p)
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods -e env_destroy=true -e env_name=${OPTARG} \
+          ${common_environment_vars}
 
-# Main Playbook
-LAB_MGR_DIR=/srv/lab-manager/
-MAIN_PLAYBOOK=${LAB_MGR_DIR}/main.yml
-export ANSIBLE_CONFIG=${LAB_MGR_DIR}/ansible.cfg
-# CAlls
-# deploy,destroy
+        ansible-playbook ${MAIN_PLAYBOOK} \
+          -e provisioner=pods -e env_name=${OPTARG} \
+          ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
 
-if [ "${1}" == "deploy" ];then
-  case ${2} in
-    satellite)
-      ssh satellite.example.com "sudo hammer subscription refresh-manifest --organization=prod"
-      ;;
-    molecule) 
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
-      ;;
-    tower)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2}
-      ;;
-    multitier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
-      ;;
-    threetier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
-      ;;
-    nodes)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
-      ;;
-    finallab)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} 
-      ;;	
-    haproxy)
-      ansible-playbook ${LAB_MGR_DIR}/haproxy.yml -e env_type=pod -e pod_type=gitlab
-      ;;
-    tower_patch) 
-      ansible-playbook ${LAB_MGR_DIR}/tower-patch.yml
-      ;;
-    gitlab)
-      ansible-playbook ${LAB_MGR_DIR}/pod-main.yml -e env_type=pod -e pod_type=gitlab
-      ;;
-    *)
-      COW_MSG "${DEPLOY_ERROR_MSG}"
-      ;;
-  esac
-  
-elif [ "${1}" == "destroy" ]; then
-  case ${2} in
-    molecule) 
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true 
-      ;;
-    tower)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
-      ;;
-    multitier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
-      ;;
-    threetier)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
-      ;;
-    nodes)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
-      ;;
-    finallab)
-      ansible-playbook ${MAIN_PLAYBOOK} -e env_type=${2} -e env_destroy=true
-      ;;
-    *)
-    	COW_MSG "${DESTROY_ERROR_MSG}"
-     ;;
-  esac
-  
-else
-  COW_MSG "${LAB_OPTION_ERROR_MSG}"
-fi
+env_exec_refresh() {
+  while  getopts "hi:" arg; do
+    case ${arg} in
+      i) if [ "${OPTARG}" == "satellite" ]; then
+            ansible-playbook ${LAB_MGR_DIR}/environments/instances/${OPTARG}/refresh.yml \
+            -e provisioner=instances -e env_name=${OPTARG} \
+            ${common_environment_vars}
+          else
+            echo "${OPTARG} - Doesn't support refresh"
+          fi
+         ;;
+      h) usage
+         ;;
+      *) usage "Invalid option"
+         ;;
+    esac
+  done
+}
+
+course_exec_prep() {
+  while  getopts "hc:" arg; do
+    case ${arg} in
+      c)
+        ansible-playbook ${PREP_PLAYBOOK} \
+        -e env_name=${OPTARG} \
+        ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
+
+course_exec_cleanup() {
+  while  getopts "hc:" arg; do
+    case ${arg} in
+      c)
+        ansible-playbook ${PREP_PLAYBOOK} \
+        -e env_name=${OPTARG} \
+        -e env_destroy=true \
+        ${common_environment_vars}
+        ;;
+      h) usage
+        ;;
+      *) usage "Invalid option"
+        ;;
+    esac
+  done
+}
+count_grade_args() {
+  if [ ${#@} -lt 3 ];
+    then 
+      usage "Less arguments were passed"
+      exit 2
+  fi
+}
+course_exec_grade() {
+  while  getopts "hc:l:" arg; do
+    case ${arg} in
+      c) course_name=${OPTARG};;
+      l) lab_name=${OPTARG};;
+      h) usage;;
+      *) usage "Invalid option";;
+    esac
+  done
+  GRADE_PATH="${LAB_MGR_DIR}/environments/grades"
+  if [ -d "${GRADE_PATH}/${course_name}" ]; then
+    # echo "Start grade for course - ${course_name}"
+    if [ -d "${GRADE_PATH}/${course_name}/${lab_name}" ]; then
+      echo -e "Grading ${lab_name} ....\n"
+      ansible-playbook ${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/main.yml \
+      ${common_environment_vars} \
+      -e provisioner=grades \
+      -e env_name=${course_name} \
+      -e lab_name=${lab_name} \
+      -e purpose=grade \
+      -e @${LAB_MGR_DIR}/collections/ansible_collections/manager/grade/playbooks/vars.yml >& /tmp/${lab_name}_logs.txt
+
+      cat /tmp/${course_name}/${lab_name}_report.txt | sed -e 's# PASS #\x1B[32m&\x1B[0m#' \
+                                                           -e 's# FAIL #\x1B[31m&\x1B[0m#' \
+                                                           -e 's#^FAILED.*#\x1B[31m&\x1B[0m#' \
+                                                           -e 's#^SUCCESS.*#\x1B[32m&\x1B[0m#'
+    else
+      echo "Lab ${lab_name} doesn't exist"
+      exit 2
+    fi
+  else  
+    echo "Course ${course_name} doesn't exist"
+    exit 2
+  fi
+}
+
+case ${1} in
+  grade)
+    count_grade_args ${@:2}
+    course_exec_grade ${@:2}
+    ;;  
+  deploy) 
+    count_args ${@:2}
+    env_exec_deploy ${@:2}
+    ;;
+  destroy) 
+    count_args ${@:2}
+    env_exec_destroy ${@:2}
+    ;;
+  reconfigure)
+    count_args ${@:2}
+    env_exec_reconfigure ${@:2}
+    ;;
+  reset)
+    count_args ${@:2}
+    env_exec_reset ${@:2}
+    ;;
+  refresh)
+    count_args ${@:2}
+    env_exec_refresh ${@:2}
+    ;;
+  prep)
+    count_args ${@:2}
+    course_exec_prep ${@:2}
+    ;;
+  cleanup) 
+    count_args ${@:2}
+    course_exec_cleanup ${@:2}
+    ;;
+
+  help|h) usage
+    ;;
+  *)
+    usage "Invalid argument"
+    ;;
+esac
 
