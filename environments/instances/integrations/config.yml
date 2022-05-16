@@ -16,4 +16,4 @@
     - vault-init
     - vault-unseal
 
-- import_playbook: "{{ playbook_dir }}/setup_vault.yml
+- import_playbook: "{{ playbook_dir }}/setup_vault.yml"
