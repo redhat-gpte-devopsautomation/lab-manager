@@ -1,0 +1,84 @@
+env_name: "{{ env_name }}"
+guid: "{{ guid }}"
+email: "{{ email }}"
+project_tag: "{{ env_name }}-{{ guid }}"
+
+# lab_name: finallab
+provider_network: external
+instance_network: default
+# all_ssh_authorized_keys: "{{ opentlc_admin_pub_keys + [user_pub_key|d()] }}"
+all_ssh_authorized_keys: testkeys
+default_metadata:
+  owner: "{{ email | default('unknownuser') }}"
+  Project: "{{ project_tag }}"
+  guid: "{{ guid }}"
+  env_name: "{{ env_name }}"
+
+osp_default_rootfs_size: 50
+# Default instance type
+__instance_type: GLOBAL-CPU_4_Memory_8192_Disk_30_flavor 
+
+# Default Image
+__image: rhel-8.4
+ipa_instance_count: 1
+# Environment Instances
+instances:  
+  - name: ipa
+    count: "{{ ipa_instance_count | default(1) }}"
+    public_dns: false
+    dns_loadbalancer: false
+    floating_ip: false
+    image: "{{ ipa_instance_image | default(__image) }}"
+    flavor:
+      osp: "{{ ipa_instance_type | default(__instance_type) }}"
+    network: "{{ instance_network | default('default') }}"
+    tags:
+      - key: "AnsibleGroup"
+        value: "ipas"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_name }}-{{ email }}"
+      - key: "lab"
+        value: "{{ instance_network }}"
+      - key: "network"
+        value: "{{ instance_network }}"
+    security_groups:
+      - DefaultSG
+      - WebSG
+      - HostSG
+ 
+### Freeipa variables 
+idm_principal: admin
+idm_dns_name: "{{ inventory_hostname }}"
+idm_domain: example.com
+idm_realm: "{{ idm_domain }}"
+idm_dm_password: "r3dh4t1!"
+idm_admin_password: "{{ idm_dm_password }}"
+idm_rpms:
+  - '@idm:DL1'
+  - ipa-server
+  - firewalld
+firewalld_service_ports:
+  - ntp
+  - http
+  - https
+  - ldap
+  - ldaps
+  - kerberos
+  - kpasswd
+
+idm_users:
+  - user: bob
+    password: redhat
+    group: integrators
+  - user: susan
+    password: redhat
+    group: integrators
+  - user: brad
+    password: redhat
+    group: integrators
+  - user: karla
+    password: redhat
+    group: integrators
+  

@@ -44,6 +44,20 @@ frontend bastion
     bind *:49205 ssl crt /etc/ssl/certs/cert.pem
     use_backend registry-49205 if { dst_port 49205 }
 
+{% if groups['ipas'] is defined %}
+    bind *:49206 ssl crt /etc/ssl/certs/cert.pem
+    use_backend ipa-49206 if { dst_port 49206 }
+{% endif %}
+
+{% if groups['metrics'] is defined %}
+    bind *:49207 ssl crt /etc/ssl/certs/cert.pem
+    use_backend prometheus-49207 if { dst_port 49207 }
+    
+    bind *:49208 ssl crt /etc/ssl/certs/cert.pem
+    use_backend grafana-49208 if { dst_port 49208 }
+{% endif %}
+
+
 {% if groups['towers'] is defined %}
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
     use_backend tower-49210 if { dst_port 49210 }
@@ -112,6 +126,27 @@ backend registry-49205
     balance source
     server registry {{ groups['bastions'][0] }}:5000 check ssl verify none
 
+{% if groups['ipas'] is defined %}
+backend ipa-49206
+    balance source
+    http-request redirect location /ipa/ui if { path_reg ^/$ }
+    http-request set-header Referer https://{{ groups.ipas.0 }}/ipa/
+    acl hdr_set_cookie_dom res.hdr(Set-cookie) -m sub Domain= bastion.{{ guid }}.dynamic.opentlc.com
+    rspirep ^(Set-Cookie:.*)\ Domain={{ groups.ipas.0 }}(.*) \1\ Domain=bastion.{{ guid }}.dynamic.opentlc.com\2
+    server ipa {{ groups.ipas.0 }}:443 check ssl verify none
+{% endif %}
+
+{% if groups['metrics'] is defined %}
+backend prometheus-49207
+    balance source
+    server prometheus {{ groups['metrics'][0] }}:9090 check
+
+backend grafana-49208
+    balance source
+    server grafana {{ groups['metrics'][0] }}:3000 check
+{% endif %}
+
+
 {% if groups['automationcontrollers'] is defined %}
 backend control-49210
     balance source
@@ -178,3 +213,5 @@ backend hub-49211
     server hub{{ loop.index }} {{ host }}:443 check ssl verify none
  {% endfor %}
 {% endif %}
+
+

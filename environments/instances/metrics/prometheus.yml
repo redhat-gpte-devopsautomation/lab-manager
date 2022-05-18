@@ -1,0 +1,106 @@
+---
+- name: Install Prometheus server
+  hosts: metrics
+  become: true
+  handlers:
+    - name: restart prometheus
+      service:
+        name: prometheus
+        state: restarted
+
+  tasks:
+    - name: Include variables
+      include_vars: vars.yml
+
+    - name: Create prometheus service user
+      user:
+        name: prometheus
+        shell: /sbin/nologin
+        system: true
+        state: present
+
+    - name: Create prometheus directory
+      file:
+        path: "/var/lib/prometheus/{{ item }}"
+        state: directory
+        recurse: true
+        mode: 0755
+        owner: prometheus
+        group: prometheus
+      loop:
+        - rules
+        - rules.d
+        - files_sd
+
+    # for future reference
+    # curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest \
+    #   | grep browser_download_url \
+    #   | grep linux-amd64 \
+    #   | cut -d '"' -f 4 \
+    #   | wget -qi -
+    - name: Unarchive prometheus tar
+      unarchive:
+        src: https://github.com/prometheus/prometheus/releases/download/v2.35.0/prometheus-2.35.0.linux-amd64.tar.gz
+        dest: /tmp
+        remote_src: yes
+      register: tar_dir
+
+    - name: Prometheus directory name
+      set_fact:
+        prometheus_dir: prometheus-2.35.0.linux-amd64
+
+    - name: Copy prometheus cmds
+      copy:
+        src: "/tmp/{{ prometheus_dir }}/{{ item }}"
+        dest: /usr/local/bin/
+        remote_src: true
+        mode: 755
+      loop:
+        - prometheus
+        - promtool
+
+    - name: Copy prometheus configs from remote
+      copy:
+        src: "/tmp/{{ prometheus_dir }}/{{ item }}"
+        dest: /etc/prometheus/
+        remote_src: true
+        mode: 0755
+        owner: prometheus
+        group: prometheus
+      loop:
+        - prometheus.yml
+        - consoles/
+        - console_libraries/ 
+
+    - name: Adding conroller entry
+      blockinfile:
+        path: /etc/prometheus/prometheus.yml
+        block: |
+          # Automation controller block #
+            - job_name: 'Automation Controller'
+              metrics_path: /api/v2/metrics
+              scrape_interval: 5s
+              scheme: https
+              bearer_token: "{{ lookup('env', 'ANSIBLE_CONTROLLER_TOKEN')  }}"
+              static_configs:
+              - targets:
+                  - "{{ groups['acs'][0] }}"
+              tls_config:
+                insecure_skip_verify: true
+      notify: restart prometheus
+
+    - name: Copy prometheus systemd file
+      copy:
+        src: prometheus.service
+        dest: /etc/systemd/system/prometheus.service
+
+    - name: Reload systemd daemon
+      command: /usr/bin/systemctl daemon-reload
+  
+    - name: Enable and Start pods
+      service:
+        name: prometheus
+        enabled: true
+        state: started
+      async: 3000
+      poll: 30
