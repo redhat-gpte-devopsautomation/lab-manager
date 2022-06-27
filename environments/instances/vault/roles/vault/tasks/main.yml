@@ -1,0 +1,72 @@
+- name: Creating vault user group
+  group: 
+    name: "{{ vault_group }}"
+  become: true
+
+- name: Creating vault user
+  user:
+    name: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+    system: yes
+    shell: "/sbin/nologin"
+    comment: "vault nologin User"
+    createhome: "no"
+    state: present
+
+- name: Install prerequisites
+  dnf:
+    name: "{{ vault_install_prerequisites }}"
+    update_cache: yes
+
+- name: Download binary
+  get_url:
+    url: https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip
+    dest: /tmp/vault_{{ vault_version }}_linux_amd64.zip
+    owner: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+    mode: 0755
+    checksum: "{{ vault_checksum }}"
+  register: r_vault_download
+
+- name: "Unzip vault archive"
+  unarchive:
+    src: "{{ r_vault_download.dest }}"
+    dest: /usr/local/bin
+    copy: no
+    owner: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+    mode: 0755
+
+- name: "Set vault binary capabilities"
+  capabilities: 
+    path: /usr/local/bin/vault
+    capability: cap_ipc_lock+ep
+    state: present
+
+- name: Copy systemd init file
+  template:
+    src: init.service.j2
+    dest: /etc/systemd/system/vault.service
+    owner: root
+    group: root
+
+- name: Create vault config file
+  template:
+    src: vault.hcl.j2
+    dest: "{{ vault_config_path }}"
+    owner: "{{ vault_user }}"
+    group: "{{ vault_group }}"
+
+- name: Create mount directories
+  file:
+    state: directory
+    path: "{{ vault_mnt_directory }}"
+    owner: "{{ vault_user }}"     
+    group: "{{ vault_group }}"
+
+- name: vault service
+  systemd:
+    daemon_reload: True
+    state: started
+    name: vault
+    enabled: yes

@@ -1,0 +1,19 @@
+---
+
+- name: Configure Vault Servers
+  hosts: vaults
+  become: true
+  roles:
+    - vault
+ 
+- name: Initialize and Unseal Vaults
+  hosts: vaults
+  become: true
+  vars:
+    unseal_keys_dir_output: "{{ playbook_dir }}/unsealKey"
+    root_token_dir_output: "{{ playbook_dir }}/rootKey"
+  roles:
+    - vault-init
+    - vault-unseal
+
+- import_playbook: "{{ playbook_dir }}/setup_vault.yml"

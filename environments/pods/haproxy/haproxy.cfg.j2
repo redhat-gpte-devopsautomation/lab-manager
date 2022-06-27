@@ -57,6 +57,10 @@ frontend bastion
     use_backend grafana-49208 if { dst_port 49208 }
 {% endif %}
 
+{% if groups['vaults'] is defined %}
+    bind *:49209 ssl crt /etc/ssl/certs/cert.pem
+    use_backend vault-49209 if { dst_port 49209 }
+{% endif %}
 
 {% if groups['towers'] is defined %}
     bind *:49210 ssl crt /etc/ssl/certs/cert.pem
@@ -146,6 +150,11 @@ backend grafana-49208
     server grafana {{ groups['metrics'][0] }}:3000 check
 {% endif %}
 
+{% if groups['vaults'] is defined %}
+backend vault-49209
+    balance source
+    server vault {{ groups['vaults'][0] }}:8200 check
+{% endif %}
 
 {% if groups['automationcontrollers'] is defined %}
 backend control-49210

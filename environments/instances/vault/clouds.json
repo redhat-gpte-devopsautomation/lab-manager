@@ -1,0 +1,17 @@
+{
+    "clouds": {
+        "cae1-project": {
+            "auth": {
+                "auth_url": "https://api.orange.sc01.infra.opentlc.com:13000//v3",
+                "password": "sC0ayW3ZAh5T",
+                "project_id": "f1836d0cf5ed4622a1ab22d4efd53d6d",
+                "project_name": "cae1-project",
+                "user_domain_name": "Default",
+                "username": "cae1-user"
+            },
+            "identity_api_version": 3,
+            "interface": "public",
+            "region_name": "regionOne"
+        }
+    }
+}
