@@ -1,0 +1,37 @@
+---
+- name: Install Elastic Search Packages
+  package:
+    name: elasticsearch
+
+- name: Create Elastic Search Config
+  copy:
+    src: elasticsearch.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Set Java Memory Limits
+  copy:
+    src: jvm.options
+    dest: /etc/elasticsearch/jvm.options
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Start & Enable Elastic Search
+  service:
+    name: elasticsearch
+    enabled: yes
+    state: started
+
+- name: Check webserver for correct response
+  uri:           
+    url: "http://elk.example.com:9200"
+    return_content: yes
+  until: '"You Know, for Search" in r_result.json.tagline'
+  retries: 10
+  delay: 1
+  register: r_result
+  delegate_to: localhost
+

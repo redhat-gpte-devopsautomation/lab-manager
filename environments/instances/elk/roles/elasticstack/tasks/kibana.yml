@@ -1,0 +1,20 @@
+---
+- name: Install Kibana
+  package:
+    name: kibana
+    state: present
+
+- name: Create Kibana Configuration
+  copy:
+    src: kibana.yml
+    dest: /etc/kibana/kibana.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Start & Enable Kibana
+  service:
+    name: kibana
+    enabled: yes
+    state: started
+

@@ -1,0 +1,25 @@
+---
+- name: Install Filebeat
+  package:
+    name: filebeat
+    state: present
+
+- name: Create Filebeat Configuration
+  copy:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Start & Enable Filebeat
+  service:
+    name: filebeat
+    enabled: yes
+    state: started
+
+- name: Enable Log Stash on Beat
+  command: filebeat modules enable logstash
+
+- name: Setup Filebeat to connect to local ES and K servers
+  command: filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['127.0.0.1:9200'] -E setup.kibana.host=127.0.0.1:5601

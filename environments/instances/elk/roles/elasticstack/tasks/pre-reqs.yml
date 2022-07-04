@@ -1,0 +1,19 @@
+---
+- name: Install Java
+  package:
+    name:
+      - java-11-openjdk
+      - java-11-openjdk-devel
+
+- name: Import Elasticsearch repo key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name:
+  copy:
+    src: elasticsearch.repo
+    dest: /etc/yum.repos.d/elasticsearch.repo
+    owner: root
+    group: root
+    mode: '0644'

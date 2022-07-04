@@ -1,0 +1,6 @@
+---
+- name: Place Holder
+  hosts: elk
+  become: True
+  roles:
+    - elasticstack

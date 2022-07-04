@@ -1,0 +1,20 @@
+---
+- name: Install Logstash
+  package:
+    name: logstash
+    state: present
+
+- name: Create beast.conf
+  copy:
+    src: beats.conf
+    dest: /etc/logstash/conf.d/beats.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Start & Enable Logstash
+  service:
+    name: logstash
+    enabled: yes
+    state: started
+
