@@ -46,9 +46,15 @@
       when: pods is defined
       loop: "{{ pods |subelements('volumes.directories', 'skip_missing=true') }}"
     
+    - name: Clone git repo
+      git:
+        repo: https://github.com/redhat-gpte-labs/rhtr2020_gitops_with_ansible_tower.git
+        dest: /tmp/bookbag
+        force: yes
+
     - name: Copy directory contents
       copy:
-        src: ./app2_bookbag/
+        src: /tmp/bookbag/
         dest: /opt/podman/volumes/bookbag-volume/tmp/src/
         owner: 1001
         group: root
