@@ -117,7 +117,7 @@ backend registry-49205
 
 backend bookbag-49206
     balance source
-    server bookbag {{ groups['bastions'][0] }}:10084 check 
+    server bookbag {{ groups['bastions'][0] }}:10080 check 
 
 {% if groups['automationcontrollers'] is defined %}
 backend control-49210
