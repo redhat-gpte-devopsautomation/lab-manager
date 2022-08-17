@@ -1,0 +1,102 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Create podman orchestration directory
+      file:
+        path: "/opt/podman/pods/{{ item.name }}-pod/"
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+        mode: "u=rwx,g=rwx,o=rwx"
+      loop: "{{ pods }}"
+    
+    # Pod volume directory
+    - name: Create volume dir for templates
+      file:
+        path: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+        mode: "u=rwx,g=rwx,o=rwx"
+      when: pods is defined
+      loop: "{{ pods |subelements('volumes.templates', 'skip_missing=true') }}"
+    
+    - name: Create volume dir for files
+      file:
+        path: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+        mode: "u=rwx,g=rwx,o=rwx"
+      when: pods is defined
+      loop: "{{ pods |subelements('volumes.files', 'skip_missing=true') }}"
+    
+    - name: Create volume directories
+      file:
+        path: "/opt/podman/volumes/{{ item.0.name }}-volume/{{ item.1.dest }}"
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+        mode: "u=rwx,g=rwx,o=rwx"
+      when: pods is defined
+      loop: "{{ pods |subelements('volumes.directories', 'skip_missing=true') }}"
+    
+    - name: Copy directory contents
+      copy:
+        src: ./app2_bookbag/
+        dest: /opt/podman/volumes/bookbag-volume/tmp/src/
+        owner: 1001
+        group: root
+        mode: "u=rwx,g=rwx,o=rwx"
+    
+    # Pod dockerfile
+    
+    - name: Copy Dockerfile in orchestration dir
+      template:
+        src:  "Dockerfile.j2"
+        dest: "/opt/podman/pods/{{ item.name }}-pod/Dockerfile"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      when: item.dockerfile |default(false) | bool
+      loop: "{{ pods }}"
+    
+    # Pod compose file
+               
+    - name: Copy podman-compose file in orchestration dir
+      template:
+        src: "podman-compose.yml.j2"
+        dest: "/opt/podman/pods/{{ item.name }}-pod/podman-compose.yml"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      loop: "{{ pods }}"
+    
+    # Pod systemd service file
+    - name: Copy podman systemd service config
+      template:
+        src: "service.j2"
+        dest: "/usr/lib/systemd/system/{{ item.name }}-pod.service"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      loop: "{{ pods }}"
+    
+    ## Pod systemd service enable/start
+    - name: Reload systemd daemon
+      command: /usr/bin/systemctl daemon-reload
+      
+    ## Pod systemd service enable/start
+    - name: Enable and Start pods
+      service:
+        name: "{{ item.name }}-pod"
+        enabled: "{{ item.systemd.enabled | default(true) }}"
+        state: "{{ item.systemd.state | default('started') }}"
+      async: 3000
+      poll: 30
+      loop: "{{ pods }}"
