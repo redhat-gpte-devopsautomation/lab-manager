@@ -20,9 +20,10 @@ if [ ! -f /srv/vmanager/bin/activate ]; then
   sudo -- bash -c '
   python3 -m venv /srv/vmanager;
   source /srv/vmanager/bin/activate;
+  python3 -m pip install -U pip;
   python3 -m pip install \
         ansible==2.9.20 \
-        cryptography==3.2.1 \
+        cryptography==38.0.1 \
         openstacksdk==0.36.4 \
         python-openstackclient==4.0.1 \
         python-heatclient==2.4.0 \
